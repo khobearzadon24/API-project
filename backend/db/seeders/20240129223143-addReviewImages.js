@@ -10,15 +10,15 @@ if (process.env.NODE_ENV === "production") {
 let reviewImages = [
   {
     reviewId: 1,
-    url: 2,
+    url: "url1",
   },
   {
     reviewId: 2,
-    url: 2,
+    url: "url2",
   },
   {
     reviewId: 3,
-    url: 2,
+    url: "url3",
   },
 ];
 module.exports = {
@@ -32,6 +32,7 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
      */
+    await ReviewImage.bulkCreate(reviewImages, { validate: true });
   },
 
   async down(queryInterface, Sequelize) {
@@ -41,5 +42,14 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
+    options.tableName = "Users";
+    const Op = Sequelize.Op;
+    return queryInterface.bulkDelete(
+      options,
+      {
+        id: { [Op.in]: [1, 2, 3] },
+      },
+      {}
+    );
   },
 };
