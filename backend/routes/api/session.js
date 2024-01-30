@@ -56,6 +56,8 @@ router.post("/", validateLogin, async (req, res, next) => {
   });
 });
 
+//get all the spots owned by the current user
+
 router.delete("/", (_req, res) => {
   res.clearCookie("token");
   return res.json({ message: "success" });
