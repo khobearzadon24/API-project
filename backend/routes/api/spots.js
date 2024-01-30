@@ -2,7 +2,11 @@ const express = require("express");
 const { Op } = require("sequelize");
 const bcrypt = require("bcryptjs");
 
-const { setTokenCookie, restoreUser } = require("../../utils/auth");
+const {
+  setTokenCookie,
+  restoreUser,
+  requireAuth,
+} = require("../../utils/auth");
 const { Spot, SpotImage, Review } = require("../../db/models");
 const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
@@ -68,48 +72,48 @@ router.get("/", async (req, res) => {
   }
   res.json(getAllSpots);
 });
-// router.get("/", async (req, res) => {
-//   const allSpots = await Spot.findAll();
 
-//   const preview = await SpotImage.findAll({
-//     where: {
-//       spotId: allSpots.id,
-//     },
-//   });
+router.get("/current", requireAuth, async (req, res) => {
+  const ownerId = req.user.id;
+  const getAllSpotsByOwner = await Spot.findAll({
+    where: {
+      ownerId,
+    },
+  });
+  let avgRating;
 
-//   const reviews = await Review.findAll({
-//     where: {
-//       spotId: allSpots.id,
-//     },
-//   });
-//   //calculate the total amount of reviews
-//   const reviewCount = reviews.length;
+  for (let i = 0; i < getAllSpotsByOwner.length; i++) {
+    let numReviews = await Review.count({
+      where: {
+        spotId: getAllSpotsByOwner[i].id,
+      },
+    });
+    let stars = await Review.sum("stars", {
+      where: {
+        spotId: getAllSpotsByOwner[i].id,
+      },
+    });
 
-//   //calculate the total review number
-//   let reviewTotalAmount = 0;
-//   reviews.forEach((review) => {
-//     reviewTotalAmount += review.stars;
-//   });
-//   //average rating
-//   const reviewAvg = Math.round(reviewTotalAmount / reviewCount);
+    if (stars === null) avgRating = 0;
+    else {
+      avgRating = stars / numReviews;
+    }
 
-//   const payload = {
-//     id: allSpots.id,
-//     ownerId: allSpots.ownerId,
-//     address: allSpots.address,
-//     city: allSpots.city,
-//     country: allSpots.country,
-//     lat: allSpots.lat,
-//     lng: allSpots.lng,
-//     name: allSpots.name,
-//     description: allSpots.description,
-//     price: allSpots.price,
-//     createdAt: allSpots.createdAt,
-//     updatedAt: allSpots.createdAt,
-//     avgRating: reviewAvg,
-//     previewImage: preview.url,
-//   };
-//   res.json(payload);
-// });
+    getAllSpotsByOwner[i].setDataValue("avgRating", avgRating);
+
+    const imageUrl = await SpotImage.findOne({
+      where: {
+        spotId: getAllSpotsByOwner[i].id,
+      },
+    });
+
+    if (imageUrl === null) {
+      getAllSpotsByOwner[i].setDataValue("previewImage", null);
+    } else {
+      getAllSpotsByOwner[i].setDataValue("previewImage", imageUrl.url);
+    }
+  }
+  res.json(getAllSpotsByOwner);
+});
 
 module.exports = router;
