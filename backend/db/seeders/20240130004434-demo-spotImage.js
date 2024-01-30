@@ -1,32 +1,30 @@
 "use strict";
 
 /** @type {import('sequelize-cli').Migration} */
-const { Review } = require("../models");
+const { SpotImage } = require("../models");
 let options = {};
 if (process.env.NODE_ENV === "production") {
   options.schema = process.env.SCHEMA; // define your schema in options object
 }
 
-let reviews = [
+let spotImages = [
   {
     spotId: 1,
-    userId: 1,
-    review: "The place was nice.",
-    stars: 3,
+    url: "exampleURL",
+    preview: true,
   },
   {
     spotId: 2,
-    userId: 2,
-    review: "The place was comfortable",
-    stars: 4,
+    url: "anotherURL",
+    preview: false,
   },
   {
     spotId: 3,
-    userId: 3,
-    review: "The place had lots of natural lighting",
-    stars: 5,
+    url: "extraURL",
+    preview: true,
   },
 ];
+
 module.exports = {
   async up(queryInterface, Sequelize) {
     /**
@@ -38,7 +36,7 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
      */
-    await Review.bulkCreate(reviews, { validate: true });
+    await SpotImage.bulkCreate(spotImages, { validate: true });
   },
 
   async down(queryInterface, Sequelize) {
@@ -48,12 +46,10 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-    options.tableName = "Reviews";
-    // const Op = Sequelize.Op;
     return queryInterface.bulkDelete(
       options,
       {
-        id: reviews.map((review) => review.id),
+        id: spotImages.map((spotImage) => spotImage.id),
       },
       {}
     );
