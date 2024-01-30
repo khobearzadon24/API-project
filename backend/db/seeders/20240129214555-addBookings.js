@@ -11,20 +11,20 @@ let bookings = [
   {
     spotId: 2,
     userId: 2,
-    startDate: "8-25-2024",
-    endDate: "8-29-2024",
+    startDate: "2024-08-25",
+    endDate: "2024-08-29",
   },
   {
     spotId: 2,
     userId: 2,
-    startDate: "2-20-24",
-    endDate: "2-21-24",
+    startDate: "2024-02-20",
+    endDate: "2024-02-21",
   },
   {
     spotId: 2,
     userId: 2,
-    startDate: "4-15-24",
-    endDate: "4-18-24",
+    startDate: "2024-04-15",
+    endDate: "2024-04-18",
   },
 ];
 module.exports = {
