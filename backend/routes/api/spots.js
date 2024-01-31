@@ -82,6 +82,14 @@ router.post("/:spotId/images", requireAuth, async (req, res) => {
 
   const createSpotImage = await Spot.findByPk(spotId);
 
+  const ownerId = req.user.id;
+
+  if (ownerId !== createSpotImage.ownerId) {
+    res.status(403).json({
+      message: "Must be the owner to add an image",
+    });
+  }
+
   if (!createSpotImage) {
     return res.status(404).json({
       message: "Spot couldn't be found",
@@ -198,6 +206,14 @@ router.put("/:spotId", requireAuth, validatePost, async (req, res) => {
 
   const spot = await Spot.findByPk(spotId);
 
+  const ownerId = req.user.id;
+
+  if (ownerId !== spot.ownerId) {
+    res.status(403).json({
+      message: "Must be the owner to edit an spot",
+    });
+  }
+
   spot.address = address || spot.address;
   spot.city = city || spot.city;
   spot.state = state || spot.state;
@@ -217,6 +233,14 @@ router.put("/:spotId", requireAuth, validatePost, async (req, res) => {
 router.delete("/:spotId", requireAuth, async (req, res) => {
   const { spotId } = req.params;
   const spot = await Spot.findByPk(spotId);
+
+  const ownerId = req.user.id;
+
+  if (ownerId !== spot.ownerId) {
+    res.status(403).json({
+      message: "Must be the owner to delete an spot",
+    });
+  }
 
   if (spot === null) {
     res.json({
