@@ -25,24 +25,25 @@ const router = express.Router();
 //     .withMessage("Please provide a password."),
 //   handleValidationErrors,
 // ];
+// get all spots owned by the current user
 router.get("/current", requireAuth, async (req, res) => {
   const ownerId = req.user.id;
-  const getAllSpotsByOwner = await Spot.findAll({
+  const Spots = await Spot.findAll({
     where: {
       ownerId,
     },
   });
   let avgRating;
 
-  for (let i = 0; i < getAllSpotsByOwner.length; i++) {
+  for (let i = 0; i < Spots.length; i++) {
     let numReviews = await Review.count({
       where: {
-        spotId: getAllSpotsByOwner[i].id,
+        spotId: Spots[i].id,
       },
     });
     let stars = await Review.sum("stars", {
       where: {
-        spotId: getAllSpotsByOwner[i].id,
+        spotId: Spots[i].id,
       },
     });
 
@@ -51,29 +52,29 @@ router.get("/current", requireAuth, async (req, res) => {
       avgRating = stars / numReviews;
     }
 
-    getAllSpotsByOwner[i].setDataValue("avgRating", avgRating);
+    Spots[i].setDataValue("avgRating", avgRating);
 
     const imageUrl = await SpotImage.findOne({
       where: {
-        spotId: getAllSpotsByOwner[i].id,
+        spotId: Spots[i].id,
       },
     });
 
     if (imageUrl === null) {
-      getAllSpotsByOwner[i].setDataValue("previewImage", null);
+      Spots[i].setDataValue("previewImage", null);
     } else {
-      getAllSpotsByOwner[i].setDataValue("previewImage", imageUrl.url);
+      Spots[i].setDataValue("previewImage", imageUrl.url);
     }
   }
-  res.json(getAllSpotsByOwner);
+  res.json({ Spots });
 });
 
 //get details of a spot from an id
 router.get("/:spotId", async (req, res) => {
   const { spotId } = req.params;
 
-  const spotDetail = await Spot.findByPk(spotId);
-  if (spotDetail === null) {
+  const Spots = await Spot.findByPk(spotId);
+  if (Spots === null) {
     return res.status(404).json({
       message: `Spot couldn't be found.`,
     });
@@ -96,8 +97,8 @@ router.get("/:spotId", async (req, res) => {
   else {
     avgRating = stars / numReviews;
   }
-  spotDetail.setDataValue("numReviews", numReviews);
-  spotDetail.setDataValue("avgRating", avgRating);
+  Spots.setDataValue("numReviews", numReviews);
+  Spots.setDataValue("avgRating", avgRating);
 
   const imageUrl = await SpotImage.findAll({
     where: {
@@ -107,18 +108,18 @@ router.get("/:spotId", async (req, res) => {
   });
 
   if (imageUrl === null) {
-    spotDetail.setDataValue("previewImage", null);
+    Spots.setDataValue("previewImage", null);
   } else {
-    spotDetail.setDataValue("previewImage", imageUrl);
+    Spots.setDataValue("previewImage", imageUrl);
   }
 
-  const owner = await User.findByPk(spotDetail.ownerId, {
+  const owner = await User.findByPk(Spots.ownerId, {
     attributes: ["id", "firstName", "lastName"],
   });
 
-  spotDetail.setDataValue("Owner", owner);
+  Spots.setDataValue("Owner", owner);
 
-  res.json(spotDetail);
+  res.json(Spots);
 });
 
 //get all the spots
@@ -131,19 +132,18 @@ router.get("/", async (req, res) => {
   //     spot: "spotId",
   //   });
 
-  const getAllSpots = await Spot.findAll();
-
+  const Spots = await Spot.findAll();
   let avgRating;
 
-  for (let i = 0; i < getAllSpots.length; i++) {
+  for (let i = 0; i < Spots.length; i++) {
     let numReviews = await Review.count({
       where: {
-        spotId: getAllSpots[i].id,
+        spotId: Spots[i].id,
       },
     });
     let stars = await Review.sum("stars", {
       where: {
-        spotId: getAllSpots[i].id,
+        spotId: Spots[i].id,
       },
     });
 
@@ -152,21 +152,23 @@ router.get("/", async (req, res) => {
       avgRating = stars / numReviews;
     }
 
-    getAllSpots[i].setDataValue("avgRating", avgRating);
+    Spots[i].setDataValue("avgRating", avgRating);
 
     const imageUrl = await SpotImage.findOne({
       where: {
-        spotId: getAllSpots[i].id,
+        spotId: Spots[i].id,
       },
     });
 
     if (imageUrl === null) {
-      getAllSpots[i].setDataValue("previewImage", null);
+      Spots[i].setDataValue("previewImage", null);
     } else {
-      getAllSpots[i].setDataValue("previewImage", imageUrl.url);
+      Spots[i].setDataValue("previewImage", imageUrl.url);
     }
   }
-  res.json(getAllSpots);
+  res.json({
+    Spots,
+  });
 });
 
 router.post("/", requireAuth, async (req, res) => {
