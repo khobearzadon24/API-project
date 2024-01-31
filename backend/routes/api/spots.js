@@ -17,26 +17,45 @@ const router = express.Router();
 const validatePost = [
   check("address")
     .exists({ checkFalsy: true })
+    .notEmpty()
     .withMessage("Street address is required"),
-  check("city").exists({ checkFalsy: true }).withMessage("City is required"),
-  check("state").exists({ checkFalsy: true }).withMessage("State is required"),
+  check("city")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .withMessage("City is required"),
+  check("state")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .withMessage("State is required"),
   check("country")
     .exists({ checkFalsy: true })
+    .notEmpty()
     .withMessage("Country is required"),
   check("lat")
     .exists({ checkFalsy: true })
+    .isFloat({
+      min: -90,
+      max: 90,
+    })
     .withMessage("Latitude must be within -90 and 90"),
   check("lng")
     .exists({ checkFalsy: true })
+    .isFloat({
+      min: -180,
+      max: 180,
+    })
     .withMessage("Longitude must be within -180 and 180"),
   check("name")
     .exists({ checkFalsy: true })
+    .notEmpty()
     .withMessage("Name must be less than 50 characters"),
   check("description")
     .exists({ checkFalsy: true })
+    .notEmpty()
     .withMessage("Description is required"),
   check("price")
     .exists({ checkFalsy: true })
+    .isFloat({ min: 0.01 })
     .withMessage("Price per day must be a positive number"),
 ];
 
@@ -146,6 +165,18 @@ router.get("/:spotId", async (req, res) => {
   Spots.setDataValue("Owner", owner);
 
   res.json(Spots);
+});
+
+//delete a post
+router.delete("/:spotId", requireAuth, async (req, res) => {
+  const { spotId } = req.params;
+  const spot = await findByPk(spotId);
+
+  await spot.destroy();
+
+  res.json({
+    message: "Successfully deleted",
+  });
 });
 
 //get all the spots
