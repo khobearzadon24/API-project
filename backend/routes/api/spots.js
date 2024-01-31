@@ -9,8 +9,8 @@ const {
 } = require("../../utils/auth");
 const { Spot, SpotImage, Review, User } = require("../../db/models");
 const { check } = require("express-validator");
-const { handleValidationErrors } = require("../../utils/validation");
 const spot = require("../../db/models/spot");
+const { handleValidationErrors } = require("../../utils/validation");
 
 const router = express.Router();
 
@@ -52,12 +52,14 @@ const validatePost = [
     .withMessage("Name must be less than 50 characters"),
   check("description")
     .exists({ checkFalsy: true })
+    .isString() // add to all the strings!!!
     .notEmpty()
     .withMessage("Description is required"),
   check("price")
     .exists({ checkFalsy: true })
     .isFloat({ min: 0.01 })
     .withMessage("Price per day must be a positive number"),
+  handleValidationErrors,
 ];
 
 // make sure user is logged in to view the spots
@@ -278,7 +280,7 @@ router.get("/", async (req, res) => {
 });
 
 //create a spot
-router.post("/", [requireAuth, validatePost], async (req, res) => {
+router.post("/", requireAuth, validatePost, async (req, res) => {
   const { address, city, state, country, lat, lng, name, description, price } =
     req.body;
 
