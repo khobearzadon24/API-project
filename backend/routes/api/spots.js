@@ -47,6 +47,7 @@ const validatePost = [
     .withMessage("Longitude must be within -180 and 180"),
   check("name")
     .exists({ checkFalsy: true })
+    .isLength({ max: 49 })
     .notEmpty()
     .withMessage("Name must be less than 50 characters"),
   check("description")
@@ -70,6 +71,25 @@ const validatePost = [
 //     .withMessage("Please provide a password."),
 //   handleValidationErrors,
 // ];
+
+// add an image to a spot based on the spot's id
+router.post("/:spotId/images", requireAuth, async (req, res) => {
+  const { url, preview } = req.body;
+
+  const { spotId } = req.params;
+
+  const createSpotImage = await Spot.findByPk(spotId);
+
+  if (!createSpotImage) {
+    return res.status(404).json({
+      message: "Spot couldn't be found",
+    });
+  }
+  const spotImage = await SpotImage.create({ spotId, url, preview });
+
+  res.json(spotImage);
+});
+
 // get all spots owned by the current user
 router.get("/current", requireAuth, async (req, res) => {
   const ownerId = req.user.id;
@@ -167,16 +187,45 @@ router.get("/:spotId", async (req, res) => {
   res.json(Spots);
 });
 
+//edit a spot
+router.put("/:spotId", requireAuth, validatePost, async (req, res) => {
+  const { address, city, state, country, lat, lng, name, description, price } =
+    req.body;
+
+  const { spotId } = req.params;
+
+  const spot = await Spot.findByPk(spotId);
+
+  spot.address = address || spot.address;
+  spot.city = city || spot.city;
+  spot.state = state || spot.state;
+  spot.country = country || spot.country;
+  spot.lat = lat || spot.lat;
+  spot.lng = lng || spot.lng;
+  spot.name = name || spot.name;
+  spot.description = description || spot.description;
+  spot.price = price || spot.price;
+
+  await spot.save();
+
+  res.json(spot);
+});
+
 //delete a post
 router.delete("/:spotId", requireAuth, async (req, res) => {
   const { spotId } = req.params;
-  const spot = await findByPk(spotId);
+  const spot = await Spot.findByPk(spotId);
 
-  await spot.destroy();
-
-  res.json({
-    message: "Successfully deleted",
-  });
+  if (spot === null) {
+    res.json({
+      message: "Spot couldn't be found",
+    });
+  } else {
+    await spot.destroy();
+    res.json({
+      message: "Successfully deleted",
+    });
+  }
 });
 
 //get all the spots
