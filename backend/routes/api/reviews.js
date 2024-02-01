@@ -117,7 +117,7 @@ router.delete("/:reviewId", requireAuth, async (req, res) => {
     });
   }
 
-  if (findReview === null) {
+  if (!findReview) {
     return res.status(404).json({
       message: "Review couldn't be found",
     });
