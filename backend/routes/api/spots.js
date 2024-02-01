@@ -141,7 +141,7 @@ router.post("/:spotId/reviews", requireAuth, async (req, res) => {
     stars,
   });
 
-  res.json(createReview);
+  res.status(201).json(createReview);
 });
 
 // add an image to a spot based on the spot's id
