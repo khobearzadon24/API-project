@@ -63,7 +63,14 @@ router.post("/:reviewId/images", requireAuth, async (req, res) => {
 
   const reviewImage = await ReviewImage.create({ reviewId, url });
 
-  res.json(reviewImage);
+  const findReviewImage = await ReviewImage.findAll({
+    where: {
+      url: url,
+    },
+    attributes: ["id", "url"],
+  });
+
+  res.json(findReviewImage);
 });
 
 // edit a review
@@ -74,8 +81,8 @@ router.put("/:reviewId", requireAuth, validateReview, async (req, res) => {
 
   const findReview = await Review.findByPk(reviewId);
 
-  if (!findReview) {
-    return res.status(403).json({
+  if (findReview === null) {
+    return res.status(404).json({
       message: "Review couldn't be found",
     });
   }
