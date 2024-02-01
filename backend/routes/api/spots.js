@@ -102,9 +102,27 @@ router.get("/:spotId/reviews", async (req, res) => {
 router.post("/:spotId/reviews", requireAuth, async (req, res) => {
   const { review, stars } = req.body;
 
+  if (review === null) {
+    return res.status(400).json({
+      message: "Review text is required",
+    });
+  }
+
+  if (stars === null) {
+    return res.status(400).json({
+      message: "Stars must be an integer from 1 to 5",
+    });
+  }
+
   const { spotId } = req.params;
 
   const getSpot = await Spot.findByPk(spotId);
+
+  if (getSpot === null) {
+    return res.status(404).json({
+      message: "Spot couldn't be found",
+    });
+  }
 
   const ownerId = req.user.id;
 
@@ -114,11 +132,7 @@ router.post("/:spotId/reviews", requireAuth, async (req, res) => {
     });
   }
 
-  if (!getSpot) {
-    return res.status(404).json({
-      message: "Spot couldn't be found",
-    });
-  }
+  // add in error handler for when review already exists
 
   const createReview = await Review.create({
     spotId: +spotId,
@@ -141,7 +155,7 @@ router.post("/:spotId/images", requireAuth, async (req, res) => {
   const ownerId = req.user.id;
 
   if (ownerId !== createSpotImage.ownerId) {
-    res.status(403).json({
+    return res.status(403).json({
       message: "Must be the owner to add an image",
     });
   }
@@ -151,11 +165,19 @@ router.post("/:spotId/images", requireAuth, async (req, res) => {
       message: "Spot couldn't be found",
     });
   }
-  const spotImage = await SpotImage.create({ spotId, url, preview });
 
-  // await spotImage.save();
+  await SpotImage.create({ spotId, url, preview });
 
-  res.json(spotImage);
+  const findSpotImage = await SpotImage.findAll({
+    where: {
+      url: url,
+    },
+    attributes: {
+      exclude: ["createdAt", "updatedAt"],
+    },
+  });
+
+  res.json(findSpotImage);
 });
 
 // get all spots owned by the current user
@@ -241,9 +263,9 @@ router.get("/:spotId", async (req, res) => {
   });
 
   if (imageUrl === null) {
-    Spots.setDataValue("previewImage", null);
+    Spots.setDataValue("SpotImages", null);
   } else {
-    Spots.setDataValue("previewImage", imageUrl);
+    Spots.setDataValue("SpotImages", imageUrl);
   }
 
   const owner = await User.findByPk(Spots.ownerId, {
@@ -264,11 +286,17 @@ router.put("/:spotId", requireAuth, validatePost, async (req, res) => {
 
   const spot = await Spot.findByPk(spotId);
 
+  if (!spot.id) {
+    return res.status(404).json({
+      message: "Spot couldn't be found",
+    });
+  }
+
   const ownerId = req.user.id;
 
   if (ownerId !== spot.ownerId) {
     res.status(403).json({
-      message: "Must be the owner to edit an spot",
+      message: "Must be the owner to edit a spot",
     });
   }
 
@@ -295,18 +323,18 @@ router.delete("/:spotId", requireAuth, async (req, res) => {
   const ownerId = req.user.id;
 
   if (ownerId !== spot.ownerId) {
-    res.status(403).json({
-      message: "Must be the owner to delete an spot",
+    return res.status(403).json({
+      message: "Must be the owner to delete the spot",
     });
   }
 
   if (spot === null) {
-    res.json({
+    return res.status(404).json({
       message: "Spot couldn't be found",
     });
   } else {
     await spot.destroy();
-    res.json({
+    return res.json({
       message: "Successfully deleted",
     });
   }
@@ -314,14 +342,6 @@ router.delete("/:spotId", requireAuth, async (req, res) => {
 
 //get all the spots
 router.get("/", async (req, res) => {
-  //   const numReviews = await Review.count({
-  //     spot: "spotId",
-  //   });
-
-  //   const getAllSpotImages = await SpotImage.findAll({
-  //     spot: "spotId",
-  //   });
-
   const Spots = await Spot.findAll();
   let avgRating;
 
@@ -381,7 +401,7 @@ router.post("/", requireAuth, validatePost, async (req, res) => {
     price,
   });
 
-  res.json(spot);
+  return res.status(201).json(spot);
 });
 
 module.exports = router;

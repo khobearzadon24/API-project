@@ -16,6 +16,112 @@ const spot = require("../../db/models/spot");
 
 const router = express.Router();
 
+const validateReview = [
+  check("review")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .withMessage("Review is required"),
+  check("stars")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .withMessage("Stars is required"),
+  handleValidationErrors,
+];
+
+// add an image to a review based on the review's id
+router.post("/:reviewId/images", requireAuth, async (req, res) => {
+  const { reviewId } = req.params;
+
+  const { url } = req.body;
+
+  const findReviewId = await Review.findByPk(reviewId);
+
+  if (findReviewId === null) {
+    return res.status(404).json({
+      message: "Review couldn't be found",
+    });
+  }
+
+  let findAllReviews = await ReviewImage.findAll({
+    where: {
+      reviewId: reviewId,
+    },
+  });
+
+  if (findAllReviews.length > 10)
+    return res.status(403).json({
+      message: "Maximum number of images for this resource was reached",
+    });
+
+  const ownerId = req.user.id;
+
+  if (ownerId !== findReviewId.userId) {
+    res.status(403).json({
+      message: "Must be the owner of the review to add an image",
+    });
+  }
+
+  const reviewImage = await ReviewImage.create({ reviewId, url });
+
+  res.json(reviewImage);
+});
+
+// edit a review
+router.put("/:reviewId", requireAuth, validateReview, async (req, res) => {
+  const { review, stars } = req.body;
+
+  const { reviewId } = req.params;
+
+  const findReview = await Review.findByPk(reviewId);
+
+  if (!findReview) {
+    return res.status(403).json({
+      message: "Review couldn't be found",
+    });
+  }
+
+  const ownerId = req.user.id;
+
+  if (ownerId !== findReview.userId) {
+    return res.status(403).json({
+      message: "Must be the owner of the review",
+    });
+  }
+
+  findReview.review = review || findReview.review;
+  findReview.stars = stars || findReview.stars;
+
+  await findReview.save();
+
+  res.json(findReview);
+});
+
+// delete a review
+router.delete("/:reviewId", requireAuth, async (req, res) => {
+  const { reviewId } = req.params;
+
+  const findReview = await Review.findByPk(reviewId);
+
+  const ownerId = req.user.id;
+
+  if (ownerId !== findReview.userId) {
+    return res.status(403).json({
+      message: "Must be the owner to delete the review",
+    });
+  }
+
+  if (findReview === null) {
+    return res.status(404).json({
+      message: "Review couldn't be found",
+    });
+  } else {
+    await findReview.destroy();
+    return res.json({
+      message: "Successfully deleted",
+    });
+  }
+});
+
 // get all reviews of the current user
 router.get("/current", requireAuth, async (req, res) => {
   const userId = req.user.id;
