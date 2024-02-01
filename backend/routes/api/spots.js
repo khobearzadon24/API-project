@@ -7,7 +7,13 @@ const {
   restoreUser,
   requireAuth,
 } = require("../../utils/auth");
-const { Spot, SpotImage, Review, User } = require("../../db/models");
+const {
+  Spot,
+  SpotImage,
+  Review,
+  User,
+  ReviewImage,
+} = require("../../db/models");
 const { check } = require("express-validator");
 const spot = require("../../db/models/spot");
 const { handleValidationErrors } = require("../../utils/validation");
@@ -62,17 +68,67 @@ const validatePost = [
   handleValidationErrors,
 ];
 
-// make sure user is logged in to view the spots
-// const validateLogin = [
-//   check("credential")
-//     .exists({ checkFalsy: true })
-//     .notEmpty()
-//     .withMessage("Please provide a valid email or username."),
-//   check("password")
-//     .exists({ checkFalsy: true })
-//     .withMessage("Please provide a password."),
-//   handleValidationErrors,
-// ];
+// get all reviews by a spot's id
+router.get("/:spotId/reviews", async (req, res) => {
+  const { spotId } = req.params;
+
+  const spot = await Spot.findByPk(spotId);
+
+  if (!spot) {
+    return res.status(404).json({
+      message: `Spot couldn't be found.`,
+    });
+  }
+
+  const allReviews = await Review.findAll({
+    where: {
+      spotId: spotId,
+    },
+    include: [
+      {
+        model: User,
+        attributes: ["id", "firstName", "lastName"],
+      },
+      {
+        model: ReviewImage,
+        attributes: ["id", "url"],
+      },
+    ],
+  });
+  res.json({ Reviews: allReviews });
+});
+
+// create a review for a spot based on the spot's id
+router.post("/:spotId/reviews", requireAuth, async (req, res) => {
+  const { review, stars } = req.body;
+
+  const { spotId } = req.params;
+
+  const getSpot = await Spot.findByPk(spotId);
+
+  const ownerId = req.user.id;
+
+  if (ownerId === getSpot.ownerId) {
+    res.status(403).json({
+      message: "Users cannot add a review to their own spot.",
+    });
+  }
+
+  if (!getSpot) {
+    return res.status(404).json({
+      message: "Spot couldn't be found",
+    });
+  }
+
+  const createReview = await Review.create({
+    spotId: +spotId,
+    userId: ownerId,
+    review,
+    stars,
+  });
+
+  res.json(createReview);
+});
 
 // add an image to a spot based on the spot's id
 router.post("/:spotId/images", requireAuth, async (req, res) => {
@@ -96,6 +152,8 @@ router.post("/:spotId/images", requireAuth, async (req, res) => {
     });
   }
   const spotImage = await SpotImage.create({ spotId, url, preview });
+
+  // await spotImage.save();
 
   res.json(spotImage);
 });
