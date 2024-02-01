@@ -3,68 +3,77 @@ const { Op } = require("sequelize");
 const bcrypt = require("bcryptjs");
 
 const { setTokenCookie, requireAuth } = require("../../utils/auth");
-const { Review, User, Spot, ReviewImage } = require("../../db/models");
+const {
+  Review,
+  User,
+  Spot,
+  ReviewImage,
+  SpotImage,
+} = require("../../db/models");
 const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
 
 const router = express.Router();
 
 // get all reviews of the current user
-router.get("/current", async (req, res) => {
+router.get("/current", requireAuth, async (req, res) => {
   const userId = req.user.id;
-  const Reviews = await Review.findAll({
+
+  const reviews = await Review.findAll({
     where: {
-      userId,
+      userId: userId,
     },
-    include: [
-      {
-        model: User,
-        where: {
-          id: userId,
-        },
-        attributes: ["id", "firstName", "lastName"],
-      },
-      {
-        model: ReviewImage,
-        where: {
-          reviewId: userId,
-        },
-        attributes: ["id", "url"],
-      },
-    ],
   });
-  // const user = await User.findOne({
-  //   where: {
-  //     id: userId,
-  //   },
-  //   attributes: ["id", "firstName", "lastName"],
-  // });
 
-  // const spot = await Spot.findByPk(userId, {
-  //   attributes: [
-  //     "id",
-  //     "ownerId",
-  //     "address",
-  //     "city",
-  //     "state",
-  //     "country",
-  //     "lat",
-  //     "lng",
-  //     "name",
-  //     "price",
-  //     "previewImage",
-  //   ],
-  // });
+  const user = await User.findAll({
+    where: {
+      id: userId,
+    },
+    attributes: ["id", "firstName", "lastName"],
+  });
 
-  // const reviewImage = await ReviewImage.findByPk(userId, {
-  //   attributes: ["id", "url"],
-  // });
-  // if (user === null) {
-  //   Reviews.setDataValue("User", null);
-  // } else {
-  //   Reviews.setDataValue("User", user);
-  // }
-  res.json({ Reviews });
+  const spots = await Spot.findAll({
+    where: {
+      ownerId: userId,
+    },
+    attributes: {
+      exclude: ["createdAt", "updatedAt", "description"],
+    },
+  });
+
+  const spotImage = await Spot.findAll({
+    where: {
+      ownerId: userId,
+    },
+    include: {
+      model: SpotImage,
+      attributes: ["url"],
+    },
+  });
+
+  const reviewImages = await Review.findAll({
+    where: {
+      userId: userId,
+    },
+    include: {
+      model: ReviewImage,
+      attributes: [["reviewId", "id"], "url"],
+    },
+  });
+
+  const response = [];
+
+  reviews.forEach((review) => response.push(review.toJSON()));
+
+  for (let i = 0; i < response.length; i++) {
+    let spot = spots[i].toJSON();
+    response[i].User = user[i];
+    response[i].Spot = spot;
+    spot.previewImage = spotImage[i].SpotImages;
+    response[i].ReviewImages = reviewImages[i].ReviewImages;
+  }
+
+  res.json({ Reviews: response });
 });
 
 module.exports = router;
