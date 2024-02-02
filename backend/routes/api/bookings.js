@@ -45,9 +45,15 @@ router.delete("/:bookingId", requireAuth, async (req, res) => {
 
   const ownerId = req.user.id;
 
-  const findBooking = Booking.findByPk(bookingId);
+  const findBooking = await Booking.findOne({
+    where: {
+      id: bookingId,
+    },
+  });
 
-  if (!findBooking) {
+  console.log(findBooking);
+
+  if (findBooking === null) {
     return res.status(404).json({
       message: "Booking couldn't be found",
     });
@@ -59,7 +65,6 @@ router.delete("/:bookingId", requireAuth, async (req, res) => {
     });
   }
 
-  // booking cannot be started
   const currentDate = new Date();
   if (findBooking.startDate < currentDate) {
     return res.status(403).json({
@@ -80,19 +85,53 @@ router.put("/:bookingId", requireAuth, validateDates, async (req, res) => {
 
   const booking = await Booking.findByPk(bookingId);
 
-  if (!booking.id) {
+  //
+  if (!booking) {
     return res.status(404).json({
       message: "Booking couldn't be found",
     });
   }
 
-  const ownerId = req.user.id;
+  let currentDate = new Date();
 
-  if (ownerId !== booking.ownerId) {
-    res.status(403).json({
-      message: "Must be the owner to edit a booking",
+  if (new Date(startDate) < currentDate || new Date(endDate) < currentDate) {
+    return res.status(403).json({
+      message: "Past bookings can't be modified",
     });
   }
+
+  const existBooking = await Booking.findOne({
+    where: {
+      id: {
+        [Op.ne]: bookingId,
+      },
+      spotId: booking.spotId,
+      [Op.or]: [
+        {
+          startDate: {
+            [Op.between]: [startDate, endDate],
+          },
+        },
+        {
+          endDate: {
+            [Op.between]: [startDate, endDate],
+          },
+        },
+      ],
+    },
+  });
+
+  if (existBooking) {
+    return res.status(403).json({
+      message: "Sorry, this spot is already booked for the specified dates",
+      errors: {
+        startDate: "Start date conflicts with an existing booking",
+        endDate: "End date conflicts with an existing booking",
+      },
+    });
+  }
+
+  const ownerId = req.user.id;
 
   booking.startDate = startDate || booking.startDate;
   booking.endDate = endDate || booking.endDate;

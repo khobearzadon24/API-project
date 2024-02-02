@@ -109,6 +109,12 @@ router.delete("/:reviewId", requireAuth, async (req, res) => {
 
   const findReview = await Review.findByPk(reviewId);
 
+  if (!findReview) {
+    return res.status(404).json({
+      message: "Review couldn't be found",
+    });
+  }
+
   const ownerId = req.user.id;
 
   if (ownerId !== findReview.userId) {
@@ -117,16 +123,10 @@ router.delete("/:reviewId", requireAuth, async (req, res) => {
     });
   }
 
-  if (!findReview) {
-    return res.status(404).json({
-      message: "Review couldn't be found",
-    });
-  } else {
-    await findReview.destroy();
-    return res.json({
-      message: "Successfully deleted",
-    });
-  }
+  await findReview.destroy();
+  return res.json({
+    message: "Successfully deleted",
+  });
 });
 
 // get all reviews of the current user

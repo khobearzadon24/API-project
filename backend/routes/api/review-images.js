@@ -21,24 +21,20 @@ const { handleValidationErrors } = require("../../utils/validation");
 
 const router = express.Router();
 
-// delete a spot image
+// delete a review image
 router.delete("/:imageId", requireAuth, async (req, res) => {
   const { imageId } = req.params;
   const ownerId = req.user.id;
 
-  const findReviewImage = await ReviewImage.findAll({
+  const findReviewImage = await ReviewImage.findByPk(imageId);
+
+  const review = await Review.findOne({
     where: {
-      id: imageId,
+      id: findReviewImage.reviewId,
     },
   });
 
-  const reviewUser = await Review.findAll({
-    where: {
-      id: findReviewImage.spotId,
-    },
-  });
-
-  if (ownerId !== reviewUser) {
+  if (ownerId !== review.userId) {
     return res.status(403).json({
       message: "Review must belong to the current user",
     });
