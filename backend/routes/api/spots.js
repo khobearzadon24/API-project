@@ -315,11 +315,11 @@ router.post("/:spotId/reviews", requireAuth, async (req, res) => {
 
   const findReview = await Review.findAll({
     where: {
-      userId: ownerId,
+      spotId: spotId,
     },
   });
 
-  if (findReview) {
+  if (findReview.userId === ownerId) {
     return res.status(403).json({
       message: "User already has a review for this spot",
     });
