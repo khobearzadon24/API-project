@@ -13,6 +13,7 @@ const {
   Review,
   User,
   ReviewImage,
+  Booking,
 } = require("../../db/models");
 const { check } = require("express-validator");
 const spot = require("../../db/models/spot");
@@ -67,6 +68,138 @@ const validatePost = [
     .withMessage("Price per day must be a positive number"),
   handleValidationErrors,
 ];
+
+const validateDates = [
+  check("startDate")
+    .exists({ checkFalsy: true })
+    .custom((val, { req }) => {
+      const currentDate = new Date();
+      if (new Date(val) <= currentDate) {
+        throw new Error("start date cannot be in the past");
+      }
+      return true;
+    }),
+  check("endDate")
+    .exists({ checkFalsy: true })
+    .custom((val, { req }) => {
+      const startDate = new Date(req.body.startDate);
+      if (new Date(val) <= startDate) {
+        throw new Error("endDate cannot be on or before startDate");
+      }
+      return true;
+    }),
+  handleValidationErrors,
+];
+
+//create a booking from a spot based on the Spot's id
+router.post(
+  "/:spotId/bookings",
+  requireAuth,
+  validateDates,
+  async (req, res) => {
+    const { startDate, endDate } = req.body;
+
+    const { spotId } = req.params;
+
+    if (startDate === null) {
+      return res.status(400).json({
+        message: "Start date is required",
+      });
+    }
+
+    if (endDate === null) {
+      return res.status(400).json({
+        message: "End date is required",
+      });
+    }
+
+    const getSpot = await Spot.findByPk(spotId);
+
+    if (getSpot === null) {
+      return res.status(404).json({
+        message: "Spot couldn't be found",
+      });
+    }
+
+    const ownerId = req.user.id;
+
+    if (ownerId === getSpot.ownerId) {
+      res.status(403).json({
+        message: "Users cannot book their own spot.",
+        errors: {
+          startDate: "Start date conflicts with an existing booking",
+          endDate: "End date conflicts with an existing booking",
+        },
+      });
+    }
+
+    const findBooking = await Booking.findAll({
+      where: {
+        startDate: startDate,
+        endDate: endDate,
+      },
+    });
+
+    // need to fix this error handler below
+    if (findBooking) {
+      return res.status(403).json({
+        message: "Sorry, this spot is already booked for the specific dates",
+      });
+    }
+
+    const createBooking = await Booking.create({
+      spotId: +spotId,
+      userId: ownerId,
+      startDate,
+      endDate,
+    });
+    res.status(201).json(createBooking);
+  }
+);
+
+//get all bookings for a spot based on the spot's id
+router.get("/:spotId/bookings", requireAuth, async (req, res) => {
+  const { spotId } = req.params;
+
+  const spot = await Spot.findByPk(spotId);
+
+  if (!spot) {
+    return res.status(404).json({
+      message: `Spot couldn't be found.`,
+    });
+  }
+
+  const ownerId = req.user.id;
+
+  const spots = await Spot.findAll({
+    where: {
+      id: spotId,
+    },
+  });
+
+  if (spots.ownerId !== ownerId) {
+    const bookings = await Booking.findAll({
+      where: {
+        spotId: spotId,
+      },
+      attributes: ["spotId", "startDate", "endDate"],
+    });
+    res.json({ Bookings: bookings });
+  }
+
+  if (spots.ownerId === ownerId) {
+    const bookings = await Booking.findAll({
+      where: {
+        spotId: spotId,
+      },
+      include: {
+        model: User,
+        attributes: ["id", "firstName", "lastName"],
+      },
+    });
+    res.json({ Bookings: bookings });
+  }
+});
 
 // get all reviews by a spot's id
 router.get("/:spotId/reviews", async (req, res) => {
@@ -132,6 +265,17 @@ router.post("/:spotId/reviews", requireAuth, async (req, res) => {
     });
   }
 
+  const findReview = await Review.findAll({
+    where: {
+      userId: ownerId,
+    },
+  });
+
+  if (findReview) {
+    return res.status(403).json({
+      message: "User already has a review for this spot",
+    });
+  }
   // add in error handler for when review already exists
 
   const createReview = await Review.create({
