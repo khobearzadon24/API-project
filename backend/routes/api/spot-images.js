@@ -14,7 +14,6 @@ const {
   User,
   ReviewImage,
   Booking,
-  SpotImage,
 } = require("../../db/models");
 const { check } = require("express-validator");
 const spot = require("../../db/models/spot");

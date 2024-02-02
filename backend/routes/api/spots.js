@@ -15,7 +15,7 @@ const {
   ReviewImage,
   Booking,
 } = require("../../db/models");
-const { check } = require("express-validator");
+const { check, query } = require("express-validator");
 const spot = require("../../db/models/spot");
 const { handleValidationErrors } = require("../../utils/validation");
 
@@ -91,6 +91,42 @@ const validateDates = [
   handleValidationErrors,
 ];
 
+const validateQueryFilters = [
+  query("page")
+    .optional()
+    .isInt({ min: 1 })
+    .withMessage("Page must be greater than or equal to 1"),
+  query("size")
+    .optional()
+    .isInt({ min: 1 })
+    .withMessage("Size must be greater than or equal to 1"),
+  query("maxLat")
+    .optional()
+    .isFloat({ min: -90, max: 90 })
+    .withMessage("Maximum latitude is invalid"),
+  query("minLat")
+    .optional()
+    .isFloat({ min: -180, max: 180 })
+    .withMessage("Minimum latitude is invalid"),
+  query("minLng")
+    .optional()
+    .isFloat({ min: -180, max: 180 })
+    .withMessage("Maximum longitude is invalid"),
+  query("maxLng")
+    .optional()
+    .isFloat({ min: -180, max: 180 })
+    .withMessage("Minimum longitude is invalid"),
+  query("minPrice")
+    .optional()
+    .isFloat({ min: 0 })
+    .withMessage("Minimum price must be greater than or equal to 0"),
+  query("maxPrice")
+    .optional()
+    .isFloat({ min: 0 })
+    .withMessage("Maximum price must be greater than or equal to 0"),
+  handleValidationErrors,
+];
+
 //create a booking from a spot based on the Spot's id
 router.post(
   "/:spotId/bookings",
@@ -101,13 +137,13 @@ router.post(
 
     const { spotId } = req.params;
 
-    if (startDate === null) {
+    if (!startDate) {
       return res.status(400).json({
         message: "Start date is required",
       });
     }
 
-    if (endDate === null) {
+    if (!endDate) {
       return res.status(400).json({
         message: "End date is required",
       });
@@ -126,24 +162,34 @@ router.post(
     if (ownerId === getSpot.ownerId) {
       res.status(403).json({
         message: "Users cannot book their own spot.",
+      });
+    }
+
+    const findBooking = await Booking.findOne({
+      where: {
+        spotId: spotId,
+        [Op.or]: [
+          {
+            startDate: {
+              [Op.between]: [startDate, endDate],
+            },
+          },
+          {
+            endDate: {
+              [Op.between]: [startDate, endDate],
+            },
+          },
+        ],
+      },
+    });
+
+    if (findBooking) {
+      return res.status(403).json({
+        message: "Sorry, this spot is already booked for the specified dates",
         errors: {
           startDate: "Start date conflicts with an existing booking",
           endDate: "End date conflicts with an existing booking",
         },
-      });
-    }
-
-    const findBooking = await Booking.findAll({
-      where: {
-        startDate: startDate,
-        endDate: endDate,
-      },
-    });
-
-    // need to fix this error handler below
-    if (findBooking) {
-      return res.status(403).json({
-        message: "Sorry, this spot is already booked for the specific dates",
       });
     }
 
@@ -237,13 +283,15 @@ router.post("/:spotId/reviews", requireAuth, async (req, res) => {
 
   if (review === null) {
     return res.status(400).json({
-      message: "Review text is required",
+      message: "Bad Request",
+      errors: "Review text is required",
     });
   }
 
   if (stars === null) {
     return res.status(400).json({
-      message: "Stars must be an integer from 1 to 5",
+      message: "Bad Request",
+      error: "Stars must be an integer from 1 to 5",
     });
   }
 
@@ -485,8 +533,36 @@ router.delete("/:spotId", requireAuth, async (req, res) => {
 });
 
 //get all the spots
-router.get("/", async (req, res) => {
-  const Spots = await Spot.findAll();
+router.get("/", validateQueryFilters, async (req, res) => {
+  let { page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } =
+    req.query;
+
+  if (!page) page = 1;
+  if (!size) size = 1;
+  if (page >= 10) page = 10;
+  if (size >= 20) size = 20;
+
+  if (minPrice < 0) minPrice = 0;
+  if (maxPrice < 0) maxPrice = 0;
+
+  const paginationObj = {
+    page: size,
+    size: size * (page - 1),
+    minLat,
+    maxLat,
+    minLng,
+    maxLng,
+    minPrice,
+    maxPrice,
+  };
+
+  if (parseInt(size) <= 0 || page <= 0) {
+    delete paginationObj.page;
+    delete paginationObj.size;
+    // paginationObj = {};
+  }
+
+  const Spots = await Spot.findAll({});
   let avgRating;
 
   for (let i = 0; i < Spots.length; i++) {
@@ -522,6 +598,8 @@ router.get("/", async (req, res) => {
   }
   res.json({
     Spots,
+    page: parseInt(page),
+    size: parseInt(size),
   });
 });
 
