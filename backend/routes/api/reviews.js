@@ -61,13 +61,14 @@ router.post("/:reviewId/images", requireAuth, async (req, res) => {
     });
   }
 
-  const reviewImage = await ReviewImage.create({ reviewId, url });
+  await ReviewImage.create({ reviewId, url });
 
   const findReviewImage = await ReviewImage.findAll({
     where: {
       url: url,
+      reviewId: reviewId,
     },
-    attributes: ["id", "url"],
+    attributes: ["id", "url", "reviewId"],
   });
 
   res.json(findReviewImage);
