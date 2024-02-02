@@ -155,7 +155,7 @@ router.get("/current", requireAuth, async (req, res) => {
     },
   });
 
-  console.log(spots[0].name, "OVER HERE");
+  // console.log(spots[0].name, "OVER HERE");
 
   const spotImage = await Spot.findAll({
     where: {
@@ -180,12 +180,12 @@ router.get("/current", requireAuth, async (req, res) => {
   const response = [];
 
   reviews.forEach((review) => response.push(review.toJSON()));
-
+  console.log(spotImage, "OVER HERE");
   for (let i = 0; i < response.length; i++) {
-    let spot = spots[0][i];
+    let spot = spots[i].toJSON();
     response[i].User = user[i];
     response[i].Spot = spot;
-    spot.previewImage = spotImage[i].SpotImages;
+    spot.previewImage = spotImage[i].SpotImages[0].url;
     response[i].ReviewImages = reviewImages[i].ReviewImages;
   }
 
