@@ -155,6 +155,8 @@ router.get("/current", requireAuth, async (req, res) => {
     },
   });
 
+  console.log(spots[0].name, "OVER HERE");
+
   const spotImage = await Spot.findAll({
     where: {
       ownerId: userId,
@@ -180,7 +182,7 @@ router.get("/current", requireAuth, async (req, res) => {
   reviews.forEach((review) => response.push(review.toJSON()));
 
   for (let i = 0; i < response.length; i++) {
-    let spot = spots[i].toJSON();
+    let spot = spots[0][i];
     response[i].User = user[i];
     response[i].Spot = spot;
     spot.previewImage = spotImage[i].SpotImages;

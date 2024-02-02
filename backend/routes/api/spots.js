@@ -313,7 +313,7 @@ router.post("/:spotId/reviews", requireAuth, async (req, res) => {
     });
   }
 
-  const findReview = await Review.findAll({
+  const findReview = await Review.findOne({
     where: {
       spotId: spotId,
     },
@@ -360,7 +360,7 @@ router.post("/:spotId/images", requireAuth, async (req, res) => {
 
   await SpotImage.create({ spotId, url, preview });
 
-  const findSpotImage = await SpotImage.findAll({
+  const findSpotImage = await SpotImage.findOne({
     where: {
       url: url,
     },
