@@ -15,6 +15,7 @@ const {
   ReviewImage,
   Booking,
   SpotImage,
+  ReviewImage,
 } = require("../../db/models");
 const { check } = require("express-validator");
 const spot = require("../../db/models/spot");
@@ -27,30 +28,30 @@ router.delete("/:imageId", requireAuth, async (req, res) => {
   const { imageId } = req.params;
   const ownerId = req.user.id;
 
-  const findSpotImage = await SpotImage.findAll({
+  const findReviewImage = await ReviewImage.findAll({
     where: {
       id: imageId,
     },
   });
 
-  const spotUser = await Spot.findAll({
+  const reviewUser = await Review.findAll({
     where: {
-      id: findSpotImage.spotId,
+      id: findReviewImage.spotId,
     },
   });
 
-  if (ownerId !== spotUser) {
+  if (ownerId !== reviewUser) {
     return res.status(403).json({
-      message: "Spot must belong to the current user",
+      message: "Review must belong to the current user",
     });
   }
 
-  if (findSpotImage === null) {
+  if (findReviewImage === null) {
     return res.status(404).json({
-      message: "Spot Image couldn't be found",
+      message: "Review Image couldn't be found",
     });
   } else {
-    await findSpotImage.destroy();
+    await findReviewImage.destroy();
     return res.json({
       message: "Successfully deleted",
     });
