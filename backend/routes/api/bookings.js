@@ -121,7 +121,38 @@ router.put("/:bookingId", requireAuth, validateDates, async (req, res) => {
     },
   });
 
+  const existOtherBooking = await Booking.findOne({
+    where: {
+      id: {
+        [Op.ne]: bookingId,
+      },
+      spotId: booking.spotId,
+      [Op.and]: [
+        {
+          startDate: {
+            [Op.lte]: [startDate],
+          },
+        },
+        {
+          endDate: {
+            [Op.gte]: [endDate],
+          },
+        },
+      ],
+    },
+  });
+
   if (existBooking) {
+    return res.status(403).json({
+      message: "Sorry, this spot is already booked for the specified dates",
+      errors: {
+        startDate: "Start date conflicts with an existing booking",
+        endDate: "End date conflicts with an existing booking",
+      },
+    });
+  }
+
+  if (existOtherBooking) {
     return res.status(403).json({
       message: "Sorry, this spot is already booked for the specified dates",
       errors: {

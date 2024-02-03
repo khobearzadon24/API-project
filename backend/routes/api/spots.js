@@ -183,7 +183,35 @@ router.post(
       },
     });
 
+    const findOtherBooking = await Booking.findOne({
+      where: {
+        spotId: spotId,
+        [Op.and]: [
+          {
+            startDate: {
+              [Op.lte]: [startDate],
+            },
+          },
+          {
+            endDate: {
+              [Op.gte]: [endDate],
+            },
+          },
+        ],
+      },
+    });
+
     if (findBooking) {
+      return res.status(403).json({
+        message: "Sorry, this spot is already booked for the specified dates",
+        errors: {
+          startDate: "Start date conflicts with an existing booking",
+          endDate: "End date conflicts with an existing booking",
+        },
+      });
+    }
+
+    if (findOtherBooking) {
       return res.status(403).json({
         message: "Sorry, this spot is already booked for the specified dates",
         errors: {
