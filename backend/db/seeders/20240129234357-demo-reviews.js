@@ -9,19 +9,19 @@ if (process.env.NODE_ENV === "production") {
 
 let reviews = [
   {
-    spotId: 1,
+    spotId: 2,
     userId: 1,
     review: "The place was nice.",
     stars: 3,
   },
   {
-    spotId: 2,
+    spotId: 3,
     userId: 2,
     review: "The place was comfortable",
     stars: 4,
   },
   {
-    spotId: 3,
+    spotId: 1,
     userId: 3,
     review: "The place had lots of natural lighting",
     stars: 5,
