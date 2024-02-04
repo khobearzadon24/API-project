@@ -406,9 +406,22 @@ router.get("/current", requireAuth, async (req, res) => {
   const ownerId = req.user.id;
   const Spots = await Spot.findAll({
     where: {
-      ownerId,
+      ownerId: ownerId,
     },
   });
+
+  const findUser = await User.findOne({
+    where: {
+      id: ownerId,
+    },
+  });
+
+  if (!findUser) {
+    return res.status(404).json({
+      message: "User does not exist",
+    });
+  }
+
   let avgRating;
 
   for (let i = 0; i < Spots.length; i++) {
