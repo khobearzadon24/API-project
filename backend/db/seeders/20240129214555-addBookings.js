@@ -9,19 +9,19 @@ if (process.env.NODE_ENV === "production") {
 }
 let bookings = [
   {
-    spotId: 1,
+    spotId: 2,
     userId: 1,
     startDate: "2024-08-25",
     endDate: "2024-08-29",
   },
   {
-    spotId: 2,
+    spotId: 3,
     userId: 2,
     startDate: "2024-02-20",
     endDate: "2024-02-21",
   },
   {
-    spotId: 3,
+    spotId: 1,
     userId: 3,
     startDate: "2024-04-15",
     endDate: "2024-04-18",
