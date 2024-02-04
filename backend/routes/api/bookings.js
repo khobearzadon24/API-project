@@ -196,7 +196,6 @@ router.get("/current", requireAuth, async (req, res) => {
     const previewimage = await SpotImage.findOne({
       where: {
         spotId: booking.Spot.id,
-        preview: true,
       },
     });
     // console.log(previewimage)
