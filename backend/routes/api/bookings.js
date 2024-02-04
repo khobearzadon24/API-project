@@ -85,6 +85,7 @@ router.put("/:bookingId", requireAuth, validateDates, async (req, res) => {
 
   const booking = await Booking.findByPk(bookingId);
 
+  console.log(booking, "OVER HERE!!!");
   //
   if (!booking) {
     return res.status(404).json({

@@ -264,12 +264,10 @@ router.get("/:spotId/bookings", requireAuth, async (req, res) => {
   }
 
   //if you are not the owner of the spot
-  //NEED TO FIX
   if (spot.ownerId !== ownerId) {
     const bookings = await Booking.findAll({
       where: {
         userId: ownerId,
-        spotId: spotId,
       },
       attributes: ["spotId", "startDate", "endDate"],
     });
