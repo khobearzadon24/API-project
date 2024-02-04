@@ -106,23 +106,23 @@ const validateQueryFilters = [
     .withMessage("Maximum latitude is invalid"),
   query("minLat")
     .optional()
-    .isDecimal({ min: -180, max: 180 })
+    .isFloat({ min: -180, max: 180 })
     .withMessage("Minimum latitude is invalid"),
   query("minLng")
     .optional()
-    .isDecimal({ min: -180, max: 180 })
+    .isFloat({ min: -180, max: 180 })
     .withMessage("Maximum longitude is invalid"),
   query("maxLng")
     .optional()
-    .isDecimal({ min: -180, max: 180 })
+    .isFloat({ min: -180, max: 180 })
     .withMessage("Minimum longitude is invalid"),
   query("minPrice")
     .optional()
-    .isDecimal({ min: 0 })
+    .isFloat({ min: 0 })
     .withMessage("Minimum price must be greater than or equal to 0"),
   query("maxPrice")
     .optional()
-    .isDecimal({ min: 0 })
+    .isFloat({ min: 0 })
     .withMessage("Maximum price must be greater than or equal to 0"),
   handleValidationErrors,
 ];
@@ -566,29 +566,59 @@ router.get("/", validateQueryFilters, async (req, res) => {
   let { page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } =
     req.query;
 
+  const paginationObj = {
+    where: {},
+  };
+
   if (!page) page = 1;
   if (!size) size = 1;
   if (page >= 10) page = 10;
   if (size >= 20) size = 20;
 
-  if (minPrice < 0) minPrice = 0;
-  if (maxPrice < 0) maxPrice = 0;
-
-  const paginationObj = {
-    page: size,
-    size: size * (page - 1),
-    minLat,
-    maxLat,
-    minLng,
-    maxLng,
-    minPrice,
-    maxPrice,
-  };
+  paginationObj.page = size;
+  paginationObj.size = size * (page - 1);
 
   if (parseInt(size) <= 0 || page <= 0) {
     delete paginationObj.page;
     delete paginationObj.size;
-    // paginationObj = {};
+  }
+
+  if (minPrice < 0) minPrice = 0;
+  if (maxPrice < 0) maxPrice = 0;
+  //   minLat,
+  if (minLat) {
+    paginationObj.where.lat = { [Op.gte]: minLat };
+  }
+  //   maxLat,
+  if (maxLat) {
+    paginationObj.where.lat = { [Op.lte]: maxLat };
+  }
+
+  if (minLat && maxLat) {
+    paginationObj.where.lat = { [Op.between]: [minLat, maxLat] };
+  }
+  //   minLng,
+  if (minLng) {
+    paginationObj.where.lng = { [Op.gte]: minLng };
+  }
+  //   maxLng,
+  if (maxLng) {
+    paginationObj.where.lng = { [Op.lte]: maxLng };
+  }
+
+  if (minLng && maxLng) {
+    paginationObj.where.lng = { [Op.between]: [minLng, maxLng] };
+  }
+  //   minPrice,
+  if (minPrice) {
+    paginationObj.where.price = { [Op.gte]: minPrice };
+  }
+  //   maxPrice,
+  if (maxPrice) {
+    paginationObj.where.price = { [Op.lte]: maxPrice };
+  }
+  if (minPrice && maxPrice) {
+    paginationObj.where.price = { [Op.between]: [minPrice, maxPrice] };
   }
 
   const Spots = await Spot.findAll({});

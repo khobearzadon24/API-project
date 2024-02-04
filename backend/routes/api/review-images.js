@@ -28,6 +28,12 @@ router.delete("/:imageId", requireAuth, async (req, res) => {
 
   const findReviewImage = await ReviewImage.findByPk(imageId);
 
+  if (findReviewImage === null) {
+    return res.status(404).json({
+      message: "Review Image couldn't be found",
+    });
+  }
+
   const review = await Review.findOne({
     where: {
       id: findReviewImage.reviewId,
@@ -40,16 +46,10 @@ router.delete("/:imageId", requireAuth, async (req, res) => {
     });
   }
 
-  if (findReviewImage === null) {
-    return res.status(404).json({
-      message: "Review Image couldn't be found",
-    });
-  } else {
-    await findReviewImage.destroy();
-    return res.json({
-      message: "Successfully deleted",
-    });
-  }
+  await findReviewImage.destroy();
+  return res.json({
+    message: "Successfully deleted",
+  });
 });
 
 module.exports = router;
