@@ -144,59 +144,55 @@ router.get("/current", requireAuth, async (req, res) => {
     where: {
       userId: userId,
     },
+    include: [
+      {
+        model: User,
+        attributes: ["id", "firstName", "lastName"],
+      },
+      {
+        model: Spot,
+        attributes: {
+          exclude: ["createdAt", "updatedAt", "description"],
+        },
+        include: {
+          model: SpotImage,
+          where: {
+            preview: true,
+          },
+          attributes: ["url"],
+        },
+      },
+      {
+        model: ReviewImage,
+        attributes: [["reviewId", "id"], "url"],
+      },
+    ],
   });
 
-  const user = await User.findAll({
-    where: {
-      id: userId,
-    },
-    attributes: ["id", "firstName", "lastName"],
-  });
+  for (let i = 0; i < reviews.length; i++) {
+    let response = reviews[i].toJSON();
+    let spotURL = response.Spot.SpotImages[0];
 
-  let spots = await Spot.findAll({
-    where: {
-      ownerId: userId,
-    },
-    attributes: {
-      exclude: ["createdAt", "updatedAt", "description"],
-    },
-  });
-
-  // console.log(spots[0].name, "OVER HERE");
-
-  const spotImage = await Spot.findAll({
-    where: {
-      ownerId: userId,
-    },
-    include: {
-      model: SpotImage,
-      attributes: ["url"],
-    },
-  });
-
-  const reviewImages = await Review.findAll({
-    where: {
-      userId: userId,
-    },
-    include: {
-      model: ReviewImage,
-      attributes: [["reviewId", "id"], "url"],
-    },
-  });
-
-  const response = [];
-
-  reviews.forEach((review) => response.push(review.toJSON()));
-  console.log(spotImage, "OVER HERE");
-  for (let i = 0; i < response.length; i++) {
-    let spot = spots[i].toJSON();
-    response[i].User = user[i];
-    response[i].Spot = spot;
-    spot.previewImage = spotImage[i].SpotImages[0].url;
-    response[i].ReviewImages = reviewImages[i].ReviewImages;
+    if (spotURL) {
+      response.Spot.previewImage = spotURL.url;
+    } else {
+      response.Spot.previewImage = null;
+    }
+    if (response.Spot.lat) {
+      response.Spot.lat = parseFloat(response.Spot.lat);
+    }
+    if (response.Spot.lng) {
+      response.Spot.lng = parseFloat(response.Spot.lng);
+    }
+    if (response.Spot.price) {
+      response.Spot.price = parseFloat(response.Spot.price);
+    }
+    //deletes url
+    delete response.Spot.SpotImages;
+    reviews[i] = response;
   }
 
-  res.json({ Reviews: response });
+  res.json({ Reviews: reviews });
 });
 
 module.exports = router;
