@@ -51,7 +51,7 @@ router.delete("/:bookingId", requireAuth, async (req, res) => {
     },
   });
 
-  if (findBooking === null) {
+  if (!findBooking) {
     return res.status(404).json({
       message: "Booking couldn't be found",
     });
