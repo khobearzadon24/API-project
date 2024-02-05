@@ -160,7 +160,7 @@ router.post("/:spotId/bookings", requireAuth, async (req, res) => {
 
   const getSpot = await Spot.findByPk(spotId);
 
-  if (getSpot === null) {
+  if (!getSpot) {
     return res.status(404).json({
       message: "Spot couldn't be found",
     });
@@ -324,7 +324,7 @@ router.post(
 
     const getSpot = await Spot.findByPk(spotId);
 
-    if (getSpot === null) {
+    if (!getSpot) {
       return res.status(404).json({
         message: "Spot couldn't be found",
       });
@@ -434,7 +434,7 @@ router.get("/current", requireAuth, async (req, res) => {
       },
     });
 
-    if (stars === null) avgRating = 0;
+    if (!stars) avgRating = 0;
     else {
       avgRating = stars / numReviews;
     }
@@ -447,7 +447,7 @@ router.get("/current", requireAuth, async (req, res) => {
       },
     });
 
-    if (imageUrl === null) {
+    if (!imageUrl) {
       Spots[i].setDataValue("previewImage", null);
     } else {
       Spots[i].setDataValue("previewImage", imageUrl.url);
@@ -461,7 +461,7 @@ router.get("/:spotId", async (req, res) => {
   const { spotId } = req.params;
 
   const Spots = await Spot.findByPk(spotId);
-  if (Spots === null) {
+  if (!Spots) {
     return res.status(404).json({
       message: `Spot couldn't be found.`,
     });
@@ -480,7 +480,7 @@ router.get("/:spotId", async (req, res) => {
     },
   });
 
-  if (stars === null) avgRating = 0;
+  if (!stars) avgRating = 0;
   else {
     avgRating = stars / numReviews;
   }
@@ -494,7 +494,7 @@ router.get("/:spotId", async (req, res) => {
     attributes: ["id", "url", "preview"],
   });
 
-  if (imageUrl === null) {
+  if (!imageUrl) {
     Spots.setDataValue("SpotImages", null);
   } else {
     Spots.setDataValue("SpotImages", imageUrl);
@@ -647,7 +647,7 @@ router.get("/", validateQueryFilters, async (req, res) => {
       },
     });
 
-    if (stars === null) avgRating = 0;
+    if (!stars) avgRating = 0;
     else {
       avgRating = stars / numReviews;
     }
@@ -660,7 +660,7 @@ router.get("/", validateQueryFilters, async (req, res) => {
       },
     });
 
-    if (imageUrl === null) {
+    if (!imageUrl) {
       Spots[i].setDataValue("previewImage", null);
     } else {
       Spots[i].setDataValue("previewImage", imageUrl.url);
