@@ -66,14 +66,6 @@ router.post("/:reviewId/images", requireAuth, async (req, res) => {
       message: "Maximum number of images for this resource was reached",
     });
 
-  const ownerId = req.user.id;
-
-  if (ownerId !== findReviewId.userId) {
-    res.status(403).json({
-      message: "Must be the owner of the review to add an image",
-    });
-  }
-
   await ReviewImage.create({ reviewId, url });
 
   const findReviewImage = await ReviewImage.findAll({
