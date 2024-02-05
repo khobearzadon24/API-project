@@ -336,7 +336,7 @@ router.post("/:spotId/reviews", requireAuth, async (req, res) => {
   const ownerId = req.user.id;
 
   if (ownerId === getSpot.ownerId) {
-    res.status(403).json({
+    res.status(500).json({
       message: "Users cannot add a review to their own spot.",
     });
   }
@@ -373,17 +373,17 @@ router.post("/:spotId/images", requireAuth, async (req, res) => {
 
   const createSpotImage = await Spot.findByPk(spotId);
 
-  const ownerId = req.user.id;
-
-  if (ownerId !== createSpotImage.ownerId) {
-    return res.status(403).json({
-      message: "Must be the owner to add an image",
-    });
-  }
-
   if (!createSpotImage) {
     return res.status(404).json({
       message: "Spot couldn't be found",
+    });
+  }
+  const ownerId = req.user.id;
+
+  console.log(createSpotImage, "OVER HERE!!!");
+  if (ownerId !== createSpotImage.ownerId) {
+    return res.status(403).json({
+      message: "Must be the owner to add an image",
     });
   }
 
