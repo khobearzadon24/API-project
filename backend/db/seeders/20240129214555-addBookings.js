@@ -38,8 +38,33 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
      */
-    await Booking.bulkCreate(bookings, { validate: true });
+    // await Booking.bulkCreate(bookings, { validate: true });
+    await Booking.bulkCreate(
+      [
+        {
+          spotId: 1,
+          userId: 1,
+          startDate: "2024-04-24",
+          endDate: "2024-04-25",
+        },
+        {
+          spotId: 2,
+          userId: 2,
+          startDate: "2024-02-15",
+          endDate: "2024-02-17",
+        },
+        {
+          spotId: 3,
+          userId: 3,
+          startDate: "2024-05-14",
+          endDate: "2024-05-18",
+        },
+      ],
+      options,
+      { validate: true }
+    );
   },
+  // },
 
   async down(queryInterface, Sequelize) {
     /**
@@ -53,7 +78,7 @@ module.exports = {
     return queryInterface.bulkDelete(
       options,
       {
-        id: bookings.map((booking) => booking.id),
+        spotId: { [Op.in]: [1, 2, 3] },
       },
       {}
     );

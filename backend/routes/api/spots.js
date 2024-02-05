@@ -88,7 +88,7 @@ const validateDates = [
     .custom((val, { req }) => {
       const currentDate = new Date();
       if (new Date(val) <= currentDate) {
-        throw new Error("start date cannot be in the past");
+        throw new Error("StartDate cannot be in the past");
       }
       return true;
     }),
@@ -246,9 +246,7 @@ router.post(
         "updatedAt",
       ],
     });
-    res.status(200).json({
-      foundBooking,
-    });
+    res.status(200).json(foundBooking);
   }
 );
 

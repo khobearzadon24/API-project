@@ -86,25 +86,28 @@ router.delete("/:bookingId", requireAuth, async (req, res) => {
 });
 //edit a booking
 router.put("/:bookingId", requireAuth, async (req, res) => {
+  const { user } = req;
   const { bookingId } = req.params;
   const { startDate, endDate } = req.body;
-  const bookings = await Booking.findOne({
-    where: {
-      id: bookingId,
-    },
-    attributes: [
-      "id",
-      "spotId",
-      "userId",
-      "startDate",
-      "endDate",
-      "createdAt",
-      "updatedAt",
-    ],
-  });
+  // const bookings = await Booking.findOne({
+  //   where: {
+  //     id: bookingId,
+  //   },
+  //   attributes: [
+  //     "id",
+  //     "spotId",
+  //     "userId",
+  //     "startDate",
+  //     "endDate",
+  //     "createdAt",
+  //     "updatedAt",
+  //   ],
+  // });
 
+  const bookings = await Booking.findByPk(req.params.bookingId);
   console.log(bookings, "OVER HERE");
-  console.log(bookings.id, "over here!!!");
+  // console.log(bookings, "OVER HERE");
+  // console.log(bookings.id, "over here!!!");
 
   // if it doesnt exist
   if (!bookings) {
@@ -169,8 +172,9 @@ router.put("/:bookingId", requireAuth, async (req, res) => {
       },
     });
   }
+  console.log(bookings.userId, "over here!!!");
 
-  if (req.user.id !== bookings.userId) {
+  if (user.id !== bookings.userId) {
     return res.status(403).json({
       message: "Forbidden",
     });
@@ -183,7 +187,7 @@ router.put("/:bookingId", requireAuth, async (req, res) => {
   await bookings.save();
 
   res.json({
-    id: bookings.id,
+    id: req.params.bookingId,
     spotId: bookings.spotId,
     userId: bookings.userId,
     startDate: bookings.startDate,
