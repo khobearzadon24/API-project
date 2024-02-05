@@ -82,12 +82,19 @@ router.put("/:bookingId", [requireAuth, validateDates], async (req, res) => {
   const { bookingId } = req.params;
 
   const booking = await Booking.findByPk(bookingId);
-
-  console.log(booking, "OVER HERE!!!");
-  //
   if (!booking) {
     return res.status(404).json({
       message: "Booking couldn't be found",
+    });
+  }
+
+  const ownerId = req.user.id;
+
+  console.log(booking.userId, "write me here!!");
+
+  if (ownerId !== booking.userId) {
+    return res.status(403).json({
+      message: "Booking must belong to the current user",
     });
   }
 
@@ -160,8 +167,6 @@ router.put("/:bookingId", [requireAuth, validateDates], async (req, res) => {
       },
     });
   }
-
-  const ownerId = req.user.id;
 
   booking.startDate = startDate || booking.startDate;
   booking.endDate = endDate || booking.endDate;

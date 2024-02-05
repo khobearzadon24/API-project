@@ -35,11 +35,23 @@ router.post("/:reviewId/images", requireAuth, async (req, res) => {
 
   const { url } = req.body;
 
-  const findReviewId = await Review.findByPk(reviewId);
+  const findReviewId = await Review.findOne({
+    where: {
+      id: reviewId,
+    },
+  });
 
   if (!findReviewId) {
     return res.status(404).json({
       message: "Review couldn't be found",
+    });
+  }
+
+  const ownerId = req.user.id;
+
+  if (ownerId !== findReviewId.userId) {
+    res.status(403).json({
+      message: "Must be the owner of the review to add an image",
     });
   }
 
@@ -49,7 +61,7 @@ router.post("/:reviewId/images", requireAuth, async (req, res) => {
     },
   });
 
-  if (findAllReviews.length > 10)
+  if (findAllReviews.length >= 10)
     return res.status(403).json({
       message: "Maximum number of images for this resource was reached",
     });
@@ -61,9 +73,15 @@ router.post("/:reviewId/images", requireAuth, async (req, res) => {
       message: "Must be the owner of the review to add an image",
     });
   }
-  const response = await ReviewImage.create({
-    reviewId: reviewId,
-    url,
+
+  await ReviewImage.create({ reviewId, url });
+
+  const findReviewImage = await ReviewImage.findAll({
+    where: {
+      url: url,
+      reviewId: reviewId,
+    },
+    attributes: ["id", "url", "reviewId"],
   });
 
   res.json({
