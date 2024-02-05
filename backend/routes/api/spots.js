@@ -345,8 +345,8 @@ router.post(
       },
     });
 
-    if (!findReview) {
-      return res.status(403).json({
+    if (findReview) {
+      return res.status(500).json({
         message: "User already has a review for this spot",
       });
     }
@@ -381,7 +381,7 @@ router.post("/:spotId/images", requireAuth, async (req, res) => {
   console.log(createSpotImage, "OVER HERE!!!");
   if (ownerId !== createSpotImage.ownerId) {
     return res.status(403).json({
-      message: "Must be the owner to add an image",
+      message: "Forbidden",
     });
   }
 
@@ -392,7 +392,7 @@ router.post("/:spotId/images", requireAuth, async (req, res) => {
       url: url,
     },
     attributes: {
-      exclude: ["createdAt", "updatedAt"],
+      exclude: ["createdAt", "updatedAt", "spotId"],
     },
   });
 
@@ -452,6 +452,15 @@ router.get("/current", requireAuth, async (req, res) => {
     } else {
       Spots[i].setDataValue("previewImage", imageUrl.url);
     }
+    if (Spots[i].lat) {
+      Spots[i].setDataValue("lat", parseFloat(Spots[i].lat));
+    }
+    if (Spots[i].lng) {
+      Spots[i].setDataValue("lng", parseFloat(Spots[i].lng));
+    }
+    if (Spots[i].price) {
+      Spots[i].setDataValue("price", parseFloat(Spots[i].price));
+    }
   }
   res.json({ Spots });
 });
@@ -505,6 +514,9 @@ router.get("/:spotId", async (req, res) => {
   });
 
   Spots.setDataValue("Owner", owner);
+  if (Spots.lat) Spots.lat = parseFloat(Spots.lat);
+  if (Spots.lng) Spots.lng = parseFloat(Spots.lng);
+  if (Spots.price) Spots.price = parseFloat(Spots.price);
 
   res.json(Spots);
 });
@@ -528,7 +540,7 @@ router.put("/:spotId", [requireAuth, validatePost], async (req, res) => {
 
   if (ownerId !== spot.ownerId) {
     res.status(403).json({
-      message: "Must be the owner to edit a spot",
+      message: "Forbidden",
     });
   }
 
@@ -562,7 +574,7 @@ router.delete("/:spotId", requireAuth, async (req, res) => {
 
   if (ownerId !== spot.ownerId) {
     return res.status(403).json({
-      message: "Must be the owner to delete the spot",
+      message: "Forbidden",
     });
   }
 
@@ -582,7 +594,7 @@ router.get("/", validateQueryFilters, async (req, res) => {
   };
 
   if (!page) page = 1;
-  if (!size) size = 1;
+  if (!size) size = 20;
   if (page >= 10) page = 10;
   if (size >= 20) size = 20;
 
@@ -664,6 +676,16 @@ router.get("/", validateQueryFilters, async (req, res) => {
       Spots[i].setDataValue("previewImage", null);
     } else {
       Spots[i].setDataValue("previewImage", imageUrl.url);
+    }
+
+    if (Spots[i].lat) {
+      Spots[i].setDataValue("lat", parseFloat(Spots[i].lat));
+    }
+    if (Spots[i].lng) {
+      Spots[i].setDataValue("lng", parseFloat(Spots[i].lng));
+    }
+    if (Spots[i].price) {
+      Spots[i].setDataValue("price", parseFloat(Spots[i].price));
     }
   }
   res.json({
