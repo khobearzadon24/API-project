@@ -21,6 +21,19 @@ const { handleValidationErrors } = require("../../utils/validation");
 
 const router = express.Router();
 
+const validateReview = [
+  check("review")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .withMessage("Review text is required"),
+  check("stars")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .isInt({ min: 1, max: 5 })
+    .withMessage("Stars must be an integer from 1 to 5"),
+  handleValidationErrors,
+];
+
 const validatePost = [
   check("address")
     .exists({ checkFalsy: true })
@@ -301,64 +314,54 @@ router.get("/:spotId/reviews", async (req, res) => {
 });
 
 // create a review for a spot based on the spot's id
-router.post("/:spotId/reviews", requireAuth, async (req, res) => {
-  const { review, stars } = req.body;
+router.post(
+  "/:spotId/reviews",
+  [requireAuth, validateReview],
+  async (req, res) => {
+    const { review, stars } = req.body;
 
-  if (review === null) {
-    return res.status(400).json({
-      message: "Bad Request",
-      errors: "Review text is required",
+    const { spotId } = req.params;
+
+    const getSpot = await Spot.findByPk(spotId);
+
+    if (getSpot === null) {
+      return res.status(404).json({
+        message: "Spot couldn't be found",
+      });
+    }
+
+    const ownerId = req.user.id;
+
+    if (ownerId === getSpot.ownerId) {
+      res.status(500).json({
+        message: "Users cannot add a review to their own spot.",
+      });
+    }
+
+    const findReview = await Review.findOne({
+      where: {
+        spotId: spotId,
+        userId: ownerId,
+      },
     });
-  }
 
-  if (stars === null) {
-    return res.status(400).json({
-      message: "Bad Request",
-      error: "Stars must be an integer from 1 to 5",
-    });
-  }
+    if (!findReview) {
+      return res.status(403).json({
+        message: "User already has a review for this spot",
+      });
+    }
+    // add in error handler for when review already exists
 
-  const { spotId } = req.params;
-
-  const getSpot = await Spot.findByPk(spotId);
-
-  if (getSpot === null) {
-    return res.status(404).json({
-      message: "Spot couldn't be found",
-    });
-  }
-
-  const ownerId = req.user.id;
-
-  if (ownerId === getSpot.ownerId) {
-    res.status(500).json({
-      message: "Users cannot add a review to their own spot.",
-    });
-  }
-
-  const findReview = await Review.findOne({
-    where: {
-      spotId: spotId,
+    const createReview = await Review.create({
+      spotId: +spotId,
       userId: ownerId,
-    },
-  });
-
-  if (!findReview) {
-    return res.status(403).json({
-      message: "User already has a review for this spot",
+      review,
+      stars,
     });
+
+    res.status(201).json(createReview);
   }
-  // add in error handler for when review already exists
-
-  const createReview = await Review.create({
-    spotId: +spotId,
-    userId: ownerId,
-    review,
-    stars,
-  });
-
-  res.status(201).json(createReview);
-});
+);
 
 // add an image to a spot based on the spot's id
 router.post("/:spotId/images", requireAuth, async (req, res) => {
