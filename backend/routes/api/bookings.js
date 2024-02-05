@@ -86,36 +86,46 @@ router.delete("/:bookingId", requireAuth, async (req, res) => {
 });
 //edit a booking
 router.put("/:bookingId", requireAuth, async (req, res) => {
-  const userId = req.user.id;
+  const { user } = req;
+  const { bookingId } = req.params;
   const { startDate, endDate } = req.body;
-  const bookingId = req.params.bookingId;
+  // const bookings = await Booking.findOne({
+  //   where: {
+  //     id: bookingId,
+  //   },
+  //   attributes: [
+  //     "id",
+  //     "spotId",
+  //     "userId",
+  //     "startDate",
+  //     "endDate",
+  //     "createdAt",
+  //     "updatedAt",
+  //   ],
+  // });
 
-  const booking = await Booking.findByPk(bookingId);
+  const bookings = await Booking.findByPk(req.params.bookingId);
+  console.log(bookings, "OVER HERE");
+  // console.log(bookings, "OVER HERE");
+  // console.log(bookings.id, "over here!!!");
 
-  if (!booking) {
-    res.status(404);
-    return res.json({
+  // if it doesnt exist
+  if (!bookings) {
+    return res.status(404).json({
       message: "Booking couldn't be found",
     });
   }
 
-  if (userId !== booking.userId) {
-    res.status(403);
-    return res.json({
-      message: "Forbidden",
-    });
-  }
-
-  if (new Date(endDate) < Date.now()) {
-    res.status(403);
-    return res.json({
+  let currentDate = new Date();
+  if (new Date(startDate) < currentDate || new Date(endDate) < currentDate) {
+    return res.status(403).json({
       message: "Past bookings can't be modified",
     });
   }
 
-  if (new Date(startDate) < Date.now()) {
-    res.status(400);
-    return res.json({
+  //if startdate is less than current date
+  if (new Date(startDate) < currentDate) {
+    return res.status(400).json({
       message: "Bad Request",
       errors: {
         startDate: "startDate cannot be in the past",
@@ -123,164 +133,77 @@ router.put("/:bookingId", requireAuth, async (req, res) => {
     });
   }
 
-  if (new Date(startDate) >= new Date(endDate)) {
-    res.status(400);
-    return res.json({
+  if (new Date(endDate) <= new Date(startDate)) {
+    return res.status(400).json({
       message: "Bad Request",
       errors: {
-        startDate: "endDate cannot be on or before startDate",
+        endDate: "endDate cannot be on or before startDate",
       },
     });
   }
-
-  const conflictBooking = await Booking.findOne({
+  // find existing booking in Booking model
+  const existBooking = await Booking.findOne({
     where: {
-      id: { [Op.ne]: booking.id },
-      spotId: booking.spotId,
+      id: {
+        [Op.ne]: bookingId,
+      },
+      spotId: bookings.spotId,
       [Op.and]: [
-        { startDate: { [Op.lte]: new Date(endDate) } },
-        { endDate: { [Op.gte]: new Date(startDate) } },
+        {
+          startDate: {
+            [Op.lte]: new Date(endDate),
+          },
+        },
+        {
+          endDate: {
+            [Op.gte]: new Date(startDate),
+          },
+        },
       ],
     },
   });
 
-  if (conflictBooking) {
-    res.status(403);
-    return res.json({
+  // const existOtherBooking = await Booking.findOne({
+  //   where: {
+  //     id: {
+  //       [Op.ne]: bookingId,
+  //     },
+
+  //   }
+  // })
+
+  if (existBooking) {
+    return res.status(403).json({
       message: "Sorry, this spot is already booked for the specified dates",
       errors: {
         startDate: "Start date conflicts with an existing booking",
-        endDate: "End date conflicts with an existing Booking",
+        endDate: "End date conflicts with an existing booking",
       },
     });
   }
+  console.log(bookings.userId, "over here!!!");
 
-  booking.startDate = startDate || booking.startDate;
-  booking.endDate = endDate || booking.endDate;
+  if (user.id !== bookings.userId) {
+    return res.status(403).json({
+      message: "Forbidden",
+    });
+  }
 
-  await booking.save();
-  res.json(booking);
+  bookings.startDate = startDate;
+  bookings.endDate = endDate;
+
+  await bookings.save();
+
+  res.json({
+    id: req.params.bookingId,
+    spotId: bookings.spotId,
+    userId: bookings.userId,
+    startDate: bookings.startDate,
+    endDate: bookings.endDate,
+    createdAt: bookings.createdAt,
+    updatedAt: bookings.updatedAt,
+  });
 });
-
-// router.put("/:bookingId", requireAuth, async (req, res) => {
-//   const { user } = req;
-//   const { bookingId } = req.params;
-//   const { startDate, endDate } = req.body;
-//   // const bookings = await Booking.findOne({
-//   //   where: {
-//   //     id: bookingId,
-//   //   },
-//   //   attributes: [
-//   //     "id",
-//   //     "spotId",
-//   //     "userId",
-//   //     "startDate",
-//   //     "endDate",
-//   //     "createdAt",
-//   //     "updatedAt",
-//   //   ],
-//   // });
-
-//   const bookings = await Booking.findByPk(req.params.bookingId);
-//   console.log(bookings, "OVER HERE");
-//   // console.log(bookings, "OVER HERE");
-//   // console.log(bookings.id, "over here!!!");
-
-//   // if it doesnt exist
-//   if (!bookings) {
-//     return res.status(404).json({
-//       message: "Booking couldn't be found",
-//     });
-//   }
-
-//   let currentDate = new Date();
-//   if (new Date(startDate) < currentDate || new Date(endDate) < currentDate) {
-//     return res.status(403).json({
-//       message: "Past bookings can't be modified",
-//     });
-//   }
-
-//   //if startdate is less than current date
-//   if (new Date(startDate) < currentDate) {
-//     return res.status(400).json({
-//       message: "Bad Request",
-//       errors: {
-//         startDate: "startDate cannot be in the past",
-//       },
-//     });
-//   }
-
-//   if (new Date(endDate) <= new Date(startDate)) {
-//     return res.status(400).json({
-//       message: "Bad Request",
-//       errors: {
-//         endDate: "endDate cannot be on or before startDate",
-//       },
-//     });
-//   }
-//   // find existing booking in Booking model
-//   const existBooking = await Booking.findOne({
-//     where: {
-//       id: {
-//         [Op.ne]: bookingId,
-//       },
-//       spotId: bookings.spotId,
-//       [Op.and]: [
-//         {
-//           startDate: {
-//             [Op.lte]: new Date(endDate),
-//           },
-//         },
-//         {
-//           endDate: {
-//             [Op.gte]: new Date(startDate),
-//           },
-//         },
-//       ],
-//     },
-//   });
-
-//   // const existOtherBooking = await Booking.findOne({
-//   //   where: {
-//   //     id: {
-//   //       [Op.ne]: bookingId,
-//   //     },
-
-//   //   }
-//   // })
-
-//   if (existBooking) {
-//     return res.status(403).json({
-//       message: "Sorry, this spot is already booked for the specified dates",
-//       errors: {
-//         startDate: "Start date conflicts with an existing booking",
-//         endDate: "End date conflicts with an existing booking",
-//       },
-//     });
-//   }
-//   console.log(bookings.userId, "over here!!!");
-
-//   if (user.id !== bookings.userId) {
-//     return res.status(403).json({
-//       message: "Forbidden",
-//     });
-//   }
-
-//   bookings.startDate = startDate;
-//   bookings.endDate = endDate;
-
-//   await bookings.save();
-
-//   res.json({
-//     id: req.params.bookingId,
-//     spotId: bookings.spotId,
-//     userId: bookings.userId,
-//     startDate: bookings.startDate,
-//     endDate: bookings.endDate,
-//     createdAt: bookings.createdAt,
-//     updatedAt: bookings.updatedAt,
-//   });
-// });
 // router.put("/:bookingId", requireAuth, async (req, res) => {
 //   const { startDate, endDate } = req.body;
 
