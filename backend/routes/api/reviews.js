@@ -35,17 +35,15 @@ router.post("/:reviewId/images", requireAuth, async (req, res) => {
 
   const { url } = req.body;
 
-  const findReviewId = await Review.findOne({
-    where: {
-      id: reviewId,
-    },
-  });
+  const findReviewId = await Review.findByPk(reviewId);
 
   if (!findReviewId) {
     return res.status(404).json({
       message: "Review couldn't be found",
     });
   }
+
+  console.log(findReviewId, "OVER HERE");
 
   const ownerId = req.user.id;
 
@@ -66,19 +64,19 @@ router.post("/:reviewId/images", requireAuth, async (req, res) => {
       message: "Maximum number of images for this resource was reached",
     });
 
-  await ReviewImage.create({ reviewId, url });
+  const getImage = await ReviewImage.create({ reviewId, url });
 
-  const findReviewImage = await ReviewImage.findAll({
-    where: {
-      url: url,
-      reviewId: reviewId,
-    },
-    attributes: ["id", "url", "reviewId"],
-  });
+  // const findReviewImage = await ReviewImage.findAll({
+  //   where: {
+  //     url: url,
+  //     reviewId: reviewId,
+  //   },
+  //   attributes: ["id", "url", "reviewId"],
+  // });
 
   res.json({
-    id: response.id,
-    url: response.url,
+    id: getImage.id,
+    url: getImage.url,
   });
 });
 
