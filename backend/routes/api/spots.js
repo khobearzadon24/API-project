@@ -141,93 +141,97 @@ const validateQueryFilters = [
 ];
 
 //create a booking from a spot based on the Spot's id
-router.post("/:spotId/bookings", requireAuth, async (req, res) => {
-  const { startDate, endDate } = req.body;
+router.post(
+  "/:spotId/bookings",
+  [requireAuth, validateDates],
+  async (req, res) => {
+    const { startDate, endDate } = req.body;
 
-  const { spotId } = req.params;
+    const { spotId } = req.params;
 
-  if (!startDate) {
-    return res.status(400).json({
-      message: "Start date is required",
-    });
-  }
+    if (!startDate) {
+      return res.status(400).json({
+        message: "Start date is required",
+      });
+    }
 
-  if (!endDate) {
-    return res.status(400).json({
-      message: "End date is required",
-    });
-  }
+    if (!endDate) {
+      return res.status(400).json({
+        message: "End date is required",
+      });
+    }
 
-  const getSpot = await Spot.findByPk(spotId);
+    const getSpot = await Spot.findByPk(spotId);
 
-  if (!getSpot) {
-    return res.status(404).json({
-      message: "Spot couldn't be found",
-    });
-  }
+    if (!getSpot) {
+      return res.status(404).json({
+        message: "Spot couldn't be found",
+      });
+    }
 
-  const ownerId = req.user.id;
+    const ownerId = req.user.id;
 
-  if (ownerId === getSpot.ownerId) {
-    res.status(403).json({
-      message: "Forbidden",
-    });
-  }
+    if (ownerId === getSpot.ownerId) {
+      return res.status(403).json({
+        message: "Forbidden",
+      });
+    }
 
-  const findBooking = await Booking.findOne({
-    where: {
-      spotId: spotId,
-      [Op.or]: [
-        {
-          startDate: {
-            [Op.between]: [startDate, endDate],
+    const findBooking = await Booking.findOne({
+      where: {
+        spotId: spotId,
+        [Op.and]: [
+          {
+            startDate: {
+              [Op.lte]: new Date(endDate),
+            },
           },
-        },
-        {
-          endDate: {
-            [Op.between]: [startDate, endDate],
+          {
+            endDate: {
+              [Op.gte]: new Date(startDate),
+            },
           },
+        ],
+      },
+    });
+
+    let currentDate = new Date();
+    if (new Date(startDate) < currentDate) {
+      return res.status(400).json({
+        message: "Bad Request",
+        errors: {
+          startDate: "startDate cannot be in the past",
         },
-      ],
-    },
-  });
+      });
+    }
+    if (new Date(endDate) <= new Date(startDate)) {
+      return res.status(400).json({
+        message: "Bad Request",
+        errors: {
+          endDate: "endDate cannot be on or before startDate",
+        },
+      });
+    }
 
-  let currentDate = new Date();
-  if (new Date(startDate) < currentDate) {
-    return res.status(400).json({
-      message: "Bad Request",
-      errors: {
-        startDate: "startDate cannot be in the past",
-      },
-    });
-  }
-  if (new Date(endDate) <= new Date(startDate)) {
-    return res.status(400).json({
-      message: "Bad Request",
-      errors: {
-        endDate: "endDate cannot be on or before startDate",
-      },
-    });
-  }
+    if (findBooking) {
+      return res.status(403).json({
+        message: "Sorry, this spot is already booked for the specified dates",
+        errors: {
+          startDate: "Start date conflicts with an existing booking",
+          endDate: "End date conflicts with an existing booking",
+        },
+      });
+    }
 
-  if (findBooking) {
-    return res.status(403).json({
-      message: "Sorry, this spot is already booked for the specified dates",
-      errors: {
-        startDate: "Start date conflicts with an existing booking",
-        endDate: "End date conflicts with an existing booking",
-      },
+    const createBooking = await Booking.create({
+      spotId: +spotId,
+      userId: ownerId,
+      startDate,
+      endDate,
     });
+    res.status(201).json(createBooking);
   }
-
-  const createBooking = await Booking.create({
-    spotId: +spotId,
-    userId: ownerId,
-    startDate,
-    endDate,
-  });
-  res.status(201).json(createBooking);
-});
+);
 
 //get all bookings for a spot based on the spot's id
 router.get("/:spotId/bookings", requireAuth, async (req, res) => {
