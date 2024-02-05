@@ -49,6 +49,15 @@ router.delete("/:bookingId", requireAuth, async (req, res) => {
     where: {
       id: bookingId,
     },
+    attributes: [
+      "id",
+      "spotId",
+      "userId",
+      "startDate",
+      "endDate",
+      "createdAt",
+      "updatedAt",
+    ],
   });
 
   if (!findBooking) {
@@ -79,9 +88,25 @@ router.delete("/:bookingId", requireAuth, async (req, res) => {
 router.put("/:bookingId", requireAuth, async (req, res) => {
   const { bookingId } = req.params;
   const { startDate, endDate } = req.body;
-  const bookings = await Booking.findByPk(bookingId);
+  const bookings = await Booking.findOne({
+    where: {
+      id: bookingId,
+    },
+    attributes: [
+      "id",
+      "spotId",
+      "userId",
+      "startDate",
+      "endDate",
+      "createdAt",
+      "updatedAt",
+    ],
+  });
 
-  //404
+  console.log(bookings, "OVER HERE");
+  console.log(bookings.id, "over here!!!");
+
+  // if it doesnt exist
   if (!bookings) {
     return res.status(404).json({
       message: "Booking couldn't be found",
@@ -95,6 +120,7 @@ router.put("/:bookingId", requireAuth, async (req, res) => {
     });
   }
 
+  //if startdate is less than current date
   if (new Date(startDate) < currentDate) {
     return res.status(400).json({
       message: "Bad Request",
@@ -112,7 +138,7 @@ router.put("/:bookingId", requireAuth, async (req, res) => {
       },
     });
   }
-  //if already booked for specified dates
+
   const existBooking = await Booking.findOne({
     where: {
       id: {
@@ -149,12 +175,22 @@ router.put("/:bookingId", requireAuth, async (req, res) => {
       message: "Forbidden",
     });
   }
+  console.log(bookings, "OVER HERE");
+  console.log(bookings.id, "over here!!!");
 
   bookings.startDate = startDate;
   bookings.endDate = endDate;
   await bookings.save();
 
-  res.json(bookings);
+  res.json({
+    id: bookings.id,
+    spotId: bookings.spotId,
+    userId: bookings.userId,
+    startDate: bookings.startDate,
+    endDate: bookings.endDate,
+    createdAt: bookings.createdAt,
+    updatedAt: bookings.updatedAt,
+  });
 });
 // router.put("/:bookingId", requireAuth, async (req, res) => {
 //   const { startDate, endDate } = req.body;

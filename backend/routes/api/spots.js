@@ -229,7 +229,26 @@ router.post(
       startDate,
       endDate,
     });
-    res.status(201).json(createBooking);
+
+    const foundBooking = await Booking.findOne({
+      where: {
+        spotId: createBooking.spotId,
+        userId: createBooking.userId,
+        endDate: createBooking.endDate,
+      },
+      attributes: [
+        "id",
+        "spotId",
+        "userId",
+        "startDate",
+        "endDate",
+        "createdAt",
+        "updatedAt",
+      ],
+    });
+    res.status(200).json({
+      foundBooking,
+    });
   }
 );
 
@@ -257,6 +276,15 @@ router.get("/:spotId/bookings", requireAuth, async (req, res) => {
       where: {
         spotId: spotId,
       },
+      attributes: [
+        "id",
+        "spotId",
+        "userId",
+        "startDate",
+        "endDate",
+        "createdAt",
+        "updatedAt",
+      ],
       include: {
         model: User,
         attributes: ["id", "firstName", "lastName"],
@@ -293,6 +321,7 @@ router.get("/:spotId/reviews", async (req, res) => {
     where: {
       spotId: spotId,
     },
+
     include: [
       {
         model: User,
