@@ -104,7 +104,7 @@ router.put("/:bookingId", requireAuth, async (req, res) => {
   //   ],
   // });
 
-  const bookings = await Booking.findByPk(req.params.bookingId);
+  const bookings = await Booking.findByPk(bookingId);
   console.log(bookings, "OVER HERE");
   // console.log(bookings, "OVER HERE");
   // console.log(bookings.id, "over here!!!");
