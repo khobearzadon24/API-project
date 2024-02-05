@@ -280,6 +280,15 @@ router.get("/current", requireAuth, async (req, res) => {
     where: {
       userId: userId,
     },
+    attributes: [
+      "id",
+      "spotId",
+      "userId",
+      "startDate",
+      "endDate",
+      "createdAt",
+      "updatedAt",
+    ],
     include: [
       {
         model: Spot,
@@ -297,6 +306,7 @@ router.get("/current", requireAuth, async (req, res) => {
     const previewimage = await SpotImage.findOne({
       where: {
         spotId: booking.Spot.id,
+        preview: true,
       },
     });
     // console.log(previewimage)
