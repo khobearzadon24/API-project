@@ -76,7 +76,7 @@ router.delete("/:bookingId", requireAuth, async (req, res) => {
   });
 });
 //edit a booking
-router.put("/:bookingId", requireAuth, validateDates, async (req, res) => {
+router.put("/:bookingId", [requireAuth, validateDates], async (req, res) => {
   const { startDate, endDate } = req.body;
 
   const { bookingId } = req.params;

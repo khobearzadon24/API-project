@@ -130,8 +130,7 @@ const validateQueryFilters = [
 //create a booking from a spot based on the Spot's id
 router.post(
   "/:spotId/bookings",
-  requireAuth,
-  validateDates,
+  [requireAuth, validateDates],
   async (req, res) => {
     const { startDate, endDate } = req.body;
 
@@ -512,7 +511,7 @@ router.get("/:spotId", async (req, res) => {
 });
 
 //edit a spot
-router.put("/:spotId", requireAuth, validatePost, async (req, res) => {
+router.put("/:spotId", [requireAuth, validatePost], async (req, res) => {
   const { address, city, state, country, lat, lng, name, description, price } =
     req.body;
 
@@ -676,7 +675,7 @@ router.get("/", validateQueryFilters, async (req, res) => {
 });
 
 //create a spot
-router.post("/", requireAuth, validatePost, async (req, res) => {
+router.post("/", [requireAuth, validatePost], async (req, res) => {
   const { address, city, state, country, lat, lng, name, description, price } =
     req.body;
 
