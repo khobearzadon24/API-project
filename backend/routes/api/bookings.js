@@ -141,7 +141,7 @@ router.put("/:bookingId", requireAuth, async (req, res) => {
       },
     });
   }
-
+  // find existing booking in Booking model
   const existBooking = await Booking.findOne({
     where: {
       id: {
@@ -151,17 +151,26 @@ router.put("/:bookingId", requireAuth, async (req, res) => {
       [Op.and]: [
         {
           startDate: {
-            [Op.lte]: new Date(endDate),
+            [Op.between]: [new Date(startDate), new Date(endDate)],
           },
         },
         {
           endDate: {
-            [Op.gte]: new Date(startDate),
+            [Op.between]: [new Date(startDate), new Date(endDate)],
           },
         },
       ],
     },
   });
+
+  // const existOtherBooking = await Booking.findOne({
+  //   where: {
+  //     id: {
+  //       [Op.ne]: bookingId,
+  //     },
+
+  //   }
+  // })
 
   if (existBooking) {
     return res.status(403).json({
@@ -179,11 +188,10 @@ router.put("/:bookingId", requireAuth, async (req, res) => {
       message: "Forbidden",
     });
   }
-  console.log(bookings, "OVER HERE");
-  console.log(bookings.id, "over here!!!");
 
   bookings.startDate = startDate;
   bookings.endDate = endDate;
+
   await bookings.save();
 
   res.json({
