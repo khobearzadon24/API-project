@@ -116,12 +116,6 @@ router.put("/:bookingId", requireAuth, async (req, res) => {
     });
   }
 
-  if (user.id !== bookings.userId) {
-    return res.status(403).json({
-      message: "Forbidden",
-    });
-  }
-
   let currentDate = new Date();
   if (new Date(startDate) < currentDate || new Date(endDate) < currentDate) {
     return res.status(403).json({
@@ -129,6 +123,24 @@ router.put("/:bookingId", requireAuth, async (req, res) => {
     });
   }
 
+  //if startdate is less than current date
+  if (new Date(startDate) < currentDate) {
+    return res.status(400).json({
+      message: "Bad Request",
+      errors: {
+        startDate: "startDate cannot be in the past",
+      },
+    });
+  }
+
+  if (new Date(endDate) <= new Date(startDate)) {
+    return res.status(400).json({
+      message: "Bad Request",
+      errors: {
+        endDate: "endDate cannot be on or before startDate",
+      },
+    });
+  }
   // find existing booking in Booking model
   const existBooking = await Booking.findOne({
     where: {
@@ -169,26 +181,13 @@ router.put("/:bookingId", requireAuth, async (req, res) => {
       },
     });
   }
-  //if startdate is less than current date
-  if (new Date(startDate) < currentDate) {
-    return res.status(400).json({
-      message: "Bad Request",
-      errors: {
-        startDate: "startDate cannot be in the past",
-      },
-    });
-  }
-
-  if (new Date(endDate) <= new Date(startDate)) {
-    return res.status(400).json({
-      message: "Bad Request",
-      errors: {
-        endDate: "endDate cannot be on or before startDate",
-      },
-    });
-  }
-
   console.log(bookings.userId, "over here!!!");
+
+  if (user.id !== bookings.userId) {
+    return res.status(403).json({
+      message: "Forbidden",
+    });
+  }
 
   bookings.startDate = startDate;
   bookings.endDate = endDate;
