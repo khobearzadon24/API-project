@@ -37,7 +37,7 @@ router.post("/:reviewId/images", requireAuth, async (req, res) => {
 
   const findReviewId = await Review.findByPk(reviewId);
 
-  if (findReviewId === null) {
+  if (!findReviewId) {
     return res.status(404).json({
       message: "Review couldn't be found",
     });
@@ -61,18 +61,15 @@ router.post("/:reviewId/images", requireAuth, async (req, res) => {
       message: "Must be the owner of the review to add an image",
     });
   }
-
-  await ReviewImage.create({ reviewId, url });
-
-  const findReviewImage = await ReviewImage.findAll({
-    where: {
-      url: url,
-      reviewId: reviewId,
-    },
-    attributes: ["id", "url", "reviewId"],
+  const response = await ReviewImage.create({
+    reviewId: reviewId,
+    url,
   });
 
-  res.json(findReviewImage);
+  res.json({
+    id: response.id,
+    url: response.url,
+  });
 });
 
 // edit a review
