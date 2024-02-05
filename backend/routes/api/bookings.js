@@ -59,12 +59,12 @@ router.delete("/:bookingId", requireAuth, async (req, res) => {
 
   if (ownerId !== findBooking.userId) {
     return res.status(403).json({
-      message: "Booking must belong to current user",
+      message: "Forbidden",
     });
   }
 
   const currentDate = new Date();
-  if (findBooking.startDate < currentDate) {
+  if (new Date(findBooking.startDate) <= currentDate) {
     return res.status(403).json({
       message: "Bookings that have been started can't be deleted",
     });
@@ -76,7 +76,7 @@ router.delete("/:bookingId", requireAuth, async (req, res) => {
   });
 });
 //edit a booking
-router.put("/:bookingId", [requireAuth, validateDates], async (req, res) => {
+router.put("/:bookingId", requireAuth, async (req, res) => {
   const { startDate, endDate } = req.body;
 
   const { bookingId } = req.params;
@@ -90,15 +90,32 @@ router.put("/:bookingId", [requireAuth, validateDates], async (req, res) => {
 
   const ownerId = req.user.id;
 
-  console.log(booking.userId, "write me here!!");
+  // console.log(booking.userId, "write me here!!");
 
   if (ownerId !== booking.userId) {
     return res.status(403).json({
-      message: "Booking must belong to the current user",
+      message: "Forbidden",
     });
   }
 
   let currentDate = new Date();
+
+  if (new Date(startDate) < currentDate) {
+    return res.status(400).json({
+      message: "Bad Request",
+      errors: {
+        startDate: "startDate cannot be in the past",
+      },
+    });
+  }
+  if (new Date(endDate) <= new Date(startDate)) {
+    return res.status(400).json({
+      message: "Bad Request",
+      errors: {
+        endDate: "endDate cannot be on or before startDate",
+      },
+    });
+  }
 
   if (new Date(startDate) < currentDate || new Date(endDate) < currentDate) {
     return res.status(403).json({

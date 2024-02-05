@@ -49,7 +49,7 @@ router.post("/:reviewId/images", requireAuth, async (req, res) => {
 
   if (ownerId !== findReviewId.userId) {
     res.status(403).json({
-      message: "Must be the owner of the review to add an image",
+      message: "Forbidden",
     });
   }
 
@@ -98,7 +98,7 @@ router.put("/:reviewId", [requireAuth, validateReview], async (req, res) => {
 
   if (ownerId !== findReview.userId) {
     return res.status(403).json({
-      message: "Must be the owner of the review",
+      message: "Forbidden",
     });
   }
 
@@ -126,7 +126,7 @@ router.delete("/:reviewId", requireAuth, async (req, res) => {
 
   if (ownerId !== findReview.userId) {
     return res.status(403).json({
-      message: "Must be the owner to delete the review",
+      message: "Forbidden",
     });
   }
 
@@ -153,7 +153,7 @@ router.get("/current", requireAuth, async (req, res) => {
     attributes: ["id", "firstName", "lastName"],
   });
 
-  const spots = await Spot.findAll({
+  let spots = await Spot.findAll({
     where: {
       ownerId: userId,
     },

@@ -170,7 +170,7 @@ router.post("/:spotId/bookings", requireAuth, async (req, res) => {
 
   if (ownerId === getSpot.ownerId) {
     res.status(403).json({
-      message: "Users cannot book their own spot.",
+      message: "Forbidden",
     });
   }
 
@@ -192,23 +192,22 @@ router.post("/:spotId/bookings", requireAuth, async (req, res) => {
     },
   });
 
-  const findOtherBooking = await Booking.findOne({
-    where: {
-      spotId: spotId,
-      [Op.and]: [
-        {
-          startDate: {
-            [Op.lte]: [startDate],
-          },
-        },
-        {
-          endDate: {
-            [Op.gte]: [endDate],
-          },
-        },
-      ],
-    },
-  });
+  if (startDate < DATE.NOW()) {
+    return res.status(400).json({
+      message: "Bad Request",
+      errors: {
+        startDate: "startDate cannot be in the past",
+      },
+    });
+  }
+  if (endDate <= startDate) {
+    return res.status(400).json({
+      message: "Bad Request",
+      errors: {
+        endDate: "endDate cannot be on or before startDate",
+      },
+    });
+  }
 
   if (findBooking) {
     return res.status(403).json({
@@ -708,11 +707,11 @@ router.post("/", [requireAuth, validatePost], async (req, res) => {
     city,
     state,
     country,
-    lat,
-    lng,
+    lat: parseFloat(lat),
+    lng: parseFloat(lng),
     name,
     description,
-    price,
+    price: parseFloat(price),
   });
 
   return res.status(201).json(spot);

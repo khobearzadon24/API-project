@@ -38,7 +38,7 @@ router.delete("/:imageId", requireAuth, async (req, res) => {
 
   if (ownerId !== review.userId) {
     return res.status(403).json({
-      message: "Review must belong to the current user",
+      message: "Forbidden",
     });
   }
 
