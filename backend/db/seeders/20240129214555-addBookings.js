@@ -7,26 +7,26 @@ let options = {};
 if (process.env.NODE_ENV === "production") {
   options.schema = process.env.SCHEMA; // define your schema in options object
 }
-let bookings = [
-  {
-    spotId: 2,
-    userId: 1,
-    startDate: "2024-08-25",
-    endDate: "2024-08-29",
-  },
-  {
-    spotId: 3,
-    userId: 2,
-    startDate: "2024-02-20",
-    endDate: "2024-02-21",
-  },
-  {
-    spotId: 1,
-    userId: 3,
-    startDate: "2024-04-15",
-    endDate: "2024-04-18",
-  },
-];
+// let bookings = [
+//   {
+//     spotId: 2,
+//     userId: 1,
+//     startDate: "2024-08-25",
+//     endDate: "2024-08-29",
+//   },
+//   {
+//     spotId: 3,
+//     userId: 2,
+//     startDate: "2024-02-20",
+//     endDate: "2024-02-21",
+//   },
+//   {
+//     spotId: 1,
+//     userId: 3,
+//     startDate: "2024-04-15",
+//     endDate: "2024-04-18",
+//   },
+// ];
 module.exports = {
   async up(queryInterface, Sequelize) {
     /**
@@ -38,8 +38,33 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
      */
-    await Booking.bulkCreate(bookings, { validate: true });
+    // await Booking.bulkCreate(bookings, { validate: true });
+    await Booking.bulkCreate(
+      [
+        {
+          spotId: 1,
+          userId: 1,
+          startDate: "2024-04-24",
+          endDate: "2024-04-25",
+        },
+        {
+          spotId: 2,
+          userId: 2,
+          startDate: "2024-02-15",
+          endDate: "2024-02-17",
+        },
+        {
+          spotId: 3,
+          userId: 3,
+          startDate: "2024-05-14",
+          endDate: "2024-05-18",
+        },
+      ],
+      options,
+      { validate: true }
+    );
   },
+  // },
 
   async down(queryInterface, Sequelize) {
     /**
@@ -49,11 +74,11 @@ module.exports = {
      * await queryInterface.bulkDelete('People', null, {});
      */
     options.tableName = "Bookings";
-    // const Op = Sequelize.Op;
+    const Op = Sequelize.Op;
     return queryInterface.bulkDelete(
       options,
       {
-        id: bookings.map((booking) => booking.id),
+        spotId: { [Op.in]: [1, 2, 3] },
       },
       {}
     );

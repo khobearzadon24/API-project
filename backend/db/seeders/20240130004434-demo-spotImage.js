@@ -7,23 +7,23 @@ if (process.env.NODE_ENV === "production") {
   options.schema = process.env.SCHEMA; // define your schema in options object
 }
 
-let spotImages = [
-  {
-    spotId: 1,
-    url: "exampleURL",
-    preview: true,
-  },
-  {
-    spotId: 2,
-    url: "anotherURL",
-    preview: false,
-  },
-  {
-    spotId: 3,
-    url: "extraURL",
-    preview: true,
-  },
-];
+// let spotImages = [
+//   {
+//     spotId: 1,
+//     url: "exampleURL",
+//     preview: true,
+//   },
+//   {
+//     spotId: 2,
+//     url: "anotherURL",
+//     preview: false,
+//   },
+//   {
+//     spotId: 3,
+//     url: "extraURL",
+//     preview: true,
+//   },
+// ];
 
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -36,7 +36,26 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
      */
-    await SpotImage.bulkCreate(spotImages, { validate: true });
+    await SpotImage.bulkCreate(
+      [
+        {
+          spotId: 1,
+          url: "exampleURL",
+          preview: true,
+        },
+        {
+          spotId: 2,
+          url: "anotherURL",
+          preview: false,
+        },
+        {
+          spotId: 3,
+          url: "extraURL",
+          preview: true,
+        },
+      ],
+      { validate: true }
+    );
   },
 
   async down(queryInterface, Sequelize) {
@@ -46,10 +65,11 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
+    const Op = Sequelize.Op;
     return queryInterface.bulkDelete(
       options,
       {
-        id: spotImages.map((spotImage) => spotImage.id),
+        spotId: { [Op.in]: [1, 2, 3] },
       },
       {}
     );

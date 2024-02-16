@@ -30,13 +30,13 @@ router.post("/test", (req, res) => {
   res.json({ requestBody: req.body });
 });
 
-router.use((err, req, res, next) => {
-  res.status(err.status || 500);
-  console.error(err);
-  res.json({
-    message: err.message,
-    errors: err.errors,
-  });
-});
+// router.use((err, req, res, next) => {
+//   res.status(err.status || 500);
+//   console.error(err);
+//   res.json({
+//     message: err.message,
+//     errors: err.errors,
+//   });
+// });
 
 module.exports = router;

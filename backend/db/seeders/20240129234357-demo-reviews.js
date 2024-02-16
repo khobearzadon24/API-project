@@ -7,26 +7,26 @@ if (process.env.NODE_ENV === "production") {
   options.schema = process.env.SCHEMA; // define your schema in options object
 }
 
-let reviews = [
-  {
-    spotId: 2,
-    userId: 1,
-    review: "The place was nice.",
-    stars: 3,
-  },
-  {
-    spotId: 3,
-    userId: 2,
-    review: "The place was comfortable",
-    stars: 4,
-  },
-  {
-    spotId: 1,
-    userId: 3,
-    review: "The place had lots of natural lighting",
-    stars: 5,
-  },
-];
+// let reviews = [
+//   {
+//     spotId: 2,
+//     userId: 1,
+//     review: "The place was nice.",
+//     stars: 3,
+//   },
+//   {
+//     spotId: 3,
+//     userId: 2,
+//     review: "The place was comfortable",
+//     stars: 4,
+//   },
+//   {
+//     spotId: 1,
+//     userId: 3,
+//     review: "The place had lots of natural lighting",
+//     stars: 5,
+//   },
+// ];
 module.exports = {
   async up(queryInterface, Sequelize) {
     /**
@@ -38,7 +38,30 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
      */
-    await Review.bulkCreate(reviews, { validate: true });
+    await Review.bulkCreate(
+      [
+        {
+          spotId: 2,
+          userId: 1,
+          review: "The place was nice.",
+          stars: 3,
+        },
+        {
+          spotId: 3,
+          userId: 2,
+          review: "The place was comfortable",
+          stars: 4,
+        },
+        {
+          spotId: 1,
+          userId: 3,
+          review: "The place had lots of natural lighting",
+          stars: 5,
+        },
+      ],
+      options,
+      { validate: true }
+    );
   },
 
   async down(queryInterface, Sequelize) {
@@ -49,11 +72,11 @@ module.exports = {
      * await queryInterface.bulkDelete('People', null, {});
      */
     options.tableName = "Reviews";
-    // const Op = Sequelize.Op;
+    const Op = Sequelize.Op;
     return queryInterface.bulkDelete(
       options,
       {
-        id: reviews.map((review) => review.id),
+        spotId: { [Op.in]: [1, 2, 3] },
       },
       {}
     );

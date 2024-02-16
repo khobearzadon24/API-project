@@ -7,20 +7,20 @@ let options = {};
 if (process.env.NODE_ENV === "production") {
   options.schema = process.env.SCHEMA; // define your schema in options object
 }
-let reviewImages = [
-  {
-    reviewId: 1,
-    url: "url1",
-  },
-  {
-    reviewId: 2,
-    url: "url2",
-  },
-  {
-    reviewId: 3,
-    url: "url3",
-  },
-];
+// let reviewImages = [
+//   {
+//     reviewId: 1,
+//     url: "url1",
+//   },
+//   {
+//     reviewId: 2,
+//     url: "url2",
+//   },
+//   {
+//     reviewId: 3,
+//     url: "url3",
+//   },
+// ];
 module.exports = {
   async up(queryInterface, Sequelize) {
     /**
@@ -32,7 +32,24 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
      */
-    await ReviewImage.bulkCreate(reviewImages, { validate: true });
+    await ReviewImage.bulkCreate(
+      [
+        {
+          reviewId: 1,
+          url: "url1",
+        },
+        {
+          reviewId: 2,
+          url: "url2",
+        },
+        {
+          reviewId: 3,
+          url: "url3",
+        },
+      ],
+      options,
+      { validate: true }
+    );
   },
 
   async down(queryInterface, Sequelize) {
