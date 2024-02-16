@@ -60,7 +60,7 @@ module.exports = {
           endDate: "2024-05-18",
         },
       ],
-      // options,
+      options,
       { validate: true }
     );
   },

@@ -47,6 +47,7 @@ module.exports = {
           url: "url3",
         },
       ],
+      options,
       { validate: true }
     );
   },

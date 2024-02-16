@@ -59,6 +59,7 @@ module.exports = {
           stars: 5,
         },
       ],
+      options,
       { validate: true }
     );
   },
@@ -71,11 +72,11 @@ module.exports = {
      * await queryInterface.bulkDelete('People', null, {});
      */
     options.tableName = "Reviews";
-    // const Op = Sequelize.Op;
+    const Op = Sequelize.Op;
     return queryInterface.bulkDelete(
       options,
       {
-        id: reviews.map((review) => review.id),
+        spotId: { [Op.in]: [1, 2, 3] },
       },
       {}
     );
