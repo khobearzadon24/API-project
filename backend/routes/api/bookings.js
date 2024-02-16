@@ -105,9 +105,6 @@ router.put("/:bookingId", requireAuth, async (req, res) => {
   // });
 
   const bookings = await Booking.findByPk(bookingId);
-  console.log(bookings, "OVER HERE");
-  // console.log(bookings, "OVER HERE");
-  // console.log(bookings.id, "over here!!!");
 
   // if it doesnt exist
   if (!bookings) {
@@ -201,7 +198,6 @@ router.put("/:bookingId", requireAuth, async (req, res) => {
       },
     });
   }
-  console.log(bookings.userId, "over here!!!");
 
   if (user.id !== bookings.userId) {
     return res.status(403).json({
@@ -238,7 +234,7 @@ router.put("/:bookingId", requireAuth, async (req, res) => {
 
 //   const ownerId = req.user.id;
 
-//   // console.log(booking.userId, "write me here!!");
+//
 
 //   if (ownerId !== booking.userId) {
 //     return res.status(403).json({
@@ -369,7 +365,6 @@ router.get("/current", requireAuth, async (req, res) => {
 
   for (let i = 0; i < bookings.length; i++) {
     let booking = bookings[i].toJSON();
-    // console.log(json)
 
     const previewimage = await SpotImage.findOne({
       where: {
@@ -377,7 +372,6 @@ router.get("/current", requireAuth, async (req, res) => {
         preview: true,
       },
     });
-    // console.log(previewimage)
 
     if (previewimage) {
       booking.Spot.previewImage = previewimage.url;

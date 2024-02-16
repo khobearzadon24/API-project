@@ -43,8 +43,6 @@ router.post("/:reviewId/images", requireAuth, async (req, res) => {
     });
   }
 
-  // console.log(findReviewId, "OVER HERE");
-
   const ownerId = req.user.id;
 
   if (ownerId !== findReviewId.userId) {
