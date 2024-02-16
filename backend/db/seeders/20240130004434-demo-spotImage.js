@@ -36,7 +36,26 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
      */
-    await SpotImage.bulkCreate(spotImages, { validate: true });
+    await SpotImage.bulkCreate(
+      [
+        {
+          spotId: 1,
+          url: "exampleURL",
+          preview: true,
+        },
+        {
+          spotId: 2,
+          url: "anotherURL",
+          preview: false,
+        },
+        {
+          spotId: 3,
+          url: "extraURL",
+          preview: true,
+        },
+      ],
+      { validate: true }
+    );
   },
 
   async down(queryInterface, Sequelize) {

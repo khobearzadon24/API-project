@@ -60,7 +60,7 @@ module.exports = {
           endDate: "2024-05-18",
         },
       ],
-      options,
+      // options,
       { validate: true }
     );
   },
@@ -74,7 +74,7 @@ module.exports = {
      * await queryInterface.bulkDelete('People', null, {});
      */
     options.tableName = "Bookings";
-    // const Op = Sequelize.Op;
+    const Op = Sequelize.Op;
     return queryInterface.bulkDelete(
       options,
       {
