@@ -1,10 +1,37 @@
+.log-in-modal {
+  padding: 20px;
+  border: 5px black solid;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+}
 .log-in-title {
   display: flex;
   justify-content: center;
-  font-size: 50px;
+  font-size: 20px;
 }
 
-.form {
+.log-in-form {
   display: flex;
+  justify-content: flex-end;
   gap: 20px;
 }
+
+.user-email {
+  display: flex;
+  gap: 5px;
+}
+
+/* .user-email-box {
+  border-radius: 5px;
+} */
+
+.password {
+  display: flex;
+  gap: 5px;
+}
+
+/* .password-box {
+  border-radius: 5px;
+} */

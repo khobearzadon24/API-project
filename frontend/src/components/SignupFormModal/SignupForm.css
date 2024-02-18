@@ -1,0 +1,60 @@
+.sign-up {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  border: 5px black solid;
+}
+
+.sign-up-title {
+  display: flex;
+  justify-content: center;
+}
+
+.sign-up-form {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.email {
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+}
+
+.username {
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+}
+
+.firstName {
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+}
+
+.lastName {
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+}
+
+.password {
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+}
+
+.confirm-password {
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+}
+
+.submit {
+  display: flex;
+  justify-content: center;
+  padding: 0px;
+}
