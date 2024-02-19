@@ -40,42 +40,42 @@ module.exports = {
       [
         {
           spotId: 1,
-          url: "https://static.wikia.nocookie.net/spongefan/images/e/e1/SpongeBob_house.jpg/revision/latest?cb=20180210163257",
+          url: "https://i.postimg.cc/7YkQfmyd/Sponge-Bob-house.webp",
           preview: true,
         },
         {
           spotId: 2,
-          url: "https://static.wikia.nocookie.net/spongebob/images/f/f0/Patrick%27s_house.png/revision/latest?cb=20230625045626",
-          preview: false,
+          url: "https://i.postimg.cc/QdPQWdTC/Patrick-s-house.webp",
+          preview: true,
         },
         {
           spotId: 3,
-          url: "https://static.wikia.nocookie.net/spongebobgalaxy/images/2/23/Squidwards_House.png/revision/latest/scale-to-width-down/700?cb=20180707172828",
+          url: "https://i.postimg.cc/8CM6JBGX/Squidwards-House.webp",
           preview: true,
         },
         {
           spotId: 4,
-          url: "https://static.wikia.nocookie.net/theadventuresofgarythesnail/images/5/5b/The_Treedome-0.jpg/revision/latest?cb=20150309183942",
+          url: "https://i.postimg.cc/NfbqtWrp/The-Treedome-0.webp",
           preview: true,
         },
         {
           spotId: 5,
-          url: "https://www.wikihow.com/images/a/a7/Draw-the-Krusty-Krab-Step-34.jpg",
-          preview: false,
+          url: "https://i.postimg.cc/3rnnx7n4/Draw-the-Krusty-Krab-Step-34.jpg",
+          preview: true,
         },
         {
           spotId: 6,
-          url: "https://static.wikia.nocookie.net/cartoons/images/0/09/The_Chum_Bucket.png/revision/latest?cb=20230225012708",
+          url: "https://i.postimg.cc/B6Ncbcc9/The-Chum-Bucket.webp",
           preview: true,
         },
         {
           spotId: 7,
-          url: "https://static.wikia.nocookie.net/spongebob/images/3/38/Handemonium_001.png/revision/latest?cb=20191122235153",
+          url: "https://i.postimg.cc/GpLQkm31/larrythe-Lobster-001.webp",
           preview: true,
         },
         {
           spotId: 8,
-          url: "https://cdn.staticneo.com/w/spongebob/Mrs._Puff%27s_Boating_School.jpg",
+          url: "https://i.postimg.cc/c4ctfMvr/Mrs-Puff-s-Boating-School.jpg",
           preview: true,
         },
       ],

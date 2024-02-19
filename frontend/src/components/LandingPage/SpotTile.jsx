@@ -1,9 +1,10 @@
 import { NavLink } from "react-router-dom";
+import "./SpotTile.css";
 
 const SpotTile = ({ spot }) => {
-  console.log(spot, "SPOT");
+  // console.log(spot, "SPOT");
   if (!spot) return;
-  console.log(spot.id, "spotID!!");
+  // console.log(spot.id, "spotID!!");
   let rating = parseInt(spot.avgRating).toFixed(1);
   if (isNaN(rating)) {
     rating = "New";

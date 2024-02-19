@@ -1,7 +1,11 @@
-.tile-container {
+.tile {
   display: flex;
   justify-content: space-evenly;
   flex-direction: row;
   flex-wrap: wrap;
-  margin-top: 75px;
+}
+
+.spot-img {
+  width: 300px;
+  height: 250px;
 }
