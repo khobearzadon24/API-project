@@ -23,25 +23,60 @@ module.exports = {
     await User.bulkCreate(
       [
         {
-          email: "demo@user.io",
-          username: "Demo-lition",
-          hashedPassword: bcrypt.hashSync("password"),
-          firstName: "Demo",
-          lastName: "Lition",
+          email: "spongebob@user.io",
+          username: "squarebob",
+          hashedPassword: bcrypt.hashSync("gary123"),
+          firstName: "Spongebob",
+          lastName: "Squarepants",
         },
         {
-          email: "user1@user.io",
-          username: "FakeUser1",
-          hashedPassword: bcrypt.hashSync("password2"),
-          firstName: "Fake",
-          lastName: "User",
+          email: "patrick@user.io",
+          username: "starfishpat",
+          hashedPassword: bcrypt.hashSync("underarock3"),
+          firstName: "Patrick",
+          lastName: "Star",
         },
         {
-          email: "user2@user.io",
-          username: "FakeUser2",
-          hashedPassword: bcrypt.hashSync("password3"),
-          firstName: "Faker",
-          lastName: "Usertwo",
+          email: "squidward@user.io",
+          username: "mistersquidward",
+          hashedPassword: bcrypt.hashSync("tentacles"),
+          firstName: "Squidward",
+          lastName: "Tentacles",
+        },
+        {
+          email: "sandy@user.io",
+          username: "karatesandy",
+          hashedPassword: bcrypt.hashSync("underwatersquirrel2"),
+          firstName: "Sandy",
+          lastName: "Cheeks",
+        },
+        {
+          email: "krabs@user.io",
+          username: "ownerkrustykrabs",
+          hashedPassword: bcrypt.hashSync("ilovekrabbypatties"),
+          firstName: "Eugene",
+          lastName: "Krabs",
+        },
+        {
+          email: "plankton@user.io",
+          username: "ownerchumbucket",
+          hashedPassword: bcrypt.hashSync("destroymrkrabs"),
+          firstName: "Sheldon",
+          lastName: "Plankton",
+        },
+        {
+          email: "larry@user.io",
+          username: "lobsterlarry",
+          hashedPassword: bcrypt.hashSync("lifting123"),
+          firstName: "Larry",
+          lastName: "Lobster",
+        },
+        {
+          email: "puffs@user.io",
+          username: "teacherpuffs",
+          hashedPassword: bcrypt.hashSync("iloveteaching567"),
+          firstName: "Penelope",
+          lastName: "Puff",
         },
       ],
       { validate: true }
@@ -60,7 +95,18 @@ module.exports = {
     return queryInterface.bulkDelete(
       options,
       {
-        username: { [Op.in]: ["Demo-lition", "FakeUser1", "FakeUser2"] },
+        username: {
+          [Op.in]: [
+            "squarebob",
+            "starfishpat",
+            "FakeUser2",
+            "mistersquidward",
+            "karatesandy",
+            "ownerchumbucket",
+            "lobsterlarry",
+            "teacherpuffs",
+          ],
+        },
       },
       {}
     );

@@ -53,6 +53,31 @@ module.exports = {
           url: "extraURL",
           preview: true,
         },
+        {
+          spotId: 4,
+          url: "underwaterURL",
+          preview: true,
+        },
+        {
+          spotId: 5,
+          url: "burgerURL",
+          preview: false,
+        },
+        {
+          spotId: 6,
+          url: "chumURL",
+          preview: true,
+        },
+        {
+          spotId: 7,
+          url: "muscleURL",
+          preview: true,
+        },
+        {
+          spotId: 8,
+          url: "drivingURL",
+          preview: true,
+        },
       ],
       { validate: true }
     );
@@ -69,7 +94,7 @@ module.exports = {
     return queryInterface.bulkDelete(
       options,
       {
-        spotId: { [Op.in]: [1, 2, 3] },
+        spotId: { [Op.in]: [1, 2, 3, 4, 5, 6, 7, 8] },
       },
       {}
     );

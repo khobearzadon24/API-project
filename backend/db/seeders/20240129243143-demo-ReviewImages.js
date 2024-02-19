@@ -46,6 +46,26 @@ module.exports = {
           reviewId: 3,
           url: "url3",
         },
+        {
+          reviewId: 4,
+          url: "url4",
+        },
+        {
+          reviewId: 5,
+          url: "url5",
+        },
+        {
+          reviewId: 6,
+          url: "url6",
+        },
+        {
+          reviewId: 7,
+          url: "url7",
+        },
+        {
+          reviewId: 8,
+          url: "url8",
+        },
       ],
       options,
       { validate: true }
@@ -64,7 +84,7 @@ module.exports = {
     return queryInterface.bulkDelete(
       options,
       {
-        reviewId: { [Op.in]: [1, 2, 3] },
+        reviewId: { [Op.in]: [1, 2, 3, 4, 5, 6, 7, 8] },
       },
       {}
     );
