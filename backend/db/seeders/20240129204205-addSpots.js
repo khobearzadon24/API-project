@@ -32,7 +32,7 @@ module.exports = {
             lat: 35.4567,
             lng: -100.4386,
             name: "Cool Pineapple",
-            description: "Nice pinapple house with a big library.",
+            description: "Nice pineapple house with a big library.",
             price: 200.99,
           },
           {
