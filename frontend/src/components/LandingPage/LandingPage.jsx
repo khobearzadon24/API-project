@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import SpotTile from "./SpotTile";
+import SpotContainer from "./SpotContainer";
 import "./LandingPage.css";
 // import { useDispatch } from "react-redux";
 
@@ -22,7 +22,7 @@ const LandingPage = () => {
     <div className="tile-container">
       {/* <h1>Over here</h1> */}
       {spots.map((spot) => (
-        <SpotTile key={spot.id} spot={spot} />
+        <SpotContainer key={spot.id} spot={spot} />
       ))}
     </div>
   );

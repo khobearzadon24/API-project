@@ -1,3 +1,7 @@
+body {
+  background-image: url("https://i.postimg.cc/280VXjrw/flowers.jpg");
+  background-color: #cccccc;
+}
 .tile-container {
   display: flex;
   justify-content: space-evenly;

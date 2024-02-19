@@ -1,17 +1,17 @@
 import { NavLink } from "react-router-dom";
-import "./SpotTile.css";
+import "./SpotContainer.css";
 
-const SpotTile = ({ spot }) => {
+const SpotContainer = ({ spot }) => {
   // console.log(spot, "SPOT");
   if (!spot) return;
   // console.log(spot.id, "spotID!!");
   let rating = parseInt(spot.avgRating).toFixed(1);
   if (isNaN(rating)) {
-    rating = "New";
+    rating = "New Spot";
   }
   return (
-    <div className="tile">
-      <NavLink className="spot-tile" to={`/spots/${spot.id}`}>
+    <div className="container">
+      <NavLink className="spot-container" to={`/spots/${spot.id}`}>
         <img
           className="spot-img"
           src={`${spot.previewImage}`}
@@ -20,13 +20,13 @@ const SpotTile = ({ spot }) => {
         <div className="spot-text">
           <div className="spot-location-rating">
             <p className="spot-location">{`${spot.city}, ${spot.state}`}</p>
-            <p className="spot-rating">{`${rating}`}</p>
+            <p className="spot-rating">{`${rating}`} stars</p>
           </div>
-          <p className="spot-price">{`$${spot.price}`} night </p>
+          <p className="spot-price">{`$${spot.price}`} per night </p>
         </div>
       </NavLink>
     </div>
   );
 };
 
-export default SpotTile;
+export default SpotContainer;

@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import Navigation from "./components/Navigation/Navigation";
 import * as sessionActions from "./store/session";
-import SpotList from "./components/LandingPage/SpotTile";
+import SpotList from "./components/LandingPage/SpotContainer";
 import LandingPage from "./components/LandingPage/LandingPage";
 
 function Layout() {
