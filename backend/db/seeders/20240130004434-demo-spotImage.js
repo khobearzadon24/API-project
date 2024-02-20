@@ -144,8 +144,48 @@ module.exports = {
           preview: true,
         },
         {
+          spotId: 5,
+          url: "https://i.postimg.cc/ZRBFK1w2/krabcashier.jpg",
+          preview: true,
+        },
+        {
+          spotId: 5,
+          url: "https://i.postimg.cc/FRpmzB1b/krabkitchen.jpg",
+          preview: true,
+        },
+        {
+          spotId: 5,
+          url: "https://i.postimg.cc/TwwNj7CJ/kraboffice.jpg",
+          preview: true,
+        },
+        {
+          spotId: 5,
+          url: "https://i.postimg.cc/pV78LG8M/krabentrance.png",
+          preview: true,
+        },
+        {
           spotId: 6,
           url: "https://i.postimg.cc/B6Ncbcc9/The-Chum-Bucket.webp",
+          preview: true,
+        },
+        {
+          spotId: 6,
+          url: "https://i.postimg.cc/sxc0rk6S/chumsitting.jpg",
+          preview: true,
+        },
+        {
+          spotId: 6,
+          url: "https://i.postimg.cc/tJkVpjKh/chumlab.jpg",
+          preview: true,
+        },
+        {
+          spotId: 6,
+          url: "https://i.postimg.cc/8kYSX3J3/chumkitchen.webp",
+          preview: true,
+        },
+        {
+          spotId: 6,
+          url: "https://i.postimg.cc/L6VrKbn2/chumstove.jpg",
           preview: true,
         },
         {
@@ -154,8 +194,48 @@ module.exports = {
           preview: true,
         },
         {
+          spotId: 7,
+          url: "https://i.postimg.cc/2SZhLPhf/larrybench.jpg",
+          preview: true,
+        },
+        {
+          spotId: 7,
+          url: "https://i.postimg.cc/X7wyVwbV/larryarea.jpg",
+          preview: true,
+        },
+        {
+          spotId: 7,
+          url: "https://i.postimg.cc/3NQJ6cW2/larrydesk.jpg",
+          preview: true,
+        },
+        {
+          spotId: 7,
+          url: "https://i.postimg.cc/vTYCcrNp/larryoverview.jpg",
+          preview: true,
+        },
+        {
           spotId: 8,
           url: "https://i.postimg.cc/c4ctfMvr/Mrs-Puff-s-Boating-School.jpg",
+          preview: true,
+        },
+        {
+          spotId: 8,
+          url: "https://i.postimg.cc/5NjkT2dq/puffclassroom.png",
+          preview: true,
+        },
+        {
+          spotId: 8,
+          url: "https://i.postimg.cc/25YGkzJt/pufflockers.jpg",
+          preview: true,
+        },
+        {
+          spotId: 8,
+          url: "https://i.postimg.cc/q7gsMzwj/pufffront.jpg",
+          preview: true,
+        },
+        {
+          spotId: 8,
+          url: "https://i.postimg.cc/K88LJR6x/puffclass.jpg",
           preview: true,
         },
       ],
