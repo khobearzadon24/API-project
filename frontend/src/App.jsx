@@ -6,6 +6,7 @@ import * as sessionActions from "./store/session";
 import SpotList from "./components/LandingPage/SpotContainer";
 import LandingPage from "./components/LandingPage/LandingPage";
 import SingleSpot from "./components/SingleSpot/SingleSpot";
+import AllSpots from "./components/AllSpots/AllSpots";
 
 function Layout() {
   const dispatch = useDispatch();
@@ -21,7 +22,7 @@ function Layout() {
     <>
       <Navigation isLoaded={isLoaded} />
       {isLoaded && <Outlet />}
-      <SpotList />
+      {/* <SpotList /> */}
     </>
   );
 }
@@ -32,7 +33,8 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <LandingPage />,
+        // element: <LandingPage />,
+        element: <AllSpots />,
       },
       {
         path: "/spots/:spotId",
