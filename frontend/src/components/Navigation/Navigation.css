@@ -1,16 +1,24 @@
 .nav-bar {
   display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  gap: 20px;
+  justify-content: space-between;
 }
 
 .home {
-  text-decoration: none;
+  list-style: none;
+}
+.home-text {
   color: black;
+  text-decoration: none;
+  font-size: 40px;
+  font-weight: bold;
 }
 
-.home:hover {
+.home-text:hover {
   color: blue;
   text-decoration: underline;
+}
+
+.log-sign {
+  list-style: none;
+  padding-right: 10px;
 }

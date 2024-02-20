@@ -1,4 +1,5 @@
 const LOAD_SPOT = "spot/loadSpot";
+// type creator
 
 export const loadSpot = (spot) => {
   return {
@@ -15,6 +16,7 @@ export const fetchSpot = (spotId) => async (dispatch) => {
   dispatch(loadSpot(spot));
 };
 
+//action reducer
 const spotReducer = (state = {}, action) => {
   switch (action.type) {
     case LOAD_SPOT:

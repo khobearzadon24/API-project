@@ -44,8 +44,48 @@ module.exports = {
           preview: true,
         },
         {
+          spotId: 1,
+          url: "https://i.postimg.cc/sX2Wh7ft/spongelivingroom.jpg",
+          preview: true,
+        },
+        {
+          spotId: 1,
+          url: "https://i.postimg.cc/xCKCxPjk/spongekitchen.jpg",
+          preview: true,
+        },
+        {
+          spotId: 1,
+          url: "https://i.postimg.cc/MZ1wBTXG/spongebedroom.jpg",
+          preview: true,
+        },
+        {
+          spotId: 1,
+          url: "https://i.postimg.cc/BbmMFHKy/spongelibrary.jpg",
+          preview: true,
+        },
+        {
           spotId: 2,
           url: "https://i.postimg.cc/QdPQWdTC/Patrick-s-house.webp",
+          preview: true,
+        },
+        {
+          spotId: 2,
+          url: "https://i.postimg.cc/PJfNc8Rd/Patrick-in-his-chair.avif",
+          preview: true,
+        },
+        {
+          spotId: 2,
+          url: "https://i.postimg.cc/dVccVKJy/patrickinhisbed.jpg",
+          preview: true,
+        },
+        {
+          spotId: 2,
+          url: "https://i.postimg.cc/cCQyQDmH/patricksrock.webp",
+          preview: true,
+        },
+        {
+          spotId: 2,
+          url: "https://i.postimg.cc/Cx5r0Pqq/patrickopenspace.webp",
           preview: true,
         },
         {
@@ -54,8 +94,48 @@ module.exports = {
           preview: true,
         },
         {
+          spotId: 3,
+          url: "https://i.postimg.cc/Z5DNkj80/squidkitchen.jpg",
+          preview: true,
+        },
+        {
+          spotId: 3,
+          url: "https://i.postimg.cc/zv0BCXp3/squidlivingroom.webp",
+          preview: true,
+        },
+        {
+          spotId: 3,
+          url: "https://i.postimg.cc/dt3tMF4m/squidbathroom.png",
+          preview: true,
+        },
+        {
+          spotId: 3,
+          url: "https://i.postimg.cc/jSNTKSNN/squidwindow.jpg",
+          preview: true,
+        },
+        {
           spotId: 4,
           url: "https://i.postimg.cc/NfbqtWrp/The-Treedome-0.webp",
+          preview: true,
+        },
+        {
+          spotId: 4,
+          url: "https://i.postimg.cc/QNRLxWDt/sandybedroom.jpg",
+          preview: true,
+        },
+        {
+          spotId: 4,
+          url: "https://i.postimg.cc/HLj3yB4C/sandywinter.jpg",
+          preview: true,
+        },
+        {
+          spotId: 4,
+          url: "https://i.postimg.cc/05GGrTRw/sandyfrontdoor.jpg",
+          preview: true,
+        },
+        {
+          spotId: 4,
+          url: "https://i.postimg.cc/RhPNKQLj/sandyscrib.jpg",
           preview: true,
         },
         {
