@@ -23,7 +23,32 @@ const SingleSpot = () => {
       <p>
         {spot?.city}, {spot?.state}, {spot?.country}
       </p>
-      <img src={spot?.SpotImages[0].url} alt="image" />
+      <div className="image-container">
+        <img className="image1" src={spot?.SpotImages[0].url} alt="image1" />
+        <div className="small-images">
+          <img
+            className="image-small"
+            src={spot?.SpotImages[1].url}
+            alt="image2"
+          />
+          <img
+            className="image-small"
+            src={spot?.SpotImages[2].url}
+            alt="image3"
+          />
+          <img
+            className="image-small"
+            src={spot?.SpotImages[3].url}
+            alt="image4"
+          />
+          <img
+            className="image-small"
+            src={spot?.SpotImages[4].url}
+            alt="image5"
+          />
+        </div>
+      </div>
+
       <p>
         Hosted By {spot?.Owner?.firstName} {spot?.Owner?.lastName}
       </p>

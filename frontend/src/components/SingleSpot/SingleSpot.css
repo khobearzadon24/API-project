@@ -5,3 +5,25 @@
   font-weight: bold;
   font-size: 40px;
 }
+
+.image-container {
+  display: flex;
+  justify-content: space-around;
+}
+
+.image1 {
+  width: 50%;
+  height: 500px;
+}
+
+.small-images {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 5px;
+}
+
+.image-small {
+  width: 250px;
+  height: 250px;
+  padding: 5px;
+}

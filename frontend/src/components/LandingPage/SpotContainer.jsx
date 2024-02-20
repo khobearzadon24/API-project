@@ -3,6 +3,7 @@ import "./SpotContainer.css";
 
 const SpotContainer = ({ spot }) => {
   // console.log(spot, "SPOT");
+  // console.log(spot.previewImage);
   if (!spot) return;
   // console.log(spot.id, "spotID!!");
   let rating = parseInt(spot.avgRating).toFixed(1);
