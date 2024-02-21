@@ -11,12 +11,13 @@ const AllSpots = () => {
   const spotArr = Object.values(spot);
   const dispatch = useDispatch();
   console.log(spotArr, "spotArray");
+  console.log(spot.city, "Spots");
   useEffect(() => {
     dispatch(fetchAllSpots());
   }, [dispatch]);
   let rating = parseInt(spot.avgRating).toFixed(1);
   if (isNaN(rating)) {
-    rating = "New Spot";
+    rating = "New";
   }
   return (
     <div className="container">
@@ -30,7 +31,14 @@ const AllSpots = () => {
           <div className="spot-text">
             <div className="spot-location-rating">
               <p className="spot-location">{`${spot.city}, ${spot.state}`}</p>
-              <p className="spot-rating">{`${rating}`} stars</p>
+              <div className="rating-container">
+                <p className="spot-rating">{`${rating}`} </p>
+                <img
+                  className="star"
+                  src="https://i.postimg.cc/XvKd8JJ9/stars.jpg"
+                  alt="star"
+                />
+              </div>
             </div>
             <p className="spot-price">{`$${spot.price}`} per night </p>
           </div>

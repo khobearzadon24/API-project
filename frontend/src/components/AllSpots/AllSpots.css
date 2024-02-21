@@ -22,3 +22,14 @@
 .spot-rating {
   text-decoration: none;
 }
+
+.star {
+  width: 25px;
+  height: 25px;
+}
+
+.rating-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}

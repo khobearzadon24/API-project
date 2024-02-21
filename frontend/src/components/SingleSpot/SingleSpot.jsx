@@ -10,13 +10,19 @@ const SingleSpot = () => {
   const spot = useSelector((state) => state.spotState[spotId]);
 
   console.log(spot, "over here!");
-  console.log(spot?.SpotImages[0].url, "heres the image url");
+  // console.log(spot?.SpotImages[0].url, "heres the image url");
+  console.log(spot?.SpotImages, "here is the spots");
+
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchSpot(spotId));
   }, [dispatch, spotId]);
 
+  if (!spot) return;
+  // if (!spot.SpotImages[0] || !spot) return <div>information</div>;
+
+  // const imageOne = spot?.SpotImages[0].url;
   return (
     <div className="spot-container">
       <h1 className="spot-name">{spot?.name}</h1>
@@ -24,28 +30,16 @@ const SingleSpot = () => {
         {spot?.city}, {spot?.state}, {spot?.country}
       </p>
       <div className="image-container">
-        <img className="image1" src={spot?.SpotImages[0].url} alt="image1" />
+        <img
+          className="image1"
+          src={spot.SpotImages && spot.SpotImages[0].url}
+          alt="image1"
+        />
         <div className="small-images">
-          <img
-            className="image-small"
-            src={spot?.SpotImages[1].url}
-            alt="image2"
-          />
-          <img
-            className="image-small"
-            src={spot?.SpotImages[2].url}
-            alt="image3"
-          />
-          <img
-            className="image-small"
-            src={spot?.SpotImages[3].url}
-            alt="image4"
-          />
-          <img
-            className="image-small"
-            src={spot?.SpotImages[4].url}
-            alt="image5"
-          />
+          {spot.SpotImages &&
+            spot.SpotImages.slice(1).map((spot) => (
+              <img className="image-small" src={spot?.url} />
+            ))}
         </div>
       </div>
 
