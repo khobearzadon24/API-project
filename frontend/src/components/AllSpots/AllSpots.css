@@ -32,4 +32,10 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  gap: 5px;
+}
+
+.errors {
+  color: red;
+  font-weight: bold;
 }

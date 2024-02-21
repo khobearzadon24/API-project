@@ -39,11 +39,38 @@ const SpotInput = () => {
       imageThree,
       imageFour,
     };
+
+    // console.log(errors);
+
     const madeSpot = await dispatch(writeSpot(newSpot));
+    if (!previewImage) {
+      madeSpot.errors.previewImage = "Preview Image is required";
+    }
+    if (previewImage && !previewImage.endsWith(".png", ".jpg", ".jpeg")) {
+      madeSpot.errors.previewImage =
+        "Image URL must end in .png, .jpg, or .jpeg";
+    }
+
+    if (imageOne && !imageOne.endsWith(".png", ".jpg", ".jpeg")) {
+      madeSpot.errors.imageOne = "Image URL must end in .png, .jpg, or .jpeg";
+    }
+
+    if (imageTwo && !imageTwo.endsWith(".png", ".jpg", ".jpeg")) {
+      madeSpot.errors.imageTwo = "Image URL must end in .png, .jpg, or .jpeg";
+    }
+
+    if (imageThree && !imageThree.endsWith(".png", ".jpg", ".jpeg")) {
+      madeSpot.errors.imageThree = "Image URL must end in .png, .jpg, or .jpeg";
+    }
+
+    if (imageFour && !imageFour.endsWith(".png", ".jpg", ".jpeg")) {
+      madeSpot.errors.imageFour = "Image URL must end in .png, .jpg, or .jpeg";
+    }
     if (madeSpot && madeSpot.errors) {
       console.log(madeSpot.errors);
       return setErrors(madeSpot.errors);
     }
+
     reset();
   };
   const reset = () => {
@@ -66,7 +93,7 @@ const SpotInput = () => {
     <div className="inputBox">
       <div className="form-heading">
         <h1 className="form-title">Create a new Spot</h1>
-        <h2 className="where-location">Where's your place located?</h2>
+        <h2 className="where-location">Where &apos;s your place located?</h2>
         <p>
           Guests will only get your exact address once they booked a reservation
         </p>
@@ -149,6 +176,9 @@ const SpotInput = () => {
         <p>Liven up your spot with photos</p>
         <p>Submit a link to at least one photo to publish your spot</p>
         <div className="image-inputs">
+          {errors.previewImage && (
+            <p className="errors">{errors.previewImage}</p>
+          )}
           <input
             type="text"
             onChange={(e) => setPreviewImage(e.target.value)}
@@ -156,6 +186,7 @@ const SpotInput = () => {
             placeholder="Preview Image URL"
             name="previewImage"
           />
+          {errors.imageOne && <p className="errors">{errors.imageOne}</p>}
           <input
             type="text"
             onChange={(e) => setImageOne(e.target.value)}
@@ -163,6 +194,7 @@ const SpotInput = () => {
             placeholder=" Image URL"
             name="imageOne"
           />
+          {errors.imageTwo && <p className="errors">{errors.imageTwo}</p>}
           <input
             type="text"
             onChange={(e) => setImageTwo(e.target.value)}
@@ -170,7 +202,7 @@ const SpotInput = () => {
             placeholder=" Image URL"
             name="imageTwo"
           />
-
+          {errors.imageThree && <p className="errors">{errors.imageThree}</p>}
           <input
             type="text"
             onChange={(e) => setImageThree(e.target.value)}
@@ -178,6 +210,7 @@ const SpotInput = () => {
             placeholder=" Image URL"
             name="imageThree"
           />
+          {errors.imageFour && <p className="errors">{errors.imageFour}</p>}
           <input
             type="text"
             onChange={(e) => setImageFour(e.target.value)}

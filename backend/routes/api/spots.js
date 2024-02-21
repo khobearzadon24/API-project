@@ -78,7 +78,7 @@ const validatePost = [
   check("price")
     .exists({ checkFalsy: true })
     .isFloat({ min: 0.01 })
-    .withMessage("Price per day must be a positive number"),
+    .withMessage("Price is required"),
   handleValidationErrors,
 ];
 

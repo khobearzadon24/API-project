@@ -10,19 +10,29 @@ const AllSpots = () => {
   //spot will be an object of object
   const spotArr = Object.values(spot);
   const dispatch = useDispatch();
+
   console.log(spotArr, "spotArray");
-  console.log(spot.city, "Spots");
+  // console.log(spotArr[1].avgRating, "Spots");
+  // console.log(spotArr.avgRating, "avgrating");
+
   useEffect(() => {
     dispatch(fetchAllSpots());
   }, [dispatch]);
-  let rating = parseInt(spot.avgRating).toFixed(1);
+
+  // console.log(rating, "rating");
+  let rating = parseInt(spotArr.avgRating).toFixed(1);
   if (isNaN(rating)) {
     rating = "New";
   }
+
   return (
     <div className="container">
       {spotArr.map((spot) => (
-        <NavLink className="spot-container" to={`/spots/${spot.id}`}>
+        <NavLink
+          key={spot.id}
+          className="spot-container"
+          to={`/spots/${spot.id}`}
+        >
           <img
             className="spot-img"
             src={`${spot.previewImage}`}
@@ -32,10 +42,10 @@ const AllSpots = () => {
             <div className="spot-location-rating">
               <p className="spot-location">{`${spot.city}, ${spot.state}`}</p>
               <div className="rating-container">
-                <p className="spot-rating">{`${rating}`} </p>
+                <p className="spot-rating">{`${spot.avgRating}` || `New`} </p>
                 <img
                   className="star"
-                  src="https://i.postimg.cc/XvKd8JJ9/stars.jpg"
+                  src="https://i.postimg.cc/QxSC3byV/stars-removebg-preview.png"
                   alt="star"
                 />
               </div>
