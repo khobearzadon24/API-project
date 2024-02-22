@@ -1,8 +1,10 @@
 import { useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useDispatch } from "react-redux";
-import { fetchAllSpots, fetchOwnerSpots } from "../../store/spotReducer";
+import { deleteSpot, fetchOwnerSpots } from "../../store/spotReducer";
 import { NavLink, useParams } from "react-router-dom";
+import OpenModalMenuItem from "../OpenModalButton/OpenModalButton";
+import DeleteSpotModal from "../DeleteSpot/DeleteSpotModal";
 
 const ManageSpots = () => {
   const spot = useSelector((state) => state.spotState);
@@ -11,16 +13,38 @@ const ManageSpots = () => {
   const spotArr = Object.values(spot);
 
   const dispatch = useDispatch();
+  const [showMenu, setShowMenu] = useState(false);
+  const ulRef = useRef();
+
+  const toggleMenu = (e) => {
+    e.stopPropagation(); // Keep from bubbling up to document and triggering closeMenu
+    setShowMenu(!showMenu);
+  };
+
+  useEffect(() => {
+    if (!showMenu) return;
+
+    const closeMenu = (e) => {
+      if (!ulRef.current.contains(e.target)) {
+        setShowMenu(false);
+      }
+    };
+
+    document.addEventListener("click", closeMenu);
+
+    return () => document.removeEventListener("click", closeMenu);
+  }, [showMenu]);
+
+  const closeMenu = () => setShowMenu(false);
+
   console.log(spotArr, "spotArray");
 
-  // useEffect(() => {
-  //   dispatch(fetchAllSpots());
-  // }, [dispatch]);
   useEffect(() => {
     console.log("whatever");
     dispatch(fetchOwnerSpots());
     console.log("below here");
   }, [dispatch]);
+
   return (
     <div className="container">
       {spotArr.map((spot) => (
@@ -39,7 +63,9 @@ const ManageSpots = () => {
               <div className="spot-location-rating">
                 <p className="spot-location">{`${spot.city}, ${spot.state}`}</p>
                 <div className="rating-container">
-                  <p className="spot-rating">{`${spot.avgRating}` || `New`} </p>
+                  <p className="spot-rating">
+                    {`${spot.avgRating.toFixed(1)}` || `New`}{" "}
+                  </p>
                   <img
                     className="star"
                     src="https://i.postimg.cc/QxSC3byV/stars-removebg-preview.png"
@@ -51,6 +77,13 @@ const ManageSpots = () => {
             </div>
           </NavLink>
           <NavLink to={`/spots/${spot.id}/edit`}>Update</NavLink>
+          <div className="delete-button">
+            <OpenModalMenuItem
+              itemText="Delete Spot"
+              onItemClick={closeMenu}
+              modalComponent={<DeleteSpotModal />}
+            />
+          </div>
         </>
       ))}
     </div>

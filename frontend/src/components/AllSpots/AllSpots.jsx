@@ -42,7 +42,9 @@ const AllSpots = () => {
             <div className="spot-location-rating">
               <p className="spot-location">{`${spot.city}, ${spot.state}`}</p>
               <div className="rating-container">
-                <p className="spot-rating">{`${spot.avgRating}` || `New`} </p>
+                <p className="spot-rating">
+                  {`${spot.avgRating.toFixed(1)}` || `New`}{" "}
+                </p>
                 <img
                   className="star"
                   src="https://i.postimg.cc/QxSC3byV/stars-removebg-preview.png"
