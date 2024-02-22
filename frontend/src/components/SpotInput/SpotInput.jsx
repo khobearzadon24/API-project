@@ -1,28 +1,32 @@
 import { useState } from "react";
 // import { nanoid } from "nanoid";
 import { useDispatch } from "react-redux";
-import { writeSpot } from "../../store/spotReducer";
+import { editSpot, writeImage, writeSpot } from "../../store/spotReducer";
+import { useNavigate } from "react-router-dom";
 import "./SpotInput.css";
 
-const SpotInput = () => {
-  const [ownerId, setOwnerId] = useState("");
-  const [address, setAddress] = useState("");
-  const [city, setCity] = useState("");
-  const [state, setState] = useState("");
-  const [country, setCountry] = useState("");
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
-  const [previewImage, setPreviewImage] = useState("");
-  const [imageOne, setImageOne] = useState("");
-  const [imageTwo, setImageTwo] = useState("");
-  const [imageThree, setImageThree] = useState("");
-  const [imageFour, setImageFour] = useState("");
+const SpotInput = ({ spot, formType }) => {
+  const [ownerId, setOwnerId] = useState(spot.ownerId || "");
+  const [address, setAddress] = useState(spot.address || "");
+  const [city, setCity] = useState(spot.city || "");
+  const [state, setState] = useState(spot.state || "");
+  const [country, setCountry] = useState(spot.country || "");
+  const [name, setName] = useState(spot.name || "");
+  const [description, setDescription] = useState(spot.description || "");
+  const [price, setPrice] = useState(spot.price || "");
+  const [previewImage, setPreviewImage] = useState(spot.previewImage || "");
+  const [imageOne, setImageOne] = useState(spot.imageOne || "");
+  const [imageTwo, setImageTwo] = useState(spot.imageTwo || "");
+  const [imageThree, setImageThree] = useState(spot.imageThree || "");
+  const [imageFour, setImageFour] = useState(spot.imageFour || "");
   const [errors, setErrors] = useState({});
+  const [submitted, setSubmitted] = useState(false);
 
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
+  const validationObj = {};
   const handleSubmit = async (e) => {
+    setSubmitted(true);
     e.preventDefault();
     const newSpot = {
       ownerId,
@@ -40,37 +44,49 @@ const SpotInput = () => {
       imageFour,
     };
 
+    setErrors({});
     // console.log(errors);
-
-    const madeSpot = await dispatch(writeSpot(newSpot));
-    if (!previewImage) {
-      madeSpot.errors.previewImage = "Preview Image is required";
-    }
-    if (previewImage && !previewImage.endsWith(".png", ".jpg", ".jpeg")) {
-      madeSpot.errors.previewImage =
-        "Image URL must end in .png, .jpg, or .jpeg";
+    let madeSpot;
+    if (formType === "edit") {
+      await dispatch(editSpot(spot.id, newSpot));
+    } else {
+      madeSpot = await dispatch(writeSpot(newSpot));
     }
 
-    if (imageOne && !imageOne.endsWith(".png", ".jpg", ".jpeg")) {
-      madeSpot.errors.imageOne = "Image URL must end in .png, .jpg, or .jpeg";
+    const validImg = (url) => {
+      const fileType = [".png", ".jpg", ".jpeg"];
+      const newUrl = url.toLowerCase();
+      return fileType.some((type) => newUrl.endsWith(type));
+    };
+
+    if (!previewImage || !validImg(previewImage)) {
+      validationObj.previewImage =
+        "Atleast 1 image is required and must end with .png, .jpg, or .jpeg";
     }
 
-    if (imageTwo && !imageTwo.endsWith(".png", ".jpg", ".jpeg")) {
-      madeSpot.errors.imageTwo = "Image URL must end in .png, .jpg, or .jpeg";
+    if (imageOne && !validImg(imageOne)) {
+      validationObj.imageOne = "Image URL must end with .png, .jpg, or .jpeg";
     }
 
-    if (imageThree && !imageThree.endsWith(".png", ".jpg", ".jpeg")) {
-      madeSpot.errors.imageThree = "Image URL must end in .png, .jpg, or .jpeg";
+    if (imageTwo && !validImg(imageTwo)) {
+      validationObj.imageTwo = "Image URL must end with .png, .jpg, or .jpeg";
     }
 
-    if (imageFour && !imageFour.endsWith(".png", ".jpg", ".jpeg")) {
-      madeSpot.errors.imageFour = "Image URL must end in .png, .jpg, or .jpeg";
+    if (imageThree && !validImg(imageThree)) {
+      validationObj.imageThree = "Image URL must end with .png, .jpg, or .jpeg";
     }
+    if (imageFour && !validImg(imageFour)) {
+      validationObj.imageFour = "Image URL must end with .png, .jpg, or .jpeg";
+    }
+
     if (madeSpot && madeSpot.errors) {
-      console.log(madeSpot.errors);
-      return setErrors(madeSpot.errors);
+      setErrors(madeSpot.errors);
     }
 
+    if (formType === "edit") return navigate(`/spots/${spot.id}`);
+    const imgArr = [previewImage, imageOne, imageThree, imageFour];
+    dispatch(writeImage(imgArr, madeSpot.id));
+    navigate(`/spots/${madeSpot.id}`);
     reset();
   };
   const reset = () => {
@@ -176,53 +192,60 @@ const SpotInput = () => {
         <p>Liven up your spot with photos</p>
         <p>Submit a link to at least one photo to publish your spot</p>
         <div className="image-inputs">
-          {errors.previewImage && (
-            <p className="errors">{errors.previewImage}</p>
+          <input
+            type="text"
+            name="previewImage"
+            placeholder="Preview Image URL"
+            value={previewImage}
+            onChange={(e) => setPreviewImage(e.target.value)}
+          ></input>
+          {submitted && "previewImage" in validationObj && (
+            <p>{validationObj.previewImage}</p>
           )}
           <input
             type="text"
-            onChange={(e) => setPreviewImage(e.target.value)}
-            value={previewImage}
-            placeholder="Preview Image URL"
-            name="previewImage"
-          />
-          {errors.imageOne && <p className="errors">{errors.imageOne}</p>}
-          <input
-            type="text"
-            onChange={(e) => setImageOne(e.target.value)}
-            value={imageOne}
-            placeholder=" Image URL"
             name="imageOne"
-          />
-          {errors.imageTwo && <p className="errors">{errors.imageTwo}</p>}
+            placeholder="Image URL"
+            value={imageOne}
+            onChange={(e) => setImageOne(e.target.value)}
+          ></input>
+          {submitted && "imageOne" in validationObj && (
+            <p>{validationObj.imageOne}</p>
+          )}
           <input
             type="text"
-            onChange={(e) => setImageTwo(e.target.value)}
-            value={imageTwo}
-            placeholder=" Image URL"
             name="imageTwo"
-          />
-          {errors.imageThree && <p className="errors">{errors.imageThree}</p>}
+            placeholder="Image URL"
+            value={imageTwo}
+            onChange={(e) => setImageTwo(e.target.value)}
+          ></input>
+          {submitted && "imageTwo" in validationObj && (
+            <p>{validationObj.imageTwo}</p>
+          )}
           <input
             type="text"
-            onChange={(e) => setImageThree(e.target.value)}
-            value={imageThree}
-            placeholder=" Image URL"
             name="imageThree"
-          />
-          {errors.imageFour && <p className="errors">{errors.imageFour}</p>}
+            placeholder="Image URL"
+            value={imageThree}
+            onChange={(e) => setImageThree(e.target.value)}
+          ></input>
+          {submitted && "imageThree" in validationObj && (
+            <p>{validationObj.imageThree}</p>
+          )}
+
           <input
             type="text"
-            onChange={(e) => setImageFour(e.target.value)}
-            value={imageFour}
-            placeholder=" Image URL"
             name="imageFour"
-          />
+            placeholder="Image URL"
+            value={imageFour}
+            onChange={(e) => setImageFour(e.target.value)}
+          ></input>
+          {submitted && "imageFour" in validationObj && (
+            <p>{validationObj.imageFour}</p>
+          )}
         </div>
 
-        <button className="button" type="submit">
-          Create Spot
-        </button>
+        <button className="button">Create Spot</button>
       </form>
     </div>
   );

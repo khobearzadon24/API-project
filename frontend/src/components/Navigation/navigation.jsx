@@ -12,7 +12,7 @@ function Navigation({ isLoaded }) {
         <NavLink className="home-text" to="/">
           Home
           <img
-            class="airbnb-logo"
+            className="airbnb-logo"
             src="https://i.postimg.cc/kGV4Lf6q/logo.jpg"
             alt="logo"
           />

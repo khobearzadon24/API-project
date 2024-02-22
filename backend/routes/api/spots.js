@@ -51,20 +51,20 @@ const validatePost = [
     .exists({ checkFalsy: true })
     .notEmpty()
     .withMessage("Country is required"),
-  check("lat")
-    .exists({ checkFalsy: true })
-    .isFloat({
-      min: -90,
-      max: 90,
-    })
-    .withMessage("Latitude must be within -90 and 90"),
-  check("lng")
-    .exists({ checkFalsy: true })
-    .isFloat({
-      min: -180,
-      max: 180,
-    })
-    .withMessage("Longitude must be within -180 and 180"),
+  // check("lat")
+  //   .exists({ checkFalsy: true })
+  //   .isFloat({
+  //     min: -90,
+  //     max: 90,
+  //   })
+  //   .withMessage("Latitude must be within -90 and 90"),
+  // check("lng")
+  //   .exists({ checkFalsy: true })
+  //   .isFloat({
+  //     min: -180,
+  //     max: 180,
+  //   })
+  //   .withMessage("Longitude must be within -180 and 180"),
   check("name")
     .exists({ checkFalsy: true })
     .isLength({ max: 49 })
