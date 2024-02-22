@@ -7,8 +7,9 @@ import { fetchOwnerSpots, removeSpot } from "../../store/spotReducer";
 function DeleteSpotModal() {
   const dispatch = useDispatch();
   const { closeModal } = useModal();
+  const [errors, setErrors] = "";
 
-  const deleteSubmit = async (e) => {
+  const deleteSubmit = async (e, spot) => {
     e.preventDefault();
     setErrors({});
     await dispatch(removeSpot(spot.id))

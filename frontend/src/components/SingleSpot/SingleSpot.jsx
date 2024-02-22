@@ -42,11 +42,32 @@ const SingleSpot = () => {
             ))}
         </div>
       </div>
+      <div className="description-container">
+        <div className="owner-detail-container">
+          <p>
+            Hosted By {spot?.Owner?.firstName} {spot?.Owner?.lastName}
+          </p>
+          <p>{spot?.description}</p>
+        </div>
 
-      <p>
-        Hosted By {spot?.Owner?.firstName} {spot?.Owner?.lastName}
-      </p>
-      <p>{spot?.description}</p>
+        <div className="rating-container">
+          <div className="top-rating">
+            <p>${spot?.price} night </p>
+            <div className="star-box">
+              <img
+                className="star"
+                src="https://i.postimg.cc/QxSC3byV/stars-removebg-preview.png"
+                alt="star"
+              />
+              <p className="stars">
+                {`${spot.avgRating.toFixed(1)}` || `New`}{" "}
+              </p>
+            </div>
+            <p>{spot.numReviews} review(s)</p>
+          </div>
+          <button className="reserve">Reserve</button>
+        </div>
+      </div>
     </div>
   );
 };

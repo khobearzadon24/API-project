@@ -27,3 +27,41 @@
   height: 250px;
   padding: 5px;
 }
+
+.description-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 40px;
+}
+
+.owner-detail-container {
+  text-align: start;
+}
+
+.rating-container {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  border: 2px solid black;
+  padding: 10px 20px 10px 20px;
+  border-radius: 10px;
+  background-color: red;
+}
+
+.top-rating {
+  display: flex;
+  flex-direction: row;
+  gap: 25px;
+}
+
+.reserve:hover {
+  cursor: pointer;
+}
+
+.star-box {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 5px;
+}
