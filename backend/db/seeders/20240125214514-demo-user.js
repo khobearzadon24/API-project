@@ -78,6 +78,13 @@ module.exports = {
           firstName: "Penelope",
           lastName: "Puff",
         },
+        {
+          email: "demoUser@user.io",
+          username: "demoUser",
+          hashedPassword: bcrypt.hashSync("password"),
+          firstName: "Demo",
+          lastName: "User",
+        },
       ],
       { validate: true }
     );

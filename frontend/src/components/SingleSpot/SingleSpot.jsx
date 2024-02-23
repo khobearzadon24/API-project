@@ -9,6 +9,7 @@ import { useModal } from "../../context/Modal";
 // import * as sessionActions from "../../store/session";
 import OpenModalButton from "../OpenModalButton/OpenModalButton";
 import PostReviewModal from "../PostReviewModal/PostReviewModal";
+import DeleteReviewModal from "../DeleteReviewModal/DeleteReviewModal";
 
 import "./SingleSpot.css";
 
@@ -25,11 +26,17 @@ const SingleSpot = () => {
   const ulRef = useRef();
 
   // console.log(review, "here is the reviews");
-  // console.log(review?.user, "here is the user of the review");
+  console.log(review?.user, "here is the user of the review");
   const reviewArr = Object.values(review);
   // console.log(reviewArr, "reviewArr");
-  // console.log(reviewArr[0].User.firstName, "here is the actual review");
+  // console.log(
+  //   reviewArr[0].User.id,
+  //   "here is the actual firstname of the review"
+  // );
 
+  let hasReview = reviewArr.filter(
+    (review) => review.User.id === sessionUser.id
+  );
   // console.log(spot, "over here!");
   // console.log(spot?.SpotImages, "here is the spots");
 
@@ -124,6 +131,15 @@ const SingleSpot = () => {
               <p>{`${review?.User?.firstName} `}</p>
               <p>{new Date(review.createdAt).toDateString()}</p>
               <p>{`${review.review}`}</p>
+              {hasReview.length > 0 && (
+                <button>
+                  <OpenModalButton
+                    buttonText="Delete Review"
+                    onItemClick={closeModal}
+                    modalComponent={<DeleteReviewModal reviewId={review.id} />}
+                  />
+                </button>
+              )}
             </h2>
           ))}
         </div>
@@ -192,6 +208,15 @@ const SingleSpot = () => {
               <p>{`${review?.User?.firstName} `}</p>
               <p>{new Date(review.createdAt).toDateString()}</p>
               <p>{`${review.review}`}</p>
+              {hasReview.length > 0 && (
+                <button>
+                  <OpenModalButton
+                    buttonText="Delete Review"
+                    onItemClick={closeModal}
+                    modalComponent={<DeleteReviewModal reviewId={review.id} />}
+                  />
+                </button>
+              )}
             </h2>
           ))}
         </div>
