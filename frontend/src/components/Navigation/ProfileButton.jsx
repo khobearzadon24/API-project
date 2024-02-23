@@ -53,7 +53,7 @@ function ProfileButton({ user }) {
       </button>
       <ul className={ulClassName} ref={ulRef}>
         {user ? (
-          <div className="dropdown-content">
+          <div className="dropdown-content-log-in">
             <li>{user.username}</li>
             <li>
               {user.firstName} {user.lastName}

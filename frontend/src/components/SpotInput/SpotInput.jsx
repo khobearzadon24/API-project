@@ -6,19 +6,19 @@ import { useNavigate } from "react-router-dom";
 import "./SpotInput.css";
 
 const SpotInput = ({ spot, formType }) => {
-  const [ownerId, setOwnerId] = useState(spot.ownerId || "");
-  const [address, setAddress] = useState(spot.address || "");
-  const [city, setCity] = useState(spot.city || "");
-  const [state, setState] = useState(spot.state || "");
-  const [country, setCountry] = useState(spot.country || "");
-  const [name, setName] = useState(spot.name || "");
-  const [description, setDescription] = useState(spot.description || "");
-  const [price, setPrice] = useState(spot.price || "");
-  const [previewImage, setPreviewImage] = useState(spot.previewImage || "");
-  const [imageOne, setImageOne] = useState(spot.imageOne || "");
-  const [imageTwo, setImageTwo] = useState(spot.imageTwo || "");
-  const [imageThree, setImageThree] = useState(spot.imageThree || "");
-  const [imageFour, setImageFour] = useState(spot.imageFour || "");
+  const [ownerId, setOwnerId] = useState(spot?.ownerId || "");
+  const [address, setAddress] = useState(spot?.address || "");
+  const [city, setCity] = useState(spot?.city || "");
+  const [state, setState] = useState(spot?.state || "");
+  const [country, setCountry] = useState(spot?.country || "");
+  const [name, setName] = useState(spot?.name || "");
+  const [description, setDescription] = useState(spot?.description || "");
+  const [price, setPrice] = useState(spot?.price || "");
+  const [previewImage, setPreviewImage] = useState(spot?.previewImage || "");
+  const [imageOne, setImageOne] = useState(spot?.imageOne || "");
+  const [imageTwo, setImageTwo] = useState(spot?.imageTwo || "");
+  const [imageThree, setImageThree] = useState(spot?.imageThree || "");
+  const [imageFour, setImageFour] = useState(spot?.imageFour || "");
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
 
@@ -29,7 +29,7 @@ const SpotInput = ({ spot, formType }) => {
     setSubmitted(true);
     e.preventDefault();
     const newSpot = {
-      ownerId,
+      // ownerId,
       address,
       city,
       state,
@@ -90,7 +90,7 @@ const SpotInput = ({ spot, formType }) => {
     reset();
   };
   const reset = () => {
-    setOwnerId("");
+    // setOwnerId("");
     setAddress("");
     setCity("");
     setState("");

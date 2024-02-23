@@ -26,7 +26,7 @@ const AllSpots = () => {
   }
 
   return (
-    <div className="container">
+    <div className="sponge-container">
       {spotArr.map((spot) => (
         <NavLink
           key={spot.id}
@@ -38,10 +38,11 @@ const AllSpots = () => {
             src={`${spot.previewImage}`}
             alt={`${spot.name}`}
           />
-          <div className="spot-text">
+
+          {/* <div className="spot-text">
             <div className="spot-location-rating">
-              <p className="spot-location">{`${spot.city}, ${spot.state}`}</p>
-              <div className="rating-container">
+              <p>{`${spot.city}, ${spot.state}`}</p>
+              <div className="rating-all-container">
                 <p className="spot-rating">
                   {`${spot.avgRating.toFixed(1)}` || `New`}{" "}
                 </p>
@@ -51,9 +52,21 @@ const AllSpots = () => {
                   alt="star"
                 />
               </div>
+              <p className="spot-price">{`$${spot.price}`} per night </p>
             </div>
-            <p className="spot-price">{`$${spot.price}`} per night </p>
+          </div> */}
+          <div className="spot-info">
+            <p>{`${spot.city}, ${spot.state}`}</p>
+            <div className="average-rating">
+              <p>{`${spot.avgRating.toFixed(1)}` || `New`}</p>
+              <img
+                className="star"
+                src="https://i.postimg.cc/QxSC3byV/stars-removebg-preview.png"
+                alt="star"
+              />
+            </div>
           </div>
+          <p className="spot-price">{`$${spot.price}`} per night </p>
         </NavLink>
       ))}
     </div>

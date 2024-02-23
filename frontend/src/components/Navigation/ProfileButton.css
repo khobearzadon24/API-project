@@ -1,9 +1,10 @@
 .dropbtn {
-  background-color: red;
+  background-color: rgb(222, 82, 177);
   color: white;
   padding: 16px;
   font-size: 16px;
   border: none;
+  border-radius: 10px;
   cursor: pointer;
 }
 
@@ -16,11 +17,24 @@
   display: none;
   position: absolute;
   right: 0;
-  background-color: red;
+  background-color: transparent;
+  min-width: 70px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  list-style: none;
+  gap: 10px;
+}
+
+.dropdown-content-log-in {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: transparent;
   min-width: 160px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
   list-style: none;
+  gap: 10px;
 }
 
 .dropdown-content a {
@@ -31,16 +45,39 @@
   list-style: none;
 }
 
+.dropdown-content-log-in a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  list-style: none;
+}
+
 .dropdown-content a:hover {
   background-color: #f1f1f1;
   text-decoration: underline;
+  cursor: pointer;
 }
+
+.dropdown-content-log-in a:hover {
+  background-color: #f1f1f1;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 .dropdown:hover .dropdown-content {
+  display: block;
+  cursor: pointer;
+  cursor: pointer;
+}
+
+.dropdown:hover .dropdown-content-log-in {
   display: block;
   cursor: pointer;
 }
 .dropdown:hover .dropbtn {
-  background-color: red;
+  background-color: pink;
+  cursor: pointer;
 }
 
 .manage-spots {

@@ -16,12 +16,12 @@ const SingleSpot = () => {
   const { spotId } = useParams();
   const { closeModal } = useModal();
   const spot = useSelector((state) => state.spotState[spotId]);
-  console.log(spot, "here is my spot console log");
+  // console.log(spot, "here is my spot console log");
   // console.log(spot.ownerId);
   const review = useSelector((state) => state.reviewState);
   const sessionUser = useSelector((state) => state.session.user);
-  console.log(sessionUser, "here is my session user");
-  console.log(sessionUser.id);
+  // console.log(sessionUser, "here is my session user");
+  // console.log(sessionUser.id);
   const ulRef = useRef();
 
   // console.log(review, "here is the reviews");
@@ -51,10 +51,12 @@ const SingleSpot = () => {
   if (sessionUser && sessionUser.id !== spot.ownerId) {
     return (
       <div className="spot-container">
-        <h1 className="spot-name">{spot?.name}</h1>
-        <p>
-          {spot?.city}, {spot?.state}, {spot?.country}
-        </p>
+        <div className="spot-text-container">
+          <h1 className="spot-name">{spot?.name}</h1>
+          <p>
+            {spot?.city}, {spot?.state}, {spot?.country}
+          </p>
+        </div>
         <div className="image-container">
           <img
             className="image1"
@@ -70,10 +72,10 @@ const SingleSpot = () => {
         </div>
         <div className="description-container">
           <div className="owner-detail-container">
-            <p>
+            <p className="hosted">
               Hosted By {spot?.Owner?.firstName} {spot?.Owner?.lastName}
             </p>
-            <p>{spot?.description}</p>
+            <h1>{spot?.description}</h1>
           </div>
 
           <div className="rating-container">
@@ -91,7 +93,9 @@ const SingleSpot = () => {
               </div>
               <p>{spot.numReviews} review(s)</p>
             </div>
-            <button className="reserve">Reserve</button>
+            <div className="reverse-container">
+              <button className="reserve">Reserve</button>
+            </div>
           </div>
         </div>
         <div className="review-header">
