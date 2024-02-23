@@ -3,7 +3,8 @@ import { useEffect, useState, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { deleteSpot, fetchOwnerSpots } from "../../store/spotReducer";
 import { NavLink, useParams } from "react-router-dom";
-import OpenModalMenuItem from "../OpenModalButton/OpenModalButton";
+
+import OpenModalButton from "../OpenModalButton/OpenModalButton";
 import DeleteSpotModal from "../DeleteSpot/DeleteSpotModal";
 
 const ManageSpots = () => {
@@ -78,8 +79,8 @@ const ManageSpots = () => {
           </NavLink>
           <NavLink to={`/spots/${spot.id}/edit`}>Update</NavLink>
           <div className="delete-button">
-            <OpenModalMenuItem
-              itemText="Delete Spot"
+            <OpenModalButton
+              buttonText="Delete Spot"
               onItemClick={closeMenu}
               modalComponent={<DeleteSpotModal />}
             />

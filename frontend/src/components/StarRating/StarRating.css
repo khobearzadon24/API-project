@@ -1,0 +1,9 @@
+.filled {
+  color: blue;
+}
+.filled:hover {
+  color: blue;
+}
+.empty {
+  color: grey;
+}

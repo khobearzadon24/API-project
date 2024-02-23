@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import * as sessionActions from "../../store/session";
-import OpenModalMenuItem from "../OpenModalButton/OpenModalButton";
+import OpenModalButton from "../OpenModalButton/OpenModalButton";
 import LoginFormModal from "../LoginFormModal/LoginFormModal";
 import SignupFormModal from "../SignupFormModal/SignupFormModal";
 import { NavLink } from "react-router-dom";
@@ -70,13 +70,13 @@ function ProfileButton({ user }) {
           </div>
         ) : (
           <div className="dropdown-content">
-            <OpenModalMenuItem
-              itemText="Log In"
+            <OpenModalButton
+              buttonText="Log In"
               onItemClick={closeMenu}
               modalComponent={<LoginFormModal />}
             />
-            <OpenModalMenuItem
-              itemText="Sign Up"
+            <OpenModalButton
+              buttonText="Sign Up"
               onItemClick={closeMenu}
               modalComponent={<SignupFormModal />}
             />
