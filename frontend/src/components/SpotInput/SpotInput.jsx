@@ -110,16 +110,18 @@ const SpotInput = ({ spot, formType }) => {
       imageFour,
     };
 
+    let fixedSpot;
+    let createdSpot;
     if (formType === "edit") {
-      await dispatch(editSpot(spot.id, newSpot));
+      fixedSpot = await dispatch(editSpot(spot.id, newSpot));
     } else {
-      await dispatch(writeSpot(newSpot));
+      createdSpot = await dispatch(writeSpot(newSpot));
     }
 
-    if (formType === "edit") return navigate(`/spots/${spot.id}`);
+    if (formType === "edit") return navigate(`/spots/${fixedSpot.id}`);
     const imgArr = [previewImage, imageOne, imageThree, imageFour];
-    dispatch(writeImage(imgArr, madeSpot.id));
-    navigate(`/spots/${madeSpot.id}`);
+    dispatch(writeImage(imgArr, newSpot.id));
+    navigate(`/spots/${createdSpot.id}`);
     reset();
   };
   const reset = () => {

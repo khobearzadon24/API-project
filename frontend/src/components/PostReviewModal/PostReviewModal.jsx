@@ -9,6 +9,7 @@ import StarRating from "../StarRating/StarRating";
 
 function PostReviewModal({ spotId }) {
   const dispatch = useDispatch();
+
   const { closeModal } = useModal();
   // const navigate = useNavigate();
   const [errors, setErrors] = useState("");

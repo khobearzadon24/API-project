@@ -133,14 +133,9 @@ const SingleSpot = () => {
               {hasReview.length === 0 && (
                 <button>
                   <OpenModalButton
-                    buttonText="Delete Review"
+                    buttonText="Post Review"
                     onItemClick={closeModal}
-                    modalComponent={
-                      <DeleteReviewModal
-                        reviewId={review.id}
-                        renderdelete={renderdelete}
-                      />
-                    }
+                    modalComponent={<PostReviewModal spotId={spot.id} />}
                   />
                 </button>
               )}
@@ -181,7 +176,7 @@ const SingleSpot = () => {
         <div className="image-container">
           <img
             className="image1"
-            src={spot.SpotImages && spot.SpotImages[0].url}
+            src={spot?.SpotImages && spot?.SpotImages[0]?.url}
             alt="image1"
           />
           <div className="small-images">
@@ -209,7 +204,7 @@ const SingleSpot = () => {
                   alt="star"
                 />
                 <p className="stars">
-                  {`${spot.avgRating.toFixed(1)}` || `New`}{" "}
+                  {`${spot?.avgRating?.toFixed(1)}` || `New`}{" "}
                 </p>
               </div>
               {spot.numReviews === 1 && <p>{spot.numReviews} review</p>}
@@ -220,7 +215,9 @@ const SingleSpot = () => {
         </div>
         <div className="review-header">
           <div className="star-box">
-            <p className="stars">{`${spot.avgRating.toFixed(1)}` || `New`} </p>
+            <p className="stars">
+              {`${spot?.avgRating?.toFixed(1)}` || `New`}{" "}
+            </p>
             <img
               className="star"
               src="https://i.postimg.cc/QxSC3byV/stars-removebg-preview.png"
