@@ -1,11 +1,21 @@
+*:hover {
+  text-decoration: none;
+}
 .spot-container {
   padding: 20px;
 }
 .spot-name {
-  font-weight: lighter;
+  font-weight: bold;
   font-size: 40px;
+  text-decoration: none;
 }
 
+/* .spot-text-container {
+  padding-left: 40px;
+  border: 2px white solid;
+  display: flex;
+  justify-content: center;
+} */
 .image-container {
   display: flex;
   justify-content: space-around;
@@ -36,19 +46,21 @@
 }
 
 .owner-detail-container {
-  text-align: start;
+  text-align: left;
 }
 
 .rating-container {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
+  text-align: center;
+  vertical-align: center;
   flex-direction: row;
   flex-wrap: wrap;
   border: 2px solid black;
   padding: 10px 20px 10px 20px;
   border-radius: 10px;
   width: 300px;
-  background-color: red;
+  background-color: rgb(167, 162, 162);
 }
 
 .top-rating {
@@ -62,9 +74,9 @@
   font-weight: lighter;
 }
 
-.reverse-container {
+.reserve-container {
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
 }
 .reserve:hover {
   cursor: pointer;
@@ -74,7 +86,11 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  gap: 5px;
+  margin-bottom: 10px;
+}
+
+.stars {
+  margin-top: 10px;
 }
 
 .review-header {
@@ -87,16 +103,23 @@
   font-size: 30px;
 }
 
-.spot-text-container {
-  padding-left: 40px;
-}
-
 .hosted {
   font-size: 40px;
 }
 
 .star {
-  width: 25px;
-  height: 20px;
-  padding-top: 15px;
+  width: fit-content;
+  height: 5px;
+  margin-bottom: 20px;
+}
+
+.review-stuff {
+  border: 2px black dashed;
+  width: fit-content;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.description {
+  font-size: 20px;
 }

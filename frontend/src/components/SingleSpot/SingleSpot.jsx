@@ -30,6 +30,11 @@ const SingleSpot = () => {
   // console.log(sessionUser?.id, "here is id of session user");
   const ulRef = useRef();
 
+  const handleFeature = (e) => {
+    console.log("feature coming soon", e);
+    alert("Feature Coming Soon");
+  };
+
   // console.log(review, "here is the reviews");
   // console.log(review?.User);
   // console.log(review?.userId, "here is the user of the review");
@@ -87,10 +92,10 @@ const SingleSpot = () => {
         </div>
         <div className="description-container">
           <div className="owner-detail-container">
-            <p className="hosted">
+            <h1 className="hosted">
               Hosted By {spot?.Owner?.firstName} {spot?.Owner?.lastName}
-            </p>
-            <h1>{spot?.description}</h1>
+            </h1>
+            <h1 className="description">{spot?.description}</h1>
           </div>
 
           <div className="rating-container">
@@ -107,10 +112,13 @@ const SingleSpot = () => {
                 </p>
               </div>
               {spot.numReviews === 1 && <p>{spot.numReviews} review</p>}
-              <p>{spot.numReviews} reviews</p>
+              {spot.numReviews > 1 && <p>{spot.numReviews} review</p>}
+              {spot.numReviews === 0 && <p>New</p>}
             </div>
-            <div className="reverse-container">
-              <button className="reserve">Reserve</button>
+            <div className="reserve-container">
+              <button className="reserve" onClick={handleFeature}>
+                Reserve
+              </button>
             </div>
           </div>
         </div>
@@ -125,7 +133,15 @@ const SingleSpot = () => {
               alt="star"
             />
           </div>
-          <p className="review-title">{spot.numReviews} reviews</p>
+          {spot.numReviews > 1 && (
+            <p className="review-title">{spot.numReviews} reviews</p>
+          )}
+          {spot.numReviews === 1 && (
+            <p className="review-title">{spot.numReviews} review</p>
+          )}
+          {spot.numReviews === 0 && (
+            <p className="review-title">Be the first to post a review!</p>
+          )}
         </div>
         <div className="review-container">
           <div className="post-here" ref={ulRef}>
@@ -188,10 +204,10 @@ const SingleSpot = () => {
         </div>
         <div className="description-container">
           <div className="owner-detail-container">
-            <p>
+            <h1>
               Hosted By {spot?.Owner?.firstName} {spot?.Owner?.lastName}
-            </p>
-            <p>{spot?.description}</p>
+            </h1>
+            <h1 className="description">{spot?.description}</h1>
           </div>
 
           <div className="rating-container">
@@ -208,23 +224,37 @@ const SingleSpot = () => {
                 </p>
               </div>
               {spot.numReviews === 1 && <p>{spot.numReviews} review</p>}
-              <p>{spot.numReviews} review</p>
+              {spot.numReviews > 1 && <p>{spot.numReviews} reviews</p>}
+              {spot.numReviews === 0 && <p>New</p>}
             </div>
-            <button className="reserve">Reserve</button>
+            <div className="reserve-container">
+              <button className="reserve" onClick={handleFeature}>
+                Reserve
+              </button>
+            </div>
           </div>
         </div>
         <div className="review-header">
           <div className="star-box">
-            <p className="stars">
-              {`${spot?.avgRating?.toFixed(1)}` || `New`}{" "}
-            </p>
             <img
               className="star"
               src="https://i.postimg.cc/QxSC3byV/stars-removebg-preview.png"
               alt="star"
             />
+            <p className="stars">
+              {`${spot?.avgRating?.toFixed(1)}` || `New`}{" "}
+            </p>
           </div>
-          <p className="review-title">{spot.numReviews} reviews</p>
+          {spot.numReviews > 1 && (
+            <p className="review-title">
+              {spot.numReviews}
+              reviews
+            </p>
+          )}
+          {spot.numReviews === 1 && (
+            <p className="review-title">{spot.numReviews} review</p>
+          )}
+          {spot.numReviews === 0 && <p className="review-title">New</p>}
         </div>
         <div className="review-container">
           {reviewArr.map((review) => (

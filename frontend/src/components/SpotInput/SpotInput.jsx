@@ -152,7 +152,9 @@ const SpotInput = ({ spot, formType }) => {
 
       <form className="form" onSubmit={handleSubmit}>
         <p>Country</p>
-        {submitted && "country" in errors && <p>{errors.country}</p>}
+        {submitted && "country" in errors && (
+          <p className="errors">{errors.country}</p>
+        )}
         <input
           className="country"
           type="text"
@@ -162,7 +164,9 @@ const SpotInput = ({ spot, formType }) => {
           name="country"
         />
         <p>Street Address</p>
-        {submitted && "address" in errors && <p>{errors.address}</p>}
+        {submitted && "address" in errors && (
+          <p className="errors">{errors.address}</p>
+        )}
         <input
           className="address"
           type="text"
@@ -172,7 +176,9 @@ const SpotInput = ({ spot, formType }) => {
           name="address"
         />
         <p>City</p>
-        {submitted && "city" in errors && <p>{errors.city}</p>}
+        {submitted && "city" in errors && (
+          <p className="errors">{errors.city}</p>
+        )}
         <input
           className="city"
           type="text"
@@ -182,7 +188,9 @@ const SpotInput = ({ spot, formType }) => {
           name="city"
         />
         <p>State</p>
-        {submitted && "state" in errors && <p>{errors.state}</p>}
+        {submitted && "state" in errors && (
+          <p className="errors">{errors.state}</p>
+        )}
         <input
           className="state"
           type="text"
@@ -192,7 +200,9 @@ const SpotInput = ({ spot, formType }) => {
           name="state"
         />
         <p>Describe your place to guests</p>
-        {submitted && "description" in errors && <p>{errors.description}</p>}
+        {submitted && "description" in errors && (
+          <p className="errors">{errors.description}</p>
+        )}
         <textarea
           className="description"
           value={description}
@@ -202,7 +212,9 @@ const SpotInput = ({ spot, formType }) => {
           rows="10"
         ></textarea>
         <p>Create a title for your spot</p>
-        {submitted && "previewImage" in errors && <p>{errors.previewImage}</p>}
+        {submitted && "title" in errors && (
+          <p className="errors">{errors.title}</p>
+        )}
         <input
           className="name"
           type="text"
@@ -212,7 +224,9 @@ const SpotInput = ({ spot, formType }) => {
           name="name"
         />
         <p>Set a base price for your spot</p>
-        {submitted && "price" in errors && <p>{errors.price}</p>}
+        {submitted && "price" in errors && (
+          <p className="errors">{errors.price}</p>
+        )}
         <div className="price-box">
           <p>$</p>
           <input
@@ -235,7 +249,7 @@ const SpotInput = ({ spot, formType }) => {
             onChange={(e) => setPreviewImage(e.target.value)}
           ></input>
           {submitted && "previewImage" in errors && (
-            <p>{errors.previewImage}</p>
+            <p className="errors">{errors.previewImage}</p>
           )}
           <input
             type="text"
@@ -252,7 +266,9 @@ const SpotInput = ({ spot, formType }) => {
             value={imageTwo}
             onChange={(e) => setImageTwo(e.target.value)}
           ></input>
-          {submitted && "imageTwo" in errors && <p>{errors.imageTwo}</p>}
+          {submitted && "imageTwo" in errors && (
+            <p className="errors">{errors.imageTwo}</p>
+          )}
           <input
             type="text"
             name="imageThree"
@@ -260,7 +276,9 @@ const SpotInput = ({ spot, formType }) => {
             value={imageThree}
             onChange={(e) => setImageThree(e.target.value)}
           ></input>
-          {submitted && "imageThree" in errors && <p>{errors.imageThree}</p>}
+          {submitted && "imageThree" in errors && (
+            <p className="errors">{errors.imageThree}</p>
+          )}
 
           <input
             type="text"
@@ -269,7 +287,9 @@ const SpotInput = ({ spot, formType }) => {
             value={imageFour}
             onChange={(e) => setImageFour(e.target.value)}
           ></input>
-          {submitted && "imageFour" in errors && <p>{errors.imageFour}</p>}
+          {submitted && "imageFour" in errors && (
+            <p className="errors">{errors.imageFour}</p>
+          )}
         </div>
 
         <button className="button">Create Spot</button>
