@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { fetchSpot } from "../../store/spotReducer";
 import { fetchAllReviews } from "../../store/reviewReducer";
@@ -21,21 +21,28 @@ const SingleSpot = () => {
   // console.log(spot.ownerId);
   const review = useSelector((state) => state.reviewState);
   const sessionUser = useSelector((state) => state.session.user);
+
+  const [deleteReview, setDeleteReview] = useState(false);
+  const renderdelete = () => {
+    setDeleteReview((arg) => !arg);
+  };
   // console.log(sessionUser, "here is my session user");
-  // console.log(sessionUser.id);
+  // console.log(sessionUser?.id, "here is id of session user");
   const ulRef = useRef();
 
   // console.log(review, "here is the reviews");
-  console.log(review?.user, "here is the user of the review");
+  // console.log(review?.User);
+  // console.log(review?.userId, "here is the user of the review");
   const reviewArr = Object.values(review);
   // console.log(reviewArr, "reviewArr");
+  // console.log(reviewArr, "reviewArr");
   // console.log(
-  //   reviewArr[0].User.id,
+  //   reviewArr[0]?.User?.id,
   //   "here is the actual firstname of the review"
   // );
 
   let hasReview = reviewArr.filter(
-    (review) => review.User.id === sessionUser.id
+    (review) => review?.User?.id === sessionUser?.id
   );
   // console.log(spot, "over here!");
   // console.log(spot?.SpotImages, "here is the spots");
@@ -45,7 +52,7 @@ const SingleSpot = () => {
   useEffect(() => {
     dispatch(fetchSpot(spotId));
     dispatch(fetchAllReviews(spotId));
-  }, [dispatch, spotId, reviewArr.length]);
+  }, [dispatch, spotId, reviewArr.length, deleteReview]);
 
   if (!spot) return;
   // if (!spot.SpotImages[0] || !spot) return <div>information</div>;
@@ -55,6 +62,7 @@ const SingleSpot = () => {
   // let number = reviewArr[0].createdAt;
   // const date = new Date(number);
   // console.log(date, "here is the conversion");
+  // console.log(reviewArr[0].id, "over here is where i am console logging");
   if (sessionUser && sessionUser.id !== spot.ownerId) {
     return (
       <div className="spot-container">
@@ -95,10 +103,11 @@ const SingleSpot = () => {
                   alt="star"
                 />
                 <p className="stars">
-                  {`${spot.avgRating.toFixed(1)}` || `New`}{" "}
+                  {`${spot?.avgRating?.toFixed(1)}` || `New`}{" "}
                 </p>
               </div>
-              <p>{spot.numReviews} review(s)</p>
+              {spot.numReviews === 1 && <p>{spot.numReviews} review</p>}
+              <p>{spot.numReviews} reviews</p>
             </div>
             <div className="reverse-container">
               <button className="reserve">Reserve</button>
@@ -107,7 +116,9 @@ const SingleSpot = () => {
         </div>
         <div className="review-header">
           <div className="star-box">
-            <p className="stars">{`${spot.avgRating.toFixed(1)}` || `New`} </p>
+            <p className="stars">
+              {`${spot?.avgRating?.toFixed(1)}` || `New`}{" "}
+            </p>
             <img
               className="star"
               src="https://i.postimg.cc/QxSC3byV/stars-removebg-preview.png"
@@ -119,24 +130,39 @@ const SingleSpot = () => {
         <div className="review-container">
           <div className="post-here" ref={ulRef}>
             <div className="post-button">
-              <OpenModalButton
-                buttonText="Post A Review"
-                onItemClick={closeModal}
-                modalComponent={<PostReviewModal spotId={spotId} />}
-              />
-            </div>
-          </div>
-          {reviewArr.map((review) => (
-            <h2 className="review-stuff">
-              <p>{`${review?.User?.firstName} `}</p>
-              <p>{new Date(review.createdAt).toDateString()}</p>
-              <p>{`${review.review}`}</p>
-              {hasReview.length > 0 && (
+              {hasReview.length === 0 && (
                 <button>
                   <OpenModalButton
                     buttonText="Delete Review"
                     onItemClick={closeModal}
-                    modalComponent={<DeleteReviewModal reviewId={review.id} />}
+                    modalComponent={
+                      <DeleteReviewModal
+                        reviewId={review.id}
+                        renderdelete={renderdelete}
+                      />
+                    }
+                  />
+                </button>
+              )}
+            </div>
+          </div>
+          {reviewArr.map((review) => (
+            <h2 className="review-stuff">
+              {console.log(review.id, "inside the mapping")}
+              <p>{`${review?.User?.firstName} `}</p>
+              <p>{new Date(review.createdAt).toDateString()}</p>
+              <p>{`${review.review}`}</p>
+              {hasReview.length > 0 && sessionUser.id === review.userId && (
+                <button>
+                  <OpenModalButton
+                    buttonText="Delete Review"
+                    onItemClick={closeModal}
+                    modalComponent={
+                      <DeleteReviewModal
+                        reviewId={review.id}
+                        renderdelete={renderdelete}
+                      />
+                    }
                   />
                 </button>
               )}
@@ -186,7 +212,8 @@ const SingleSpot = () => {
                   {`${spot.avgRating.toFixed(1)}` || `New`}{" "}
                 </p>
               </div>
-              <p>{spot.numReviews} review(s)</p>
+              {spot.numReviews === 1 && <p>{spot.numReviews} review</p>}
+              <p>{spot.numReviews} review</p>
             </div>
             <button className="reserve">Reserve</button>
           </div>

@@ -19,9 +19,12 @@ function Navigation({ isLoaded }) {
 
       {isLoaded && (
         <div className="logo-sign">
-          <NavLink className="create" to="/spot/new">
-            Create a Spot
-          </NavLink>
+          {sessionUser && (
+            <NavLink className="create" to="/spot/new">
+              Create a Spot
+            </NavLink>
+          )}
+
           <ProfileButton className="extra" user={sessionUser} />
         </div>
       )}

@@ -2,15 +2,17 @@ import { useState } from "react";
 import * as sessionActions from "../../store/session";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
-import { fetchOwnerSpots, removeSpot } from "../../store/spotReducer";
+import { fetchOwnerSpots, deleteSpot } from "../../store/spotReducer";
 
-function DeleteSpotModal() {
+function DeleteSpotModal({ spot, renderSpot }) {
   const dispatch = useDispatch();
   const { closeModal } = useModal();
+  // console.log(spot, "here is the spot over hererere");
 
-  const deleteSubmit = async (e, spot) => {
+  const deleteSubmit = async (e) => {
     e.preventDefault();
-    await dispatch(removeSpot(spot.id));
+    await dispatch(deleteSpot(spot.id));
+    renderSpot();
     closeModal();
   };
 

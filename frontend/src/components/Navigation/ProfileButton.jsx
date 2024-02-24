@@ -56,7 +56,7 @@ function ProfileButton({ user }) {
           <div className="dropdown-content-log-in">
             <li>{user.username}</li>
             <li>
-              {user.firstName} {user.lastName}
+              Hello {user.firstName} {user.lastName}!
             </li>
             <li>{user.email}</li>
             <li>

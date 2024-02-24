@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
 import { createReview } from "../../store/reviewReducer";
 import StarRating from "../StarRating/StarRating";
+// import { Alert } from "react-alert";
 // import { useNavigate } from "react-router-dom";
 
 function PostReviewModal({ spotId }) {

@@ -20,10 +20,10 @@ export const addReview = (review) => {
   };
 };
 
-export const deleteReview = (review) => {
+export const deleteReview = (reviewId) => {
   return {
     type: DELETE_REVIEW,
-    review,
+    reviewId,
   };
 };
 
@@ -58,13 +58,11 @@ export const createReview = (payload, spotId) => async (dispatch) => {
 export const removeReview = (reviewId) => async (dispatch) => {
   const response = await csrfFetch(`/api/reviews/${reviewId}`, {
     method: "DELETE",
-    header: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      message: "Successfully deleted",
-    }),
   });
+  console.log(response, "here is the response wojweonfwohfwoihf");
   if (response.ok) {
     const review = await response.json();
+    console.log(review, "here is the review");
     dispatch(deleteReview(reviewId));
     return review;
   }

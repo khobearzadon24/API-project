@@ -79,6 +79,47 @@ const validatePost = [
     .exists({ checkFalsy: true })
     .isFloat({ min: 0.01 })
     .withMessage("Price is required"),
+  check("previewImage")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .custom(async (value) => {
+      if (!value.endsWith(".png", ".jpg", ",jpeg")) {
+        throw new Error("Image must end with .png, .jpg, or.jpeg");
+      }
+    })
+    .withMessage("At least 1 image is required"),
+  check("imageOne")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .custom(async (value) => {
+      if (!value.endsWith(".png", ".jpg", ",jpeg")) {
+        throw new Error("Image must end with .png, .jpg, or.jpeg");
+      }
+    }),
+  check("imageTwo")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .custom(async (value) => {
+      if (!value.endsWith(".png", ".jpg", ",jpeg")) {
+        throw new Error("Image must end with .png, .jpg, or.jpeg");
+      }
+    }),
+  check("imageThree")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .custom(async (value) => {
+      if (!value.endsWith(".png", ".jpg", ",jpeg")) {
+        throw new Error("Image must end with .png, .jpg, or.jpeg");
+      }
+    }),
+  check("imageFour")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .custom(async (value) => {
+      if (!value.endsWith(".png", ".jpg", ",jpeg")) {
+        throw new Error("Image must end with .png, .jpg, or.jpeg");
+      }
+    }),
   handleValidationErrors,
 ];
 

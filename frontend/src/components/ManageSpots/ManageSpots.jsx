@@ -9,6 +9,11 @@ import DeleteSpotModal from "../DeleteSpot/DeleteSpotModal";
 
 const ManageSpots = () => {
   const spot = useSelector((state) => state.spotState);
+  const [postSpot, setPostSpot] = useState(false);
+
+  const renderSpot = () => {
+    setPostSpot((arg) => !arg);
+  };
   // console.log(spot, "SPOTS");
 
   const spotArr = Object.values(spot);
@@ -44,7 +49,7 @@ const ManageSpots = () => {
     console.log("whatever");
     dispatch(fetchOwnerSpots());
     console.log("below here");
-  }, [dispatch]);
+  }, [dispatch, postSpot]);
 
   return (
     <div className="container">
@@ -82,7 +87,9 @@ const ManageSpots = () => {
             <OpenModalButton
               buttonText="Delete Spot"
               onItemClick={closeMenu}
-              modalComponent={<DeleteSpotModal />}
+              modalComponent={
+                <DeleteSpotModal spot={spot} renderSpot={renderSpot} />
+              }
             />
           </div>
         </>

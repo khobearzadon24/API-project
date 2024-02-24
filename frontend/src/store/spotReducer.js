@@ -46,10 +46,10 @@ export const addImage = (image) => {
   };
 };
 
-export const removeSpot = (spot) => {
+export const removeSpot = (spotId) => {
   return {
     type: REMOVE_SPOT,
-    spot,
+    spotId,
   };
 };
 
@@ -125,14 +125,13 @@ export const writeImage = (imgArr, spotId) => (dispatch) => {
 export const deleteSpot = (spotId) => async (dispatch) => {
   const response = await csrfFetch(`/api/spots/${spotId}`, {
     method: "DELETE",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      message: "Successfully deleted",
-    }),
   });
+  console.log("here it is");
   if (response.ok) {
     const spot = await response.json();
-    dispatch(removeSpot(spotId));
+    console.log(spotId, "thunk");
+    console.log(spot, "here is another log");
+    dispatch(removeSpot(spot.spotId));
     return spot;
   }
 };

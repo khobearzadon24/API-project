@@ -1,16 +1,17 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
-import { deleteReview } from "../../store/reviewReducer";
+import { removeReview } from "../../store/reviewReducer";
 import OpenModalButton from "../OpenModalButton/OpenModalButton";
 
-function DeleteReviewModal() {
+function DeleteReviewModal({ reviewId, renderdelete }) {
+  console.log(reviewId, "here is the review id over herehrehrherehh");
   const dispatch = useDispatch();
   const { closeModal } = useModal();
-
-  const removeReview = async (e, review) => {
+  const deletedReview = async (e) => {
     e.preventDefault();
-    await dispatch(deleteReview(review.id));
+    await dispatch(removeReview(reviewId));
+    renderdelete();
     closeModal();
   };
 
@@ -18,7 +19,7 @@ function DeleteReviewModal() {
     <div>
       <h1>Confirm Delete</h1>
       <p>Are you sure you want to delete this review?</p>
-      <button onClick={removeReview}>Yes Delete Review</button>
+      <button onClick={deletedReview}>Yes Delete Review</button>
       <button onClick={closeModal}>No Keep Review</button>
     </div>
   );

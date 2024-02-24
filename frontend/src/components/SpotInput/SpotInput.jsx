@@ -28,29 +28,38 @@ const SpotInput = ({ spot, formType }) => {
   const handleSubmit = async (e) => {
     setSubmitted(true);
     e.preventDefault();
-    const newSpot = {
-      // ownerId,
-      address,
-      city,
-      state,
-      country,
-      name,
-      description,
-      price,
-      previewImage,
-      imageOne,
-      imageTwo,
-      imageThree,
-      imageFour,
-    };
 
     setErrors({});
+
     // console.log(errors);
-    let madeSpot;
-    if (formType === "edit") {
-      await dispatch(editSpot(spot.id, newSpot));
-    } else {
-      madeSpot = await dispatch(writeSpot(newSpot));
+    // let madeSpot;
+
+    if (!address) {
+      validationObj.address = "Street address is required";
+    }
+
+    if (!city) {
+      validationObj.city = "City is required";
+    }
+
+    if (!state) {
+      validationObj.state = "State is required";
+    }
+
+    if (!country) {
+      validationObj.country = "Country is required";
+    }
+
+    if (!name) {
+      validationObj.name = "Name is required";
+    }
+
+    if (name && name.length > 50) {
+      validationObj.name = "Name must be less than 50 characters";
+    }
+
+    if (!price || price < 0) {
+      validationObj.price = "Price is required";
     }
 
     const validImg = (url) => {
@@ -79,8 +88,32 @@ const SpotInput = ({ spot, formType }) => {
       validationObj.imageFour = "Image URL must end with .png, .jpg, or .jpeg";
     }
 
-    if (madeSpot && madeSpot.errors) {
-      setErrors(madeSpot.errors);
+    // if (madeSpot && madeSpot.errors) {
+    //   setErrors(madeSpot.errors);
+    // }
+    if (Object.keys(validationObj).length > 1) {
+      setErrors(validationObj);
+    }
+    const newSpot = {
+      // ownerId,
+      address,
+      city,
+      state,
+      country,
+      name,
+      description,
+      price,
+      previewImage,
+      imageOne,
+      imageTwo,
+      imageThree,
+      imageFour,
+    };
+
+    if (formType === "edit") {
+      await dispatch(editSpot(spot.id, newSpot));
+    } else {
+      await dispatch(writeSpot(newSpot));
     }
 
     if (formType === "edit") return navigate(`/spots/${spot.id}`);
@@ -117,7 +150,7 @@ const SpotInput = ({ spot, formType }) => {
 
       <form className="form" onSubmit={handleSubmit}>
         <p>Country</p>
-        {errors.country && <p className="errors">{errors.country}</p>}
+        {submitted && "country" in errors && <p>{errors.country}</p>}
         <input
           className="country"
           type="text"
@@ -127,7 +160,7 @@ const SpotInput = ({ spot, formType }) => {
           name="country"
         />
         <p>Street Address</p>
-        {errors.address && <p className="errors">{errors.address}</p>}
+        {submitted && "address" in errors && <p>{errors.address}</p>}
         <input
           className="address"
           type="text"
@@ -137,7 +170,7 @@ const SpotInput = ({ spot, formType }) => {
           name="address"
         />
         <p>City</p>
-        {errors.city && <p className="errors">{errors.city}</p>}
+        {submitted && "city" in errors && <p>{errors.city}</p>}
         <input
           className="city"
           type="text"
@@ -147,7 +180,7 @@ const SpotInput = ({ spot, formType }) => {
           name="city"
         />
         <p>State</p>
-        {errors.state && <p className="errors">{errors.state}</p>}
+        {submitted && "state" in errors && <p>{errors.state}</p>}
         <input
           className="state"
           type="text"
@@ -157,7 +190,7 @@ const SpotInput = ({ spot, formType }) => {
           name="state"
         />
         <p>Describe your place to guests</p>
-        {errors.description && <p className="errors">{errors.description}</p>}
+        {submitted && "description" in errors && <p>{errors.description}</p>}
         <textarea
           className="description"
           value={description}
@@ -167,7 +200,7 @@ const SpotInput = ({ spot, formType }) => {
           rows="10"
         ></textarea>
         <p>Create a title for your spot</p>
-        {errors.name && <p className="errors">{errors.name}</p>}
+        {submitted && "previewImage" in errors && <p>{errors.previewImage}</p>}
         <input
           className="name"
           type="text"
@@ -177,7 +210,7 @@ const SpotInput = ({ spot, formType }) => {
           name="name"
         />
         <p>Set a base price for your spot</p>
-        {errors.price && <p className="errors">{errors.price}</p>}
+        {submitted && "price" in errors && <p>{errors.price}</p>}
         <div className="price-box">
           <p>$</p>
           <input
@@ -199,8 +232,8 @@ const SpotInput = ({ spot, formType }) => {
             value={previewImage}
             onChange={(e) => setPreviewImage(e.target.value)}
           ></input>
-          {submitted && "previewImage" in validationObj && (
-            <p>{validationObj.previewImage}</p>
+          {submitted && "previewImage" in errors && (
+            <p>{errors.previewImage}</p>
           )}
           <input
             type="text"
@@ -209,9 +242,7 @@ const SpotInput = ({ spot, formType }) => {
             value={imageOne}
             onChange={(e) => setImageOne(e.target.value)}
           ></input>
-          {submitted && "imageOne" in validationObj && (
-            <p>{validationObj.imageOne}</p>
-          )}
+          {submitted && "imageOne" in errors && <p>{errors.imageOne}</p>}
           <input
             type="text"
             name="imageTwo"
@@ -219,9 +250,7 @@ const SpotInput = ({ spot, formType }) => {
             value={imageTwo}
             onChange={(e) => setImageTwo(e.target.value)}
           ></input>
-          {submitted && "imageTwo" in validationObj && (
-            <p>{validationObj.imageTwo}</p>
-          )}
+          {submitted && "imageTwo" in errors && <p>{errors.imageTwo}</p>}
           <input
             type="text"
             name="imageThree"
@@ -229,9 +258,7 @@ const SpotInput = ({ spot, formType }) => {
             value={imageThree}
             onChange={(e) => setImageThree(e.target.value)}
           ></input>
-          {submitted && "imageThree" in validationObj && (
-            <p>{validationObj.imageThree}</p>
-          )}
+          {submitted && "imageThree" in errors && <p>{errors.imageThree}</p>}
 
           <input
             type="text"
@@ -240,9 +267,7 @@ const SpotInput = ({ spot, formType }) => {
             value={imageFour}
             onChange={(e) => setImageFour(e.target.value)}
           ></input>
-          {submitted && "imageFour" in validationObj && (
-            <p>{validationObj.imageFour}</p>
-          )}
+          {submitted && "imageFour" in errors && <p>{errors.imageFour}</p>}
         </div>
 
         <button className="button">Create Spot</button>
