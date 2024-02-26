@@ -3,6 +3,7 @@ import * as sessionActions from "../../store/session";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
 import { fetchOwnerSpots, deleteSpot } from "../../store/spotReducer";
+import "./DeleteSpotModal.css";
 
 function DeleteSpotModal({ spot, renderSpot }) {
   const dispatch = useDispatch();
@@ -17,11 +18,13 @@ function DeleteSpotModal({ spot, renderSpot }) {
   };
 
   return (
-    <div>
+    <div className="delete-modal-container">
       <h1>Confirm Delete</h1>
       <p>Are you sure you want to delete this spot from the listings?</p>
-      <button onClick={deleteSubmit}>Yes Delete Spot</button>
-      <button onClick={closeModal}>No Keep Spot</button>
+      <div className="yes-no">
+        <button onClick={deleteSubmit}>Yes Delete Spot</button>
+        <button onClick={closeModal}>No Keep Spot</button>
+      </div>
     </div>
   );
 }

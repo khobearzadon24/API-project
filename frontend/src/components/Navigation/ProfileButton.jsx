@@ -54,10 +54,10 @@ function ProfileButton({ user }) {
       <ul className={ulClassName} ref={ulRef}>
         {user ? (
           <div className="dropdown-content-log-in">
-            <li>{user.username}</li>
             <li>
               Hello {user.firstName} {user.lastName}!
             </li>
+            <li>{user.username}</li>
             <li>{user.email}</li>
             <li>
               <NavLink className="manage-spots" to={`/spots/current`}>
@@ -71,11 +71,13 @@ function ProfileButton({ user }) {
         ) : (
           <div className="dropdown-content">
             <OpenModalButton
+              className="log-in-button"
               buttonText="Log In"
               onItemClick={closeMenu}
               modalComponent={<LoginFormModal />}
             />
             <OpenModalButton
+              className="sign-up-button"
               buttonText="Sign Up"
               onItemClick={closeMenu}
               modalComponent={<SignupFormModal />}

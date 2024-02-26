@@ -68,7 +68,6 @@
 .dropdown:hover .dropdown-content {
   display: block;
   cursor: pointer;
-  cursor: pointer;
 }
 
 .dropdown:hover .dropdown-content-log-in {

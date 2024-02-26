@@ -1,5 +1,7 @@
 /* TODO: Add sitewide styles */
-
+* {
+  font-family: palatino, serif;
+}
 body {
   background-image: linear-gradient(
     to right top,

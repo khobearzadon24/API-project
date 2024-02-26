@@ -70,14 +70,14 @@ const SingleSpot = () => {
   // console.log(reviewArr[0].id, "over here is where i am console logging");
   if (sessionUser && sessionUser.id !== spot.ownerId) {
     return (
-      <div className="spot-container">
+      <div className=".single-spot-container">
         <div className="spot-text-container">
-          <h1 className="spot-name">{spot?.name}</h1>
+          <h1 className="single-spot-name">{spot?.name}</h1>
           <p>
             {spot?.city}, {spot?.state}, {spot?.country}
           </p>
         </div>
-        <div className="image-container">
+        <div className="single-image-container">
           <img
             className="image1"
             src={spot.SpotImages && spot.SpotImages[0].url}
@@ -90,24 +90,24 @@ const SingleSpot = () => {
               ))}
           </div>
         </div>
-        <div className="description-container">
-          <div className="owner-detail-container">
+        <div className="single-description-container">
+          <div className="single-owner-detail-container">
             <h1 className="hosted">
               Hosted By {spot?.Owner?.firstName} {spot?.Owner?.lastName}
             </h1>
-            <h1 className="description">{spot?.description}</h1>
+            <h1 className="single-description">{spot?.description}</h1>
           </div>
 
-          <div className="rating-container">
-            <div className="top-rating">
+          <div className="single-rating-container">
+            <div className="single-top-rating">
               <p>${spot?.price} night </p>
-              <div className="star-box">
+              <div className="single-star-box">
                 <img
-                  className="star"
+                  className="single-star"
                   src="https://i.postimg.cc/QxSC3byV/stars-removebg-preview.png"
                   alt="star"
                 />
-                <p className="stars">
+                <p className="single-stars">
                   {`${spot?.avgRating?.toFixed(1)}` || `New`}{" "}
                 </p>
               </div>
@@ -115,67 +115,68 @@ const SingleSpot = () => {
               {spot.numReviews > 1 && <p>{spot.numReviews} review</p>}
               {spot.numReviews === 0 && <p>New</p>}
             </div>
-            <div className="reserve-container">
-              <button className="reserve" onClick={handleFeature}>
+            <div className="single-reserve-container">
+              <button className="single-reserve" onClick={handleFeature}>
                 Reserve
               </button>
             </div>
           </div>
         </div>
-        <div className="review-header">
-          <div className="star-box">
-            <p className="stars">
+        <hr className="single-line" color="black" />
+        <div className="single-review-header">
+          <div className="single-star-box">
+            <p className="single-stars">
               {`${spot?.avgRating?.toFixed(1)}` || `New`}{" "}
             </p>
             <img
-              className="star"
+              className="single-star"
               src="https://i.postimg.cc/QxSC3byV/stars-removebg-preview.png"
               alt="star"
             />
           </div>
           {spot.numReviews > 1 && (
-            <p className="review-title">{spot.numReviews} reviews</p>
+            <p className="single-review-title">{spot.numReviews} reviews</p>
           )}
           {spot.numReviews === 1 && (
-            <p className="review-title">{spot.numReviews} review</p>
+            <p className="single-review-title">{spot.numReviews} review</p>
           )}
           {spot.numReviews === 0 && (
-            <p className="review-title">Be the first to post a review!</p>
+            <p className="single-review-title">
+              Be the first to post a review!
+            </p>
           )}
         </div>
-        <div className="review-container">
+        <div className="single-review-container">
           <div className="post-here" ref={ulRef}>
             <div className="post-button">
               {hasReview.length === 0 && (
-                <button>
-                  <OpenModalButton
-                    buttonText="Post Review"
-                    onItemClick={closeModal}
-                    modalComponent={<PostReviewModal spotId={spot.id} />}
-                  />
-                </button>
+                <OpenModalButton
+                  buttonText="Post Review"
+                  onItemClick={closeModal}
+                  modalComponent={<PostReviewModal spotId={spot.id} />}
+                />
               )}
             </div>
           </div>
           {reviewArr.map((review) => (
-            <h2 className="review-stuff">
+            <h2 className="single-review-stuff">
               {console.log(review.id, "inside the mapping")}
-              <p>{`${review?.User?.firstName} `}</p>
-              <p>{new Date(review.createdAt).toDateString()}</p>
-              <p>{`${review.review}`}</p>
+              <p className="single-review-username">{`${review?.User?.firstName} `}</p>
+              <p className="single-date">
+                {new Date(review.createdAt).toDateString()}
+              </p>
+              <p className="single-delete-modal">{`${review.review}`}</p>
               {hasReview.length > 0 && sessionUser.id === review.userId && (
-                <button>
-                  <OpenModalButton
-                    buttonText="Delete Review"
-                    onItemClick={closeModal}
-                    modalComponent={
-                      <DeleteReviewModal
-                        reviewId={review.id}
-                        renderdelete={renderdelete}
-                      />
-                    }
-                  />
-                </button>
+                <OpenModalButton
+                  buttonText="Delete Review"
+                  onItemClick={closeModal}
+                  modalComponent={
+                    <DeleteReviewModal
+                      reviewId={review.id}
+                      renderdelete={renderdelete}
+                    />
+                  }
+                />
               )}
             </h2>
           ))}
@@ -184,12 +185,12 @@ const SingleSpot = () => {
     );
   } else
     return (
-      <div className="spot-container">
-        <h1 className="spot-name">{spot?.name}</h1>
+      <div className="single-spot-container">
+        <h1 className="single-spot-name">{spot?.name}</h1>
         <p>
           {spot?.city}, {spot?.state}, {spot?.country}
         </p>
-        <div className="image-container">
+        <div className="single-image-container">
           <img
             className="image1"
             src={spot?.SpotImages && spot?.SpotImages[0]?.url}
@@ -202,24 +203,24 @@ const SingleSpot = () => {
               ))}
           </div>
         </div>
-        <div className="description-container">
-          <div className="owner-detail-container">
+        <div className="single-description-container">
+          <div className="single-owner-detail-container">
             <h1>
               Hosted By {spot?.Owner?.firstName} {spot?.Owner?.lastName}
             </h1>
-            <h1 className="description">{spot?.description}</h1>
+            <h1 className="single-description">{spot?.description}</h1>
           </div>
 
-          <div className="rating-container">
-            <div className="top-rating">
+          <div className="single-rating-container">
+            <div className="single-top-rating">
               <p>${spot?.price} night </p>
-              <div className="star-box">
+              <div className="single-star-box">
                 <img
-                  className="star"
+                  className="single-star"
                   src="https://i.postimg.cc/QxSC3byV/stars-removebg-preview.png"
                   alt="star"
                 />
-                <p className="stars">
+                <p className="single-stars">
                   {`${spot?.avgRating?.toFixed(1)}` || `New`}{" "}
                 </p>
               </div>
@@ -227,49 +228,50 @@ const SingleSpot = () => {
               {spot.numReviews > 1 && <p>{spot.numReviews} reviews</p>}
               {spot.numReviews === 0 && <p>New</p>}
             </div>
-            <div className="reserve-container">
-              <button className="reserve" onClick={handleFeature}>
+            <div className="single-reserve-container">
+              <button className="single-reserve" onClick={handleFeature}>
                 Reserve
               </button>
             </div>
           </div>
         </div>
-        <div className="review-header">
-          <div className="star-box">
+        <hr className="single-line" color="black" />
+        <div className="single-review-header">
+          <div className="single-star-box">
             <img
-              className="star"
+              className="single-star"
               src="https://i.postimg.cc/QxSC3byV/stars-removebg-preview.png"
               alt="star"
             />
-            <p className="stars">
+            <p className="single-stars">
               {`${spot?.avgRating?.toFixed(1)}` || `New`}{" "}
             </p>
           </div>
           {spot.numReviews > 1 && (
-            <p className="review-title">
+            <p className="single-review-title">
               {spot.numReviews}
               reviews
             </p>
           )}
           {spot.numReviews === 1 && (
-            <p className="review-title">{spot.numReviews} review</p>
+            <p className="single-review-title">{spot.numReviews} review</p>
           )}
-          {spot.numReviews === 0 && <p className="review-title">New</p>}
+          {spot.numReviews === 0 && <p className="single-review-title">New</p>}
         </div>
-        <div className="review-container">
+        <div className="single-review-container">
           {reviewArr.map((review) => (
-            <h2 className="review-stuff">
-              <p>{`${review?.User?.firstName} `}</p>
-              <p>{new Date(review.createdAt).toDateString()}</p>
-              <p>{`${review.review}`}</p>
+            <h2 className="single-review-stuff">
+              <p className="single-review-username">{`${review?.User?.firstName} `}</p>
+              <p className="single-date">
+                {new Date(review.createdAt).toDateString()}
+              </p>
+              <p className="single-delete-modal">{`${review.review}`}</p>
               {hasReview.length > 0 && (
-                <button>
-                  <OpenModalButton
-                    buttonText="Delete Review"
-                    onItemClick={closeModal}
-                    modalComponent={<DeleteReviewModal reviewId={review.id} />}
-                  />
-                </button>
+                <OpenModalButton
+                  buttonText="Delete Review"
+                  onItemClick={closeModal}
+                  modalComponent={<DeleteReviewModal reviewId={review.id} />}
+                />
               )}
             </h2>
           ))}

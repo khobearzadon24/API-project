@@ -7,6 +7,8 @@ import { NavLink, useParams } from "react-router-dom";
 import OpenModalButton from "../OpenModalButton/OpenModalButton";
 import DeleteSpotModal from "../DeleteSpot/DeleteSpotModal";
 
+import "./ManageSpots.css";
+
 const ManageSpots = () => {
   const spot = useSelector((state) => state.spotState);
   const [postSpot, setPostSpot] = useState(false);
@@ -52,23 +54,27 @@ const ManageSpots = () => {
   }, [dispatch, postSpot]);
 
   return (
-    <div className="container">
-      {spotArr.map((spot) => (
-        <>
-          <NavLink
-            key={spot.id}
-            className="spot-container"
-            to={`/spots/${spot.id}`}
-          >
-            <img
-              className="spot-img"
-              src={`${spot.previewImage}`}
-              alt={`${spot.name}`}
-            />
-            <div className="spot-text">
+    <div className="manage-page-container">
+      <h1>Manage Your Spots</h1>
+      <NavLink className="create-button" to="/spot/new">
+        Create a New Spot
+      </NavLink>
+      <div className="manage-all-container">
+        {spotArr.map((spot) => (
+          <div className="manage-container">
+            <NavLink
+              key={spot.id}
+              className="spot-container"
+              to={`/spots/${spot.id}`}
+            >
+              <img
+                className="spot-img"
+                src={`${spot.previewImage}`}
+                alt={`${spot.name}`}
+              />
               <div className="spot-location-rating">
                 <p className="spot-location">{`${spot.city}, ${spot.state}`}</p>
-                <div className="rating-container">
+                <div className="single-rating-container">
                   <p className="spot-rating">
                     {`${spot.avgRating.toFixed(1)}` || `New`}{" "}
                   </p>
@@ -78,22 +84,26 @@ const ManageSpots = () => {
                     alt="star"
                   />
                 </div>
+                <p className="spot-price">{`$${spot.price}`} per night </p>
               </div>
-              <p className="spot-price">{`$${spot.price}`} per night </p>
+            </NavLink>
+            <div className="update-delete">
+              <NavLink className="update-button" to={`/spots/${spot.id}/edit`}>
+                Update
+              </NavLink>
+              <div className="delete-button">
+                <OpenModalButton
+                  buttonText="Delete Spot"
+                  onItemClick={closeMenu}
+                  modalComponent={
+                    <DeleteSpotModal spot={spot} renderSpot={renderSpot} />
+                  }
+                />
+              </div>
             </div>
-          </NavLink>
-          <NavLink to={`/spots/${spot.id}/edit`}>Update</NavLink>
-          <div className="delete-button">
-            <OpenModalButton
-              buttonText="Delete Spot"
-              onItemClick={closeMenu}
-              modalComponent={
-                <DeleteSpotModal spot={spot} renderSpot={renderSpot} />
-              }
-            />
           </div>
-        </>
-      ))}
+        ))}
+      </div>
     </div>
   );
 };

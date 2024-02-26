@@ -1,0 +1,83 @@
+.manage-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  padding: 20px;
+  border: 10px border black;
+  width: 300px;
+}
+
+.manage-all-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.update-delete {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  padding: 10px;
+}
+
+.single-rating-container {
+  background-color: transparent;
+  gap: 0px;
+  display: flex;
+  justify-content: center;
+  margin: 0px;
+  padding: 0px;
+  width: 80px;
+  border: 1px solid black;
+}
+
+.spot-text {
+  display: flex;
+  border: 2px black solid;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding: 10px 30px;
+}
+
+.spot-location-rating {
+  display: flex;
+  justify-content: center;
+  border: 2px black solid;
+  border-radius: 10px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding: 10px 30px;
+  width: 200px;
+  margin-top: 10px;
+}
+
+.update-button {
+  border: 1px solid black;
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  background-color: white;
+  border-radius: 2px;
+  text-decoration: none;
+}
+
+.update-button:hover {
+  background-color: rgb(242, 237, 237);
+}
+
+.create-button {
+  font-size: 20px;
+  border: 2px black solid;
+  border-radius: 5px;
+  background-color: beige;
+  padding: 10px;
+  text-decoration: none;
+  width: fit-content;
+}
+
+.manage-page-container {
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+}

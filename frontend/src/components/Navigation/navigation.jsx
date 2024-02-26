@@ -21,7 +21,7 @@ function Navigation({ isLoaded }) {
         <div className="logo-sign">
           {sessionUser && (
             <NavLink className="create" to="/spot/new">
-              Create a Spot
+              Create a New Spot
             </NavLink>
           )}
 

@@ -1,0 +1,9 @@
+.delete-modal-container {
+  padding: 20px;
+  background-color: rgb(230, 220, 220);
+}
+
+.yes-no {
+  display: flex;
+  gap: 10px;
+}

@@ -6,6 +6,7 @@ import { createReview } from "../../store/reviewReducer";
 import StarRating from "../StarRating/StarRating";
 // import { Alert } from "react-alert";
 // import { useNavigate } from "react-router-dom";
+import "./PostReviewModal.css";
 
 function PostReviewModal({ spotId }) {
   const dispatch = useDispatch();
@@ -55,13 +56,13 @@ function PostReviewModal({ spotId }) {
     setRating("");
   };
   return (
-    <div>
-      <form className="form" onSubmit={handleSubmit}>
+    <div className="post-a-review">
+      <form className="form-review" onSubmit={handleSubmit}>
         <h1>How was your stay?</h1>
         {errors.review && <p className="errors">{errors.review}</p>}
         {errors.stars && <p className="errors">{errors.stars}</p>}
         <textarea
-          className="review"
+          className="review-text"
           value={review}
           onChange={(e) => setReview(e.target.value)}
           name="review"

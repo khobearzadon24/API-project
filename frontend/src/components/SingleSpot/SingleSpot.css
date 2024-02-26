@@ -1,10 +1,10 @@
 *:hover {
   text-decoration: none;
 }
-.spot-container {
+.single-spot-container {
   padding: 20px;
 }
-.spot-name {
+.single-spot-name {
   font-weight: bold;
   font-size: 40px;
   text-decoration: none;
@@ -16,7 +16,7 @@
   display: flex;
   justify-content: center;
 } */
-.image-container {
+.single-image-container {
   display: flex;
   justify-content: space-around;
 }
@@ -38,18 +38,18 @@
   padding: 5px;
 }
 
-.description-container {
+.single-description-container {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   margin: 40px;
 }
 
-.owner-detail-container {
+.single-owner-detail-container {
   text-align: left;
 }
 
-.rating-container {
+.single-rating-container {
   display: flex;
   justify-content: space-around;
   text-align: center;
@@ -60,66 +60,84 @@
   padding: 10px 20px 10px 20px;
   border-radius: 10px;
   width: 300px;
-  background-color: rgb(167, 162, 162);
+  margin-bottom: 10px;
 }
 
-.top-rating {
+.single-top-rating {
   display: flex;
   flex-direction: row;
   gap: 25px;
 }
 
-.reverse {
+.single-reserve {
   width: 200px;
+  margin-bottom: 10px;
   font-weight: lighter;
 }
 
-.reserve-container {
+.single-reserve-container {
   display: flex;
   justify-content: flex-end;
 }
-.reserve:hover {
+.single-reserve:hover {
   cursor: pointer;
 }
 
-.star-box {
+.single-star-box {
   display: flex;
   justify-content: flex-end;
   align-items: center;
   margin-bottom: 10px;
 }
 
-.stars {
+.single-stars {
   margin-top: 10px;
 }
 
-.review-header {
+.single-review-header {
   display: flex;
   margin-left: 30px;
   gap: 20px;
 }
 
-.review-title {
+.single-review-title {
   font-size: 30px;
 }
 
-.hosted {
+.single-hosted {
   font-size: 40px;
 }
 
-.star {
+.single-star {
   width: fit-content;
-  height: 5px;
-  margin-bottom: 20px;
+  height: 15px;
+  margin-bottom: 10px;
 }
 
-.review-stuff {
-  border: 2px black dashed;
+.single-review-stuff {
   width: fit-content;
   padding: 10px;
+  margin-top: 0px;
+  border: 2px black solid;
   border-radius: 10px;
 }
 
-.description {
+.single-description {
   font-size: 20px;
+}
+
+.single-review-username {
+  font-size: 25px;
+}
+
+.single-date {
+  font-size: 20px;
+}
+
+.single-delete-modal {
+  font-size: 18px;
+}
+
+.post-button {
+  margin-bottom: 5px;
 }
