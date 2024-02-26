@@ -70,7 +70,7 @@ const SingleSpot = () => {
   // console.log(reviewArr[0].id, "over here is where i am console logging");
   if (sessionUser && sessionUser.id !== spot.ownerId) {
     return (
-      <div className=".single-spot-container">
+      <div className="single-spot-container">
         <div className="spot-text-container">
           <h1 className="single-spot-name">{spot?.name}</h1>
           <p>
@@ -98,7 +98,7 @@ const SingleSpot = () => {
             <h1 className="single-description">{spot?.description}</h1>
           </div>
 
-          <div className="single-rating-container">
+          <div className="rating-container">
             <div className="single-top-rating">
               <p>${spot?.price} night </p>
               <div className="single-star-box">
@@ -112,14 +112,14 @@ const SingleSpot = () => {
                 </p>
               </div>
               {spot.numReviews === 1 && <p>{spot.numReviews} review</p>}
-              {spot.numReviews > 1 && <p>{spot.numReviews} review</p>}
+              {spot.numReviews > 1 && <p>{spot.numReviews} reviews</p>}
               {spot.numReviews === 0 && <p>New</p>}
             </div>
-            <div className="single-reserve-container">
-              <button className="single-reserve" onClick={handleFeature}>
-                Reserve
-              </button>
-            </div>
+            {/* <div className="single-reserve-container"> */}
+            <button className="single-reserve" onClick={handleFeature}>
+              Reserve
+            </button>
+            {/* </div> */}
           </div>
         </div>
         <hr className="single-line" color="black" />
@@ -185,32 +185,34 @@ const SingleSpot = () => {
   } else
     return (
       <div className="single-spot-container">
-        <h1 className="single-spot-name">{spot?.name}</h1>
-        <p>
-          {spot?.city}, {spot?.state}, {spot?.country}
-        </p>
-        <div className="single-image-container">
-          <img
-            className="image1"
-            src={spot?.SpotImages && spot?.SpotImages[0]?.url}
-            alt="image1"
-          />
-          <div className="small-images">
-            {spot.SpotImages &&
-              spot.SpotImages.slice(1).map((spot) => (
-                <img key={spot?.id} className="image-small" src={spot?.url} />
-              ))}
+        <div className="spot-text-container">
+          <h1 className="single-spot-name">{spot?.name}</h1>
+          <p>
+            {spot?.city}, {spot?.state}, {spot?.country}
+          </p>
+          <div className="single-image-container">
+            <img
+              className="image1"
+              src={spot?.SpotImages && spot?.SpotImages[0]?.url}
+              alt="image1"
+            />
+            <div className="small-images">
+              {spot.SpotImages &&
+                spot.SpotImages.slice(1).map((spot) => (
+                  <img key={spot?.id} className="image-small" src={spot?.url} />
+                ))}
+            </div>
           </div>
         </div>
         <div className="single-description-container">
           <div className="single-owner-detail-container">
-            <h1>
+            <h1 className="hosted">
               Hosted By {spot?.Owner?.firstName} {spot?.Owner?.lastName}
             </h1>
             <h1 className="single-description">{spot?.description}</h1>
           </div>
 
-          <div className="single-rating-container">
+          <div className="rating-container">
             <div className="single-top-rating">
               <p>${spot?.price} night </p>
               <div className="single-star-box">
@@ -227,11 +229,11 @@ const SingleSpot = () => {
               {spot.numReviews > 1 && <p>{spot.numReviews} reviews</p>}
               {spot.numReviews === 0 && <p>New</p>}
             </div>
-            <div className="single-reserve-container">
-              <button className="single-reserve" onClick={handleFeature}>
-                Reserve
-              </button>
-            </div>
+            {/* <div className="single-reserve-container"> */}
+            <button className="single-reserve" onClick={handleFeature}>
+              Reserve
+            </button>
+            {/* </div> */}
           </div>
         </div>
         <hr className="single-line" color="black" />

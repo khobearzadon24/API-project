@@ -1,9 +1,22 @@
-.filled {
-  color: blue;
+/* body {
+  background-color: red;
 }
+
+.filled {
+  color: rgb(246, 213, 53);
+}
+
 .filled:hover {
-  color: blue;
+  color: rgb(246, 213, 53);
 }
 .empty {
-  color: grey;
+  color: rgb(83, 94, 107);
 }
+.star-rating {
+  display: flex;
+  justify-content: center;
+  padding: 3px;
+}
+.star-text {
+  padding-left: 5px;
+} */
