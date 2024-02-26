@@ -134,16 +134,17 @@ const SingleSpot = () => {
               alt="star"
             />
           </div>
+
           {spot.numReviews > 1 && (
-            <p className="single-review-title">{spot.numReviews} reviews</p>
+            <li className="single-review-title">{spot.numReviews} reviews</li>
           )}
           {spot.numReviews === 1 && (
-            <p className="single-review-title">{spot.numReviews} review</p>
+            <li className="single-review-title">{spot.numReviews} review</li>
           )}
           {spot.numReviews === 0 && (
-            <p className="single-review-title">
+            <li className="single-review-title">
               Be the first to post a review!
-            </p>
+            </li>
           )}
         </div>
         <div className="single-review-container">
@@ -249,15 +250,17 @@ const SingleSpot = () => {
             </p>
           </div>
           {spot.numReviews > 1 && (
-            <p className="single-review-title">
+            <li className="single-review-title">
               {spot.numReviews}
               reviews
-            </p>
+            </li>
           )}
           {spot.numReviews === 1 && (
-            <p className="single-review-title">{spot.numReviews} review</p>
+            <li className="single-review-title">{spot.numReviews} review</li>
           )}
-          {spot.numReviews === 0 && <p className="single-review-title">New</p>}
+          {spot.numReviews === 0 && (
+            <li className="single-review-title">New</li>
+          )}
         </div>
         <div className="single-review-container">
           {reviewArr.map((review) => (
