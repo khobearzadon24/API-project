@@ -13,7 +13,7 @@ function PostReviewModal({ spotId }) {
   const { closeModal } = useModal();
   // const navigate = useNavigate();
   const [errors, setErrors] = useState("");
-  const [submitted, setSubmitted] = useState(false);
+  // const [submitted, setSubmitted] = useState(false);
   const [review, setReview] = useState("");
   const [rating, setRating] = useState(null);
   // const [validate, setValidate] = useState({});
@@ -31,7 +31,7 @@ function PostReviewModal({ spotId }) {
   // },[review])
 
   const handleSubmit = async (e) => {
-    setSubmitted(true);
+    // setSubmitted(true);
     e.preventDefault();
 
     const newReview = {
