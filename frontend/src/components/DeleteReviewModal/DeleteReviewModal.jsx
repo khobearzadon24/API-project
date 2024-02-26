@@ -1,8 +1,7 @@
-import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
 import { removeReview } from "../../store/reviewReducer";
-import OpenModalButton from "../OpenModalButton/OpenModalButton";
+
 import "./DeleteReviewModal.css";
 
 function DeleteReviewModal({ reviewId, renderdelete }) {

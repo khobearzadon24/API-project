@@ -174,10 +174,11 @@ const spotReducer = (state = {}, action) => {
       return { ...state, [action.spot.id]: action.spot };
     case ADD_SPOTIMAGE:
       return { ...state, [action.image.id]: action.image };
-    case REMOVE_SPOT:
+    case REMOVE_SPOT: {
       const newState = { ...state };
       delete newState[action.spotId];
       return newState;
+    }
     case UPDATE_SPOT:
       return { ...state, [action.spot.id]: action.spot };
 

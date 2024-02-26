@@ -86,7 +86,7 @@ const SingleSpot = () => {
           <div className="small-images">
             {spot.SpotImages &&
               spot.SpotImages.slice(1).map((spot) => (
-                <img className="image-small" src={spot?.url} />
+                <img key={spot?.id} className="image-small" src={spot?.url} />
               ))}
           </div>
         </div>
@@ -159,8 +159,7 @@ const SingleSpot = () => {
             </div>
           </div>
           {reviewArr.map((review) => (
-            <h2 className="single-review-stuff">
-              {console.log(review.id, "inside the mapping")}
+            <h2 key={review?.id} className="single-review-stuff">
               <p className="single-review-username">{`${review?.User?.firstName} `}</p>
               <p className="single-date">
                 {new Date(review.createdAt).toDateString()}
@@ -199,7 +198,7 @@ const SingleSpot = () => {
           <div className="small-images">
             {spot.SpotImages &&
               spot.SpotImages.slice(1).map((spot) => (
-                <img className="image-small" src={spot?.url} />
+                <img key={spot?.id} className="image-small" src={spot?.url} />
               ))}
           </div>
         </div>
@@ -260,7 +259,7 @@ const SingleSpot = () => {
         </div>
         <div className="single-review-container">
           {reviewArr.map((review) => (
-            <h2 className="single-review-stuff">
+            <h2 key={spot?.id} className="single-review-stuff">
               <p className="single-review-username">{`${review?.User?.firstName} `}</p>
               <p className="single-date">
                 {new Date(review.createdAt).toDateString()}

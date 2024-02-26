@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-import * as sessionActions from "../../store/session";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
 import { createReview } from "../../store/reviewReducer";

@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 import "./SpotInput.css";
 
 const SpotInput = ({ spot, formType }) => {
-  const [ownerId, setOwnerId] = useState(spot?.ownerId || "");
   const [address, setAddress] = useState(spot?.address || "");
   const [city, setCity] = useState(spot?.city || "");
   const [state, setState] = useState(spot?.state || "");

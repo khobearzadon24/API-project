@@ -1,8 +1,8 @@
 import { useSelector } from "react-redux";
 import { useEffect, useState, useRef } from "react";
 import { useDispatch } from "react-redux";
-import { deleteSpot, fetchOwnerSpots } from "../../store/spotReducer";
-import { NavLink, useParams } from "react-router-dom";
+import { fetchOwnerSpots } from "../../store/spotReducer";
+import { NavLink } from "react-router-dom";
 
 import OpenModalButton from "../OpenModalButton/OpenModalButton";
 import DeleteSpotModal from "../DeleteSpot/DeleteSpotModal";
@@ -24,10 +24,10 @@ const ManageSpots = () => {
   const [showMenu, setShowMenu] = useState(false);
   const ulRef = useRef();
 
-  const toggleMenu = (e) => {
-    e.stopPropagation(); // Keep from bubbling up to document and triggering closeMenu
-    setShowMenu(!showMenu);
-  };
+  // const toggleMenu = (e) => {
+  //   e.stopPropagation(); // Keep from bubbling up to document and triggering closeMenu
+  //   setShowMenu(!showMenu);
+  // };
 
   useEffect(() => {
     if (!showMenu) return;
@@ -61,12 +61,8 @@ const ManageSpots = () => {
       </NavLink>
       <div className="manage-all-container">
         {spotArr.map((spot) => (
-          <div className="manage-container">
-            <NavLink
-              key={spot.id}
-              className="spot-container"
-              to={`/spots/${spot.id}`}
-            >
+          <div key={spot?.id} className="manage-container">
+            <NavLink className="spot-container" to={`/spots/${spot.id}`}>
               <img
                 className="spot-img"
                 src={`${spot.previewImage}`}

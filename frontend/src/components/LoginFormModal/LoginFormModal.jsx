@@ -2,7 +2,6 @@ import { useState } from "react";
 import * as sessionActions from "../../store/session";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
-import { useNavigate } from "react-router-dom";
 import "./LoginForm.css";
 
 function LoginFormModal() {
@@ -13,7 +12,7 @@ function LoginFormModal() {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
-  const [disable, setDisable] = useState(false);
+
   const { closeModal } = useModal();
 
   const handleSubmit = async (e) => {
